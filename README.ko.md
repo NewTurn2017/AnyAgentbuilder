@@ -15,8 +15,10 @@
 [skills CLI](https://github.com/vercel-labs/skills)로 한 줄 설치 — Claude Code, Codex, Cursor 등 70개 이상의 에이전트를 지원합니다:
 
 ```bash
-npx skills add newTurn2017/AnyAgentbuilder
+npx skills add newTurn2017/AnyAgentbuilder --agent claude-code
 ```
+
+다른 에이전트를 쓴다면 `--agent claude-code`를 빼고 프롬프트에서 선택하세요. Claude Code에서는 이 플래그가 중요합니다: 스킬을 Claude Code가 실제로 스캔하는 `.claude/skills/` 아래에 설치해 줍니다(새 세션부터 인식됩니다).
 
 그다음 에이전트에게 운영형 에이전트 시스템을 만들어 달라고 요청하세요(예: "스터디룸 예약 에이전트 시스템 만들어줘"). 스킬이 도메인 스펙 설계, 에이전트/핸드오프/가드레일 분해, mock 우선 구현 계획을 안내합니다.
 

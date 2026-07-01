@@ -15,8 +15,10 @@ The repo ships three things:
 Install the skill with the [skills CLI](https://github.com/vercel-labs/skills) — works with Claude Code, Codex, Cursor, and 70+ other agents:
 
 ```bash
-npx skills add newTurn2017/AnyAgentbuilder
+npx skills add newTurn2017/AnyAgentbuilder --agent claude-code
 ```
+
+Using another agent? Drop `--agent claude-code` and pick yours when prompted. The flag matters for Claude Code: it materializes the skill under `.claude/skills/`, which is where Claude Code actually scans (a new session picks it up).
 
 Then ask your agent to build an agentic operations system (e.g. "스터디룸 예약 에이전트 시스템 만들어줘") — the skill guides domain-spec design, agent/handoff/guardrail decomposition, and a mock-first implementation plan.
 
