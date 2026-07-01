@@ -6,21 +6,16 @@ A Claude Code skill that turns a real service workflow — reservation, lending,
 
 The repo ships three things:
 
-- **`agentic-system-builder/`** — the skill itself (`SKILL.md`, methodology in `REFERENCE.md`, domain packs in `EXAMPLES.md`) plus scaffold/validation scripts and templates.
+- **`skills/agentic-system-builder/`** — the skill itself (`SKILL.md`, methodology in `REFERENCE.md`, domain packs in `EXAMPLES.md`) plus scaffold/validation scripts and templates.
 - **`generated/library-reservation-demo/`** — a working demo generated from the templates: FastAPI mock backend + Korean React chat UI. Runs fully offline, no `OPENAI_API_KEY` needed.
 - **`.omo/`** — the work plan and verification evidence (browser screenshots, QA logs) from the build.
 
 ## Quick start
 
-```bash
-git clone https://github.com/newTurn2017/AnyAgentbuilder.git
-cd AnyAgentbuilder
-```
-
-Install the skill into Claude Code:
+Install the skill with the [skills CLI](https://github.com/vercel-labs/skills) — works with Claude Code, Codex, Cursor, and 70+ other agents:
 
 ```bash
-cp -r agentic-system-builder ~/.claude/skills/
+npx skills add newTurn2017/AnyAgentbuilder
 ```
 
 Then ask your agent to build an agentic operations system (e.g. "스터디룸 예약 에이전트 시스템 만들어줘") — the skill guides domain-spec design, agent/handoff/guardrail decomposition, and a mock-first implementation plan.
@@ -30,6 +25,8 @@ Then ask your agent to build an agentic operations system (e.g. "스터디룸 �
 One command runs the full QA pipeline (validators → scaffold → backend curl checks → browser QA → cleanup). Requires Node 18+ and Python 3.
 
 ```bash
+git clone https://github.com/newTurn2017/AnyAgentbuilder.git
+cd AnyAgentbuilder
 env -u OPENAI_API_KEY AGENT_RUNTIME=mock npm run qa:generated-demo
 ```
 
@@ -43,13 +40,13 @@ All scripts use Node built-ins only — no `npm install` needed at the repo root
 |---|---|
 | `npm run validate:skill` | Checks the skill package structure (`SKILL.md` frontmatter, one-level references) |
 | `npm run validate:examples` | Validates the airline / library / pcbang / generic domain packs in `EXAMPLES.md` |
-| `npm run scaffold:library-demo` | Regenerates the library demo from `agentic-system-builder/templates/` |
+| `npm run scaffold:library-demo` | Regenerates the library demo from `skills/agentic-system-builder/templates/` |
 | `npm run qa:generated-demo` | Full end-to-end QA of the generated demo in mock mode |
 
 ## Project structure
 
 ```
-agentic-system-builder/
+skills/agentic-system-builder/
   SKILL.md          # skill entry point (fast path)
   REFERENCE.md      # reusable methodology: domain spec → agents → proof plan
   EXAMPLES.md       # domain packs: airline, library, pcbang, generic

@@ -5,8 +5,8 @@ import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const TEMPLATE_ROOT = join(ROOT, "agentic-system-builder", "templates");
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const TEMPLATE_ROOT = join(ROOT, "skills", "agentic-system-builder", "templates");
 const DOMAIN_PATH = join(TEMPLATE_ROOT, "domains.json");
 const GENERATED_ROOT = join(ROOT, "generated");
 const OWNERSHIP_MARKER = ".any-agent-builder-generated.json";
@@ -253,11 +253,11 @@ const PROTECTED_EXACT_PATHS = [
   homedir(),
   ROOT,
   GENERATED_ROOT,
-  join(ROOT, "agentic-system-builder"),
+  join(ROOT, "skills", "agentic-system-builder"),
   join(ROOT, ".omo"),
 ].map((path) => resolve(path));
 
-const PROTECTED_WORKSPACE_SUBTREES = [join(ROOT, "agentic-system-builder"), join(ROOT, ".omo")].map((path) => resolve(path));
+const PROTECTED_WORKSPACE_SUBTREES = [join(ROOT, "skills", "agentic-system-builder"), join(ROOT, ".omo")].map((path) => resolve(path));
 
 function assertNotProtectedPath(path, outputDir) {
   if (PROTECTED_EXACT_PATHS.includes(path)) {

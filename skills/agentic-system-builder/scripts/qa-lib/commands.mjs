@@ -11,15 +11,15 @@ export function buildPlannedCommands(backendPort, frontendPort) {
     validateSkill: {
       cwd: ROOT,
       bin: process.execPath,
-      args: ["agentic-system-builder/scripts/validate-domain-spec.mjs", "--check-skill", "agentic-system-builder"],
+      args: ["skills/agentic-system-builder/scripts/validate-domain-spec.mjs", "--check-skill", "skills/agentic-system-builder"],
     },
     validateExamples: {
       cwd: ROOT,
       bin: process.execPath,
       args: [
-        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "skills/agentic-system-builder/scripts/validate-domain-spec.mjs",
         "--validate-example",
-        "agentic-system-builder/EXAMPLES.md",
+        "skills/agentic-system-builder/EXAMPLES.md",
         "--require-domain",
         "airline",
         "--require-domain",
@@ -33,12 +33,12 @@ export function buildPlannedCommands(backendPort, frontendPort) {
     scaffoldLibrary: {
       cwd: ROOT,
       bin: process.execPath,
-      args: ["agentic-system-builder/scripts/scaffold-agent-system.mjs", "--domain", "library", "--out", "generated/library-reservation-demo", "--force"],
+      args: ["skills/agentic-system-builder/scripts/scaffold-agent-system.mjs", "--domain", "library", "--out", "generated/library-reservation-demo", "--force"],
     },
     validateGenerated: {
       cwd: ROOT,
       bin: process.execPath,
-      args: ["agentic-system-builder/scripts/validate-domain-spec.mjs", "--check-generated", "generated/library-reservation-demo"],
+      args: ["skills/agentic-system-builder/scripts/validate-domain-spec.mjs", "--check-generated", "generated/library-reservation-demo"],
     },
     backendVenv: {
       cwd: GENERATED_ROOT,

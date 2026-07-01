@@ -1,7 +1,7 @@
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
 export const GENERATED_ROOT = join(ROOT, "generated/library-reservation-demo");
 export const BACKEND_ROOT = join(GENERATED_ROOT, "backend");
 export const FRONTEND_ROOT = join(GENERATED_ROOT, "frontend");

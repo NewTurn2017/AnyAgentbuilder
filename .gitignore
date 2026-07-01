@@ -17,3 +17,6 @@ build/
 .vite/
 .pytest_cache/
 *.log
+
+# senior-mode codex job state
+.senior-mode/
