@@ -107,4 +107,4 @@ Mock mode is the default and only proven path: the generated backend never impor
 
 ## License
 
-[License — not yet specified]
+[MIT](LICENSE)
