@@ -3,3 +3,17 @@ node_modules/
 .venv/
 __pycache__/
 .DS_Store
+
+# Secrets / local env (keep .env.example tracked)
+.env
+.env.local
+.env*.local
+*.pem
+*.key
+
+# Build output / caches
+dist/
+build/
+.vite/
+.pytest_cache/
+*.log
