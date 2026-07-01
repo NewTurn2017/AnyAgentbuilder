@@ -1,0 +1,22 @@
+$ malformed JSON
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   155  100   125  100    30   112k  27649 --:--:-- --:--:-- --:--:--  151k
+HTTP/1.1 422 Unprocessable Content
+date: Wed, 01 Jul 2026 14:08:32 GMT
+server: uvicorn
+content-length: 125
+content-type: application/json
+
+{"detail":[{"type":"json_invalid","loc":["body",30],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting value"}}]}
+$ bad shape
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   175  100   128  100    47   103k  38875 --:--:-- --:--:-- --:--:--  170k
+HTTP/1.1 422 Unprocessable Content
+date: Wed, 01 Jul 2026 14:08:32 GMT
+server: uvicorn
+content-length: 128
+content-type: application/json
+
+{"detail":[{"type":"string_type","loc":["body","message"],"msg":"Input should be a valid string","input":{"text":"bad shape"}}]}

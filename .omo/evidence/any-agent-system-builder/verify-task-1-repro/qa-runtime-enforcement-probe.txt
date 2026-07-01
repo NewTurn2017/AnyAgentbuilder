@@ -1,0 +1,3 @@
+ERROR: AGENT_RUNTIME must be mock for local QA; OpenAI calls are disabled by this harness
+
+EXIT_CODE=1

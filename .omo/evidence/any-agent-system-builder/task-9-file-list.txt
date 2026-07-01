@@ -1,0 +1,43 @@
+artifact=.omo/evidence/any-agent-system-builder/task-9-file-list.txt
+scenario=Current skill package structure including nested helper/template paths
+invocation=find agentic-system-builder -maxdepth 4 -type f | sort
+observable=full current file tree captured below; command exit 0
+
+agentic-system-builder/EXAMPLES.md
+agentic-system-builder/REFERENCE.md
+agentic-system-builder/SKILL.md
+agentic-system-builder/scripts/qa-generated-demo.mjs
+agentic-system-builder/scripts/qa-lib/args.mjs
+agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+agentic-system-builder/scripts/qa-lib/commands.mjs
+agentic-system-builder/scripts/qa-lib/errors.mjs
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+agentic-system-builder/scripts/qa-lib/http-checks.mjs
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+agentic-system-builder/scripts/qa-lib/manifest.mjs
+agentic-system-builder/scripts/qa-lib/paths.mjs
+agentic-system-builder/scripts/qa-lib/ports.mjs
+agentic-system-builder/scripts/qa-lib/processes.mjs
+agentic-system-builder/scripts/qa-lib/provider-security.mjs
+agentic-system-builder/scripts/scaffold-agent-system.mjs
+agentic-system-builder/scripts/validate-domain-spec.mjs
+agentic-system-builder/templates/.gitignore.tmpl
+agentic-system-builder/templates/.ignore.tmpl
+agentic-system-builder/templates/README.md.tmpl
+agentic-system-builder/templates/backend/agents.py.tmpl
+agentic-system-builder/templates/backend/context.py.tmpl
+agentic-system-builder/templates/backend/demo_data.py.tmpl
+agentic-system-builder/templates/backend/events.py.tmpl
+agentic-system-builder/templates/backend/main.py.tmpl
+agentic-system-builder/templates/backend/memory.py.tmpl
+agentic-system-builder/templates/backend/requirements.txt
+agentic-system-builder/templates/backend/tools.py.tmpl
+agentic-system-builder/templates/domains.json
+agentic-system-builder/templates/frontend/index.html.tmpl
+agentic-system-builder/templates/frontend/package.json.tmpl
+agentic-system-builder/templates/frontend/src/App.jsx.tmpl
+agentic-system-builder/templates/frontend/src/main.jsx.tmpl
+agentic-system-builder/templates/frontend/src/styles.css
+agentic-system-builder/templates/frontend/vite.config.js.tmpl
+
+note=This receipt supersedes the earlier maxdepth-2-only structure receipt. Nested scripts/qa-lib files are implementation helpers; nested templates/backend and templates/frontend files are scaffold assets. The skill reference chain remains SKILL.md, REFERENCE.md, EXAMPLES.md, and top-level scripts.

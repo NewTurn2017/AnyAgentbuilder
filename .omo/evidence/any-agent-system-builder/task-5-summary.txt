@@ -1,0 +1,53 @@
+Todo 5 blocker fixed: generated library apps now reject extra and missing public keys in actual public seed data, not just PUBLIC_FIELD_NAMES.
+
+DoneClaim:
+- Changed `agentic-system-builder/scripts/validate-domain-spec.mjs`.
+- Updated task-5 evidence artifacts only under `.omo/evidence/any-agent-system-builder/task-5-*.txt`.
+- Did not edit scaffold script, templates, generated app, `.omo/plans`, or ledger.
+- Did not start servers.
+
+Implementation:
+- Added static parsing for top-level keys in `backend/demo_data.py` `DEMO_PUBLIC_SEED`.
+- For `DOMAIN_KEY = "library"`, `--check-generated` now enforces the exact public field set on both `PUBLIC_FIELD_NAMES` and `DEMO_PUBLIC_SEED`: `patron_display_name`, `reservation_id`, `resource_label`, `time_window`, `reservation_status`, `loan_titles`, `policy_summary`.
+- Non-library generated apps still validate their own generated fields without requiring library names.
+
+Verification:
+- Scenario: checked-in generated library app remains valid.
+  Invocation: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo`
+  Binary observable: exit 0; output includes `OK: generated library app skeleton valid`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-generated-check.txt`
+- Scenario: temp generated library app mutated with `vip_code` only in `DEMO_PUBLIC_SEED`.
+  Invocation: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-extra-seed.*/library`
+  Binary observable: exit 1; output includes `ERROR: generated library backend DEMO_PUBLIC_SEED has unexpected extra public context fields: vip_code`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-library-extra-seed-negative.txt`
+- Scenario: temp generated library app mutated with missing `loan_titles` only in `DEMO_PUBLIC_SEED`.
+  Invocation: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-missing-seed.*/library`
+  Binary observable: exit 1; output includes `ERROR: generated library backend DEMO_PUBLIC_SEED missing required public context fields: loan_titles`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-library-missing-seed-negative.txt`
+- Scenario: temp generated library app mutated with extra `PUBLIC_FIELD_NAMES` value `vip_code`.
+  Invocation: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-extra-public.*/library`
+  Binary observable: exit 1; output includes `ERROR: generated library backend has unexpected extra public context fields: vip_code`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-library-extra-public-negative.txt`
+- Scenario: temp generated `pcbang` app validates with its own non-library fields.
+  Invocation: `node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain pcbang --out /tmp/aab-task5-nonlibrary.*/pcbang --force`, then `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-nonlibrary.*/pcbang`
+  Binary observable: scaffold exit 0 and check exit 0; output includes `OK: generated pcbang app skeleton valid`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-nonlibrary-generated-check.txt`
+- Scenario: Todo 4 false-pass regressions.
+  Invocation: placeholder, tokenstuff, route-tokenstuff, and wrong-method temp generated app probes recorded in artifact.
+  Binary observable: all four exit 1 and `FAILURE_COUNT=0`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-validator-regression.txt`
+- Scenario: validator syntax.
+  Invocation: `node --check agentic-system-builder/scripts/validate-domain-spec.mjs`
+  Binary observable: exit 0.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-validator-node-check.txt`
+- Scenario: task temp cleanup.
+  Invocation: `/tmp` scan for `aab-task5-extra-public.*`, `aab-task5-extra-seed.*`, `aab-task5-missing-seed.*`, `aab-task5-nonlibrary.*`, and `aab-task5-regression.*`.
+  Binary observable: exit 0; output records `RESULT=PASS no Todo 5 temp dirs remain`.
+  Artifact: `.omo/evidence/any-agent-system-builder/task-5-cleanup.txt`
+
+Cleanup:
+- Removed all temp mutation, non-library scaffold, and regression probe dirs.
+- Final cleanup artifact found no matching task-5 temp dirs.
+
+Risks:
+- Validation remains static. This proves the generated file contract and validator behavior, not live backend/frontend runtime execution.

@@ -1,0 +1,120 @@
+# verify-task-5-final-domain-smoke
+cwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T12:12:25Z
+smoke_root=.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr
+
+## domain=pcbang
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain pcbang --out .omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang --force
+OK: scaffolded pcbang agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit_status=0
+generated_files:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/README.md
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/agents.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/context.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/events.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/main.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/memory.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/requirements.txt
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/tools.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/index.html
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/package.json
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/main.jsx
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/styles.css
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/vite.config.js
+
+domain_markers:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/README.md:1:# PC방 좌석 매니저
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/README.md:3:Generated mock app for the `pcbang` agentic operations domain.
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:3:DOMAIN_KEY = "pcbang"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:4:BRAND_NAME = "PC방 좌석 매니저"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:7:  "reservation_id": "PCB-2208",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:12:  "policy_summary": "나란한 좌석은 결제 전 10분 동안만 보류됩니다.",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:60:    "resource_kind": "게임 좌석",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:87:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/agents.py:19:POLICY_SUMMARY = "연령 제한과 직원 확인이 필요한 요청은 좌석 배정 전에 차단됩니다."
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/agents.py:39:                "reason": "이 데스크는 게임 좌석 예약 업무만 처리합니다.",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/agents.py:77:        "assistant_message": "좌석 배치도를 확인했고, 나란히 앉을 수 있는 고사양 좌석 두 자리를 임시 확보했습니다.",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx:7:  "seat_label": "좌석",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx:74:          <p className="eyebrow">pcbang</p>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx:75:          <h1>PC방 좌석 매니저</h1>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx:130:          <h2>좌석 배치도</h2>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/src/App.jsx:132:            <p>사용 가능한 좌석을 확인 중입니다.</p>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/package.json:2:  "name": "pcbang-seat-demo",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/frontend/index.html:6:    <title>PC방 좌석 매니저</title>
+
+validator_command: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang
+ERROR: generated backend missing public context field markers: patron_display_name, resource_label, loan_titles
+validator_exit_status=1
+
+marker_scan:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:87:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+marker_result=FAIL stale library marker present
+
+library_renamed_scan:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/pcbang/backend/demo_data.py:87:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+library_residue_result=FAIL library-specific residue present
+
+## domain=generic
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain generic --out .omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic --force
+OK: scaffolded generic agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit_status=0
+generated_files:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/README.md
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/context.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/events.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/main.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/memory.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/requirements.txt
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/tools.py
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/index.html
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/package.json
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/App.jsx
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/main.jsx
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/styles.css
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/vite.config.js
+
+domain_markers:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/README.md:1:# 예약 운영 데스크
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/README.md:3:Generated mock app for the `generic` agentic operations domain.
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/README.md:27:curl -i -X POST http://127.0.0.1:8000/chat -H 'content-type: application/json' -d '{"thread_id":"demo","message":"상담 가능한 시간을 예약하고 싶어요"}'
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:3:DOMAIN_KEY = "generic"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:4:BRAND_NAME = "예약 운영 데스크"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:7:  "reservation_id": "GEN-5109",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:8:  "resource_label": "상담실 1",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:22:    "label": "상담실 1",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:27:    "label": "상담실 2",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:39:  "availability_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:40:  "appointment_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:44:  "triage_agent -> availability_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:45:  "availability_agent -> appointment_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:83:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py:6:  "availability_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py:7:  "appointment_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py:11:  "triage_agent -> availability_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py:12:  "availability_agent -> appointment_agent",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/agents.py:51:    return "appointment_agent"
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/App.jsx:3:const initialMessage = "상담 가능한 시간을 예약하고 싶어요";
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/App.jsx:73:          <p className="eyebrow">generic</p>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/src/App.jsx:74:          <h1>예약 운영 데스크</h1>
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/package.json:2:  "name": "generic-reservation-demo",
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/frontend/index.html:6:    <title>예약 운영 데스크</title>
+
+validator_command: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic
+ERROR: generated backend missing public context field markers: patron_display_name, loan_titles
+validator_exit_status=1
+
+marker_scan:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:83:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+marker_result=FAIL stale library marker present
+
+library_renamed_scan:
+.omo/evidence/any-agent-system-builder/tmp-final-domain-smoke.6dsUAr/generic/backend/demo_data.py:83:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+library_residue_result=FAIL library-specific residue present
+
+cleanup_smoke_root_exists=no

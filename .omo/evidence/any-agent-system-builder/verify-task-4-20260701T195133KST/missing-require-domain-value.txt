@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain
+ERROR: --require-domain requires a value
+
+exit=1

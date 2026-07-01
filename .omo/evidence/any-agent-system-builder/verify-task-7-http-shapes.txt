@@ -1,0 +1,27 @@
+Todo 7 HTTP shape verification
+
+health.status: HTTP/1.1 200 OK
+health.body: status=ok, runtime=mock, domain_key=library, active_stream_listeners=0
+
+chat.status: HTTP/1.1 200 OK
+chat.required_keys_present: true
+chat.active_agent: room_reservation_agent
+chat.events: handoff.started, tool.called, state.delta
+
+guardrail.status: HTTP/1.1 200 OK
+guardrail.body: status=blocked, name=relevance_guardrail, reason=이 데스크는 도서관 공간 예약 업무만 처리합니다.
+
+malformed.statuses: HTTP/1.1 422 Unprocessable Content | HTTP/1.1 422 Unprocessable Content
+malformed.detail_types: json_invalid, string_type
+
+unknown.status: HTTP/1.1 200 OK
+unknown.empty_messages: true
+unknown.empty_events: true
+unknown.public_context_keys: patron_display_name, reservation_id, resource_label, time_window, reservation_status, loan_titles, policy_summary
+
+sse.status: HTTP/1.1 200 OK
+sse.has_state_snapshot: true
+sse.has_state_delta: true
+sse.listener_cleanup: true
+
+result: PASS

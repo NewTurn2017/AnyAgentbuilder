@@ -1,0 +1,3 @@
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-final-3-tmp/wrong-method
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: GET /state (method/path mismatch), POST /chat (method/path mismatch)
+EXIT_STATUS=1

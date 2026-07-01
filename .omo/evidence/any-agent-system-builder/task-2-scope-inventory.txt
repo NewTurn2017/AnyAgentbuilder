@@ -1,0 +1,20 @@
+scope inventory after Todo 2 completion pass
+
+Skill directory markdown files:
+agentic-system-builder/EXAMPLES.md
+agentic-system-builder/REFERENCE.md
+agentic-system-builder/SKILL.md
+
+Line counts:
+     349 agentic-system-builder/EXAMPLES.md
+     177 agentic-system-builder/REFERENCE.md
+      61 agentic-system-builder/SKILL.md
+
+Todo 2 evidence files refreshed:
+.omo/evidence/any-agent-system-builder/task-2-adversarial-probes.txt
+.omo/evidence/any-agent-system-builder/task-2-cleanup.txt
+.omo/evidence/any-agent-system-builder/task-2-frontmatter-preview.txt
+.omo/evidence/any-agent-system-builder/task-2-line-count.txt
+.omo/evidence/any-agent-system-builder/task-2-negative.txt
+.omo/evidence/any-agent-system-builder/task-2-scope-inventory.txt
+.omo/evidence/any-agent-system-builder/task-2-skill-check.txt

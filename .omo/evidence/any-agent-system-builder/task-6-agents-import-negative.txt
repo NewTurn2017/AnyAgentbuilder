@@ -1,0 +1,12 @@
+PASS: scan blocked Python Agents SDK import
+status=failed-provider-boundary
+message=mock backend provider boundary blocked disallowed provider imports/calls: ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-agents-negative-t9TI2N/backend/main.py:1 python-agents-sdk-import from agents import Agent, Runner, function_tool, handoff
+findings=1
+[
+  {
+    "file": "../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-agents-negative-t9TI2N/backend/main.py",
+    "line": 1,
+    "kind": "python-agents-sdk-import",
+    "match": "from agents import Agent, Runner, function_tool, handoff"
+  }
+]

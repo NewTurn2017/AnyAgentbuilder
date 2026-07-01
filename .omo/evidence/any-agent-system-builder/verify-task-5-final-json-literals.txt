@@ -1,0 +1,87 @@
+# verify-task-5-final-json-literals
+cwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T12:13:19Z
+spec=.omo/evidence/any-agent-system-builder/verify-task-5-final-json-literals-spec.json
+out=.omo/evidence/any-agent-system-builder/tmp-final-json-literals.6zRQ9J/custom-literals
+
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --spec .omo/evidence/any-agent-system-builder/verify-task-5-final-json-literals-spec.json --out .omo/evidence/any-agent-system-builder/tmp-final-json-literals.6zRQ9J/custom-literals --force
+OK: scaffolded literal_probe agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/tmp-final-json-literals.6zRQ9J/custom-literals
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit_status=0
+
+python_literal_snippets:
+6:  "string_truths": "true false null should remain string words",
+7:  "actual_true": True,
+8:  "actual_false": False,
+9:  "actual_null": None,
+10:  "nested_values": [
+12:    True,
+14:    False,
+16:    None,
+20:  "internal_string_truths": "true false null internal string",
+21:  "internal_true": True,
+22:  "internal_false": False,
+23:  "internal_null": None,
+29:    "detail": "true false null 문자열 포함",
+
+python_runtime_type_probe:
+{
+  "public_string_truths_value": "true false null should remain string words",
+  "public_string_truths_type": "str",
+  "public_actual_true_type_value": [
+    "bool",
+    true
+  ],
+  "public_actual_false_type_value": [
+    "bool",
+    false
+  ],
+  "public_actual_null_type_value": [
+    "NoneType",
+    null
+  ],
+  "public_nested_types_values": [
+    [
+      "str",
+      "true"
+    ],
+    [
+      "bool",
+      true
+    ],
+    [
+      "str",
+      "false"
+    ],
+    [
+      "bool",
+      false
+    ],
+    [
+      "str",
+      "null"
+    ],
+    [
+      "NoneType",
+      null
+    ]
+  ],
+  "internal_string_truths_value": "true false null internal string",
+  "internal_string_truths_type": "str",
+  "internal_actual_true_type_value": [
+    "bool",
+    true
+  ],
+  "internal_actual_false_type_value": [
+    "bool",
+    false
+  ],
+  "internal_actual_null_type_value": [
+    "NoneType",
+    null
+  ]
+}
+literal_probe=PASS
+python_probe_exit_status=0
+
+cleanup_tmp_root_exists=no

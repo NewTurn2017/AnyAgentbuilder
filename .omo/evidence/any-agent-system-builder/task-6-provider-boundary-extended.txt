@@ -1,0 +1,25 @@
+$ AGENT_RUNTIME=mock node --input-type=module <provider-boundary-temp-fixture>
+PASS: extended pinned SDK symbols with local agents.py
+status=failed-provider-boundary
+message=mock backend provider boundary blocked disallowed provider imports/calls: ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-S3x1Ho/backend/main.py:1 python-agents-sdk-import from agents import SQLiteSession, RunContextWrapper, input_guardrail, GuardrailFunctionOutput
+findings=1
+kinds=python-agents-sdk-import
+match=from agents import SQLiteSession, RunContextWrapper, input_guardrail, GuardrailFunctionOutput
+PASS: previous pinned SDK symbols with local agents.py
+status=failed-provider-boundary
+message=mock backend provider boundary blocked disallowed provider imports/calls: ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-FuadoL/backend/main.py:1 python-agents-sdk-import from agents import Agent, Runner, function_tool, handoff
+findings=1
+kinds=python-agents-sdk-import
+match=from agents import Agent, Runner, function_tool, handoff
+PASS: aliased and parenthesized pinned SDK import with local agents.py
+status=failed-provider-boundary
+message=mock backend provider boundary blocked disallowed provider imports/calls: ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-YUS61f/backend/main.py:1 python-agents-sdk-import from agents import (   SQLiteSession as SessionStore,   GuardrailFunctionOutput as GuardrailOut, )
+findings=1
+kinds=python-agents-sdk-import
+match=from agents import (   SQLiteSession as SessionStore,   GuardrailFunctionOutput as GuardrailOut, )
+PASS: aliased agents module and OpenAI import/call with local agents.py
+status=failed-provider-boundary
+message=mock backend provider boundary blocked disallowed provider imports/calls: ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-e9LCMP/backend/main.py:1 python-agents-module-import import agents as agents_sdk; ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-e9LCMP/backend/main.py:2 python-openai-import from openai import OpenAI; ../../../../../../var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/task-6-provider-boundary-e9LCMP/backend/main.py:3 python-openai-call client = OpenAI()
+findings=3
+kinds=python-agents-module-import, python-openai-import, python-openai-call
+match=import agents as agents_sdk | from openai import OpenAI | client = OpenAI()

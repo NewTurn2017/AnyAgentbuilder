@@ -1,0 +1,7 @@
+
+> validate:skill
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+
+ERROR: missing SKILL.md: agentic-system-builder/SKILL.md
+
+EXIT:1

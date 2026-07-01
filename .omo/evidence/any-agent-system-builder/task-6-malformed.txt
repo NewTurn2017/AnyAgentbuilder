@@ -1,0 +1,7 @@
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --bogus
+ERROR: unknown flag or argument: --bogus
+exit=1
+
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario airline --dry-run
+ERROR: unsupported --scenario value: airline; only library is wired for generated-demo QA
+exit=1

@@ -1,0 +1,25 @@
+# verify-task-5-final-malformed
+cwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T12:12:05Z
+
+## unknown domain
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain unknown --out .omo/evidence/any-agent-system-builder/tmp-final-unknown-domain-out
+ERROR: unknown built-in domain "unknown"; choose one of airline, library, pcbang, generic or pass --spec <json>
+exit_status=1
+partial_output_exists=false
+
+## malformed json spec
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --spec .omo/evidence/any-agent-system-builder/verify-task-5-final-bad-spec.json --out .omo/evidence/any-agent-system-builder/tmp-final-bad-json-out
+ERROR: invalid JSON domain spec /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-bad-spec.json: Expected double-quoted property name in JSON at position 23 (line 1 column 24)
+exit_status=1
+partial_output_exists=false
+
+## missing json spec path
+command: node agentic-system-builder/scripts/scaffold-agent-system.mjs --spec .omo/evidence/any-agent-system-builder/verify-task-5-final-missing-spec.json --out .omo/evidence/any-agent-system-builder/tmp-final-missing-spec-out
+ERROR: missing JSON domain spec: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-missing-spec.json
+exit_status=1
+partial_output_exists=false
+
+cleanup_unknown_exists=no
+cleanup_badjson_exists=no
+cleanup_missing_exists=no

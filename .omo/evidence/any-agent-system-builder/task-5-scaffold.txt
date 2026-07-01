@@ -1,0 +1,6 @@
+
+> scaffold:library-demo
+> node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/library-reservation-demo --force
+
+OK: scaffolded library agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat

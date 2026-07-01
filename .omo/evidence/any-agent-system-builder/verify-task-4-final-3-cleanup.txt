@@ -1,0 +1,11 @@
+CLEANUP Todo 4 final gate
+Wed Jul  1 20:37:21 KST 2026
+
+[server_start_confirmation]
+No dev server/start commands were invoked by this verification. Workspace-specific process probe follows.
+COMMAND: ps -axo pid,command | rg "[A]nyAgentbuilder|[a]gentic-system-builder/scripts/qa-generated-demo|[g]enerated/library-reservation-demo|[u]vicorn.*library-reservation-demo|[v]ite.*library-reservation-demo" || true
+SERVER_PROBE_SCOPE=workspace/generated-demo only; unrelated system processes intentionally ignored
+
+[temp_fixture_cleanup]
+no_temp_fixture_dir_present=.omo/evidence/any-agent-system-builder/verify-task-4-final-3-tmp
+TEMP_CLEANUP_RESULT=PASS removed or absent

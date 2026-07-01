@@ -1,0 +1,47 @@
+===== .omo/evidence/any-agent-system-builder/task-4-adversarial-probes.txt
+## nested_reference_chain
+status=1
+ERROR: SKILL.md has unsupported local links; only REFERENCE.md and EXAMPLES.md are allowed: REFERENCE.md#deep (anchors create deep references)
+## public_internal_overlap
+status=1
+ERROR: domain library leaks internal fields into public_context: member_id
+## per_domain_schema_gap
+status=1
+ERROR: domain airline missing required schema terms: tools
+## time_sensitive_claim
+status=1
+ERROR: SKILL.md contains time-sensitive wording: latest
+## stale_state_positive_recheck
+status=0
+OK: example domains valid: airline, library, pcbang, generic
+===== .omo/evidence/any-agent-system-builder/task-4-cleanup.txt
+Todo 4 cleanup receipt
+
+- No servers were started.
+- No PIDs were allocated.
+- No ports were opened.
+- No generated app files were created or removed.
+- Cleanup requirement for this static validator task is satisfied by absence of long-running commands.
+===== .omo/evidence/any-agent-system-builder/task-4-generated-negative.txt
+ERROR: missing generated app directory: generated/library-reservation-demo
+===== .omo/evidence/any-agent-system-builder/task-4-malformed-missing-mode.txt
+ERROR: choose exactly one mode: --check-skill <dir>, --validate-example <file>, or --check-generated <dir>
+===== .omo/evidence/any-agent-system-builder/task-4-malformed-missing-value.txt
+ERROR: --check-skill requires a value
+===== .omo/evidence/any-agent-system-builder/task-4-malformed-unknown-flag.txt
+ERROR: unknown flag or argument: --unknown
+===== .omo/evidence/any-agent-system-builder/task-4-negative-statuses.txt
+missing_skill_status=1
+missing_generated_status=1
+unknown_flag_status=1
+missing_value_status=1
+missing_mode_status=1
+===== .omo/evidence/any-agent-system-builder/task-4-negative.txt
+ERROR: missing skill directory: /tmp/does-not-exist
+===== .omo/evidence/any-agent-system-builder/task-4-validator.txt
+OK: skill structure valid: agentic-system-builder/SKILL.md
+
+> validate:examples
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+
+OK: example domains valid: airline, library, pcbang, generic

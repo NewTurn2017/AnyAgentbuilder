@@ -1,0 +1,2 @@
+COMMAND: rg -n --hidden -S "LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron" agentic-system-builder generated/library-reservation-demo
+marker_scan=PASS no stale marker residue found

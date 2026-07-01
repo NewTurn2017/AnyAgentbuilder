@@ -1,0 +1,251 @@
+validate-domain-spec generated-app source excerpt
+   544	function checkGenerated(dir) {
+   545	  if (!existsSync(dir) || !statSync(dir).isDirectory()) {
+   546	    fail(`missing generated app directory: ${dir}`);
+   547	  }
+   548	
+   549	  const missing = [];
+   550	  for (const rel of GENERATED_REQUIRED) {
+   551	    const path = join(dir, rel);
+   552	    if (!existsSync(path)) {
+   553	      missing.push(rel);
+   554	    }
+   555	  }
+   556	  if (missing.length > 0) {
+   557	    fail(`missing generated app skeleton files: ${missing.join(", ")}`);
+   558	  }
+   559	
+   560	  const frontendEntry = GENERATED_FRONTEND_ENTRY_CANDIDATES.find((rel) => existsSync(join(dir, rel)));
+   561	  if (!frontendEntry) {
+   562	    fail(`missing generated frontend entry; expected one of: ${GENERATED_FRONTEND_ENTRY_CANDIDATES.join(", ")}`);
+   563	  }
+   564	
+   565	  const main = readRequiredFile(join(dir, "backend/main.py"), "generated backend main.py");
+   566	  const mainWithoutComments = stripPythonComments(main);
+   567	  assertNotPlaceholder(mainWithoutComments, "generated backend main.py");
+   568	  if (!/\bFastAPI\b/.test(mainWithoutComments) || !/\bapp\s*=\s*FastAPI\s*\(/.test(mainWithoutComments)) {
+   569	    fail("generated backend main.py must create a FastAPI app");
+   570	  }
+   571	  const missingEndpoints = ENDPOINT_TERMS.filter((term) => {
+   572	    const escaped = escapeRegex(term);
+   573	    const decorator = new RegExp(`@(app|router)\\.(get|post|put|patch|delete|api_route)\\(\\s*["']${escaped}["']`);
+   574	    const addApiRoute = new RegExp(`\\bapp\\.add_api_route\\(\\s*["']${escaped}["']`);
+   575	    return !decorator.test(mainWithoutComments) && !addApiRoute.test(mainWithoutComments);
+   576	  });
+   577	  if (missingEndpoints.length > 0) {
+   578	    fail(`generated backend missing FastAPI route declarations: ${missingEndpoints.join(", ")}`);
+   579	  }
+   580	  assertContainsAllGroups(mainWithoutComments, [["AGENT_RUNTIME"], ["mock"]], "generated backend main.py");
+   581	  if (/\b(from\s+openai\b|import\s+openai\b)/.test(mainWithoutComments)) {
+   582	    fail("generated backend must not import OpenAI directly in the mock generated app");
+   583	  }
+   584	
+   585	  const frontendPackage = readRequiredFile(join(dir, "frontend/package.json"), "generated frontend package.json");
+   586	  assertNotPlaceholder(frontendPackage, "generated frontend/package.json");
+   587	  try {
+   588	    const parsedPackage = JSON.parse(frontendPackage);
+   589	    if (!parsedPackage.scripts || !parsedPackage.scripts.dev) {
+   590	      fail("generated frontend/package.json must define scripts.dev");
+   591	    }
+   592	    const dependencyNames = new Set([
+   593	      ...Object.keys(parsedPackage.dependencies || {}),
+   594	      ...Object.keys(parsedPackage.devDependencies || {}),
+   595	    ]);
+   596	    if (![...dependencyNames].some((name) => ["@vitejs/plugin-react", "vite", "next", "react"].includes(name))) {
+   597	      fail("generated frontend/package.json must declare a React-compatible frontend dependency");
+   598	    }
+   599	  } catch (error) {
+   600	    fail(`generated frontend/package.json is invalid JSON: ${error.message}`);
+   601	  }
+   602	
+   603	  const requirements = readRequiredFile(join(dir, "backend/requirements.txt"), "generated backend requirements.txt");
+   604	  assertNotPlaceholder(requirements, "generated backend/requirements.txt");
+   605	  for (const term of ["fastapi", "uvicorn"]) {
+   606	    if (!requirements.toLowerCase().includes(term)) {
+   607	      fail(`generated backend/requirements.txt missing dependency: ${term}`);
+   608	    }
+   609	  }
+   610	
+   611	  const readme = readRequiredFile(join(dir, "README.md"), "generated README.md");
+   612	  assertNotPlaceholder(readme, "generated README.md");
+   613	  for (const term of ["mock", "backend", "frontend", "AGENT_RUNTIME", "npm run", "uvicorn", "qa"]) {
+   614	    if (!readme.toLowerCase().includes(term.toLowerCase())) {
+   615	      fail(`generated README.md missing run/extension term: ${term}`);
+   616	    }
+   617	  }
+   618	
+   619	  const backendContractTexts = [mainWithoutComments];
+   620	  for (const contract of BACKEND_MODULE_CONTRACTS) {
+   621	    const moduleText = stripPythonComments(readRequiredFile(join(dir, contract.rel), `generated ${contract.rel}`));
+   622	    assertNotPlaceholder(moduleText, `generated ${contract.rel}`);
+   623	    assertContainsAllGroups(moduleText, contract.groups, `generated ${contract.rel} ${contract.label}`);
+   624	    backendContractTexts.push(moduleText);
+   625	  }
+   626	
+   627	  const backendText = backendContractTexts.join("\n");
+   628	  const frontendText = readTextTree(join(dir, "frontend"));
+   629	  const missingBackendPublic = LIBRARY_PUBLIC_FIELDS.filter((field) => !backendText.includes(field));
+   630	  const missingBackendInternal = LIBRARY_INTERNAL_FIELDS.filter((field) => !backendText.includes(field));
+   631	  if (missingBackendPublic.length > 0) {
+   632	    fail(`generated backend missing public context field markers: ${missingBackendPublic.join(", ")}`);
+   633	  }
+   634	  if (missingBackendInternal.length > 0) {
+   635	    fail(`generated backend missing internal context field markers: ${missingBackendInternal.join(", ")}`);
+   636	  }
+   637	  const leakedFrontendInternal = LIBRARY_INTERNAL_FIELDS.filter((field) => frontendText.includes(field));
+   638	  if (leakedFrontendInternal.length > 0) {
+   639	    fail(`generated frontend leaks internal context field markers: ${leakedFrontendInternal.join(", ")}`);
+   640	  }
+   641	  const frontendSource = stripJsxComments(readRequiredFile(join(dir, frontendEntry), `generated ${frontendEntry}`));
+   642	  assertNotPlaceholder(frontendSource, `generated ${frontendEntry}`);
+   643	  if (/\breturn\s+null\b/.test(frontendSource)) {
+   644	    fail(`generated ${frontendEntry} must render the generated app UI, not return null`);
+   645	  }
+   646	  if (!/<(input|textarea)\b/i.test(frontendSource)) {
+   647	    fail(`generated ${frontendEntry} must render a chat input control`);
+   648	  }
+   649	  if (!/<button\b/i.test(frontendSource)) {
+   650	    fail(`generated ${frontendEntry} must render a send button control`);
+   651	  }
+   652	  for (const group of FRONTEND_CONTRACT_GROUPS) {
+   653	    assertContainsAny(frontendSource, group.alternatives, `generated ${frontendEntry} ${group.label}`);
+   654	  }
+   655	
+   656	  ok(`generated app skeleton valid: ${resolve(dir)}`);
+
+old task-4 code review summary
+# Todo 4 Code Quality Review
+
+Result: FAIL
+
+codeQualityStatus: BLOCK
+recommendation: REQUEST_CHANGES
+reportPath: `/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/task-4-code-review.md`
+
+## Review Scope
+
+- Workdir: `/Users/genie/dev/tools/skills/AnyAgentbuilder`
+- Reviewed file: `agentic-system-builder/scripts/validate-domain-spec.mjs`
+- Reviewed Todo 4 evidence:
+  - `.omo/evidence/any-agent-system-builder/task-4-validator.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-adversarial-probes.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-negative.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-generated-negative.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-negative-statuses.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-malformed-*.txt`
+  - `.omo/evidence/any-agent-system-builder/task-4-cleanup.txt`
+  - `.omo/plans/any-agent-system-builder.md`
+- Diff status: unavailable from this workdir. `git status --short --branch` failed with `fatal: not a git repository`, so this review is based on the current file snapshot and evidence artifacts.
+
+## Skill-Perspective Check
+
+The required skill-perspective check ran:
+
+- `omo:remove-ai-slops` was loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/remove-ai-slops/SKILL.md`.
+- `omo:programming` was loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/SKILL.md`.
+
+Violations found:
+
+- remove-ai-slops / overfit-slop: violated. The generated-app validator can falsely pass a placeholder app through token presence and file existence checks.
+- programming perspective: violated. The validator is deterministic and dependency-free, but the generated-app contract check is not honest enough for the claimed behavior, and the script is 460 pure LOC without an explicit size exception.
+
+## Verification Run
+
+Commands run:
+
+- `node --check agentic-system-builder/scripts/validate-domain-spec.mjs` -> PASS
+- `npm run validate:skill` -> PASS
+- `npm run validate:examples` -> PASS
+- `awk '!/^[[:space:]]*$/ && !/^[[:space:]]*(#|\/\/)/' agentic-system-builder/scripts/validate-domain-spec.mjs | wc -l` -> `460`
+- Targeted `/tmp` fake generated-app probe -> FAILING VALIDATOR BEHAVIOR
+
+The targeted fake generated-app probe created only required filenames plus placeholder comments and a null frontend component, then ran:
+
+```text
+node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated "$tmp"
+```
+
+Observed output:
+
+```text
+OK: generated app skeleton valid: /var/folders/.../tmp.1eFKFPPaKt
+fake_generated_status=0
+```
+
+## Findings
+
+### CRITICAL
+
+None.
+
+### HIGH
+
+1. `--check-generated` falsely accepts placeholder apps with no real backend routes or frontend contract.
+
+File: `agentic-system-builder/scripts/validate-domain-spec.mjs:424`
+
+The generated-app validator checks required filenames, then validates endpoint terms with substring search in `backend/main.py`:
+
+- `agentic-system-builder/scripts/validate-domain-spec.mjs:445`
+- `agentic-system-builder/scripts/validate-domain-spec.mjs:446`
+
+It also accepts frontend presence by finding any candidate entry file and a `react`/`vite`/`next` dependency:
+
+- `agentic-system-builder/scripts/validate-domain-spec.mjs:440`
+- `agentic-system-builder/scripts/validate-domain-spec.mjs:451`
+
+This is not an honest generated-app contract check. A fake app with endpoint strings only in Python comments, required public/internal markers only in comments, and `export default function App(){ return null }` passed with status 0. That directly violates the review requirement: "no superficial generated app contract check that will falsely pass later."
+
+Required fix: make `checkGenerated` validate observable contract structure rather than broad token presence. At minimum, reject endpoint terms that only appear in comments and verify actual route declarations for `/health`, `/state/bootstrap`, `/state`, `/state/stream`, and `/chat`; verify the frontend entry contains the expected chat/UI contract surface such as chat input/send control, agent activity, context summary, domain widget, and guardrail/error rendering markers. Keep this static and dependency-free if desired, but the checks need meaningful failure paths.
+
+### MEDIUM
+
+1. Public/internal context separation in docs is partially global-token based.
+
+File: `agentic-system-builder/scripts/validate-domain-spec.mjs:255`
+
+`assertReferenceContextSeparation` lowercases `REFERENCE.md` and `EXAMPLES.md` together, then checks for global marker strings:
+
+- `publiccontext`
+- `public_context`
+- `internal_context`
+- `public json`
+- `internal fields`
+
+This can pass even if the methodology lacks a coherent section-level public/internal boundary. The domain block checks are stronger, but this specific docs check still matches the anti-slop smell of global token presence where section-level validation is expected.
+
+Required fix: make this check section-aware, or remove the claim that it validates methodology-level context separation. Prefer checking named headings or a bounded section around `PublicContext` / `internal_context`.
+
+2. Validator size exceeds the programming/remove-ai-slops 250 pure LOC ceiling.
+
+File: `agentic-system-builder/scripts/validate-domain-spec.mjs:1`
+
+Measured pure LOC: `460`. The file combines CLI parsing, skill validation, example validation, generated-app validation, Markdown link parsing, simple frontmatter parsing, and recursive tree reads. The programming skill allows genuinely indivisible standalone checkers only with an explicit size exception comment near the top; this file has no such exception.
+
+Required fix: either split by responsibility, or add an explicit size exception with rationale if this is intentionally kept as one standalone validator. Given the false-pass issue above, a split between skill/example/generated-app validators would likely improve maintainability.
+
+### LOW
+
+1. Todo 4 remains unchecked in the plan.
+
+File: `.omo/plans/any-agent-system-builder.md`
+
+The plan still shows:
+
+```text
+- [ ] 4. Harden deterministic validation coverage
+```
+
+This is not a code defect by itself, but plan acceptance is not complete. Do not treat Todo 4 as accepted until the blocker above is fixed and the plan/evidence are updated honestly.
+
+2. Todo 4 evidence is useful but incomplete for the generated-app contract.
+
+The evidence includes good negative probes for missing skill dir, missing values, unknown flags, missing mode, nested reference links, per-domain schema gaps, public/internal overlap, and time-sensitive wording. It does not include a generated-app false-positive probe. `.omo/evidence/any-agent-system-builder/task-4-generated-negative.txt` only verifies a missing generated directory, which does not exercise the superficial-pass risk.
+
+## Blockers
+
+- Fix `checkGenerated` so placeholder comments and a null frontend component cannot pass as a valid generated app contract.
+
+## Final Status
+
+FAIL. Request changes before approval.

@@ -1,0 +1,14 @@
+unknown domain probe
+ERROR: unknown built-in domain "unknown"; choose one of airline, library, pcbang, generic or pass --spec <json>
+unknown_status=1
+unknown_cleanup=ok generated/verify-task-5-bad absent
+
+bad JSON spec probe
+ERROR: invalid JSON domain spec /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-bad-spec.json: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+bad_json_status=1
+bad_json_cleanup=ok generated/verify-task-5-bad-json absent
+
+missing JSON spec probe
+ERROR: missing JSON domain spec: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-missing-spec.json
+missing_status=1
+missing_cleanup=ok generated/verify-task-5-missing-spec absent

@@ -1,0 +1,3 @@
+ERROR: missing generated app directory: generated/library-reservation-demo
+
+EXIT_CODE=1

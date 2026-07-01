@@ -1,0 +1,15 @@
+SCENARIO=cleanup after Todo 5 final-4 gate
+COMMAND=find .omo/evidence/any-agent-system-builder -maxdepth 1 -type d -name 'verify-task-5-final-4-*-tmp.*' -print
+
+RESULT=PASS no final-4 evidence temp dirs remain
+
+COMMAND=find /tmp -maxdepth 1 -type d -name 'aab-task5-final4-*' -print
+
+RESULT=PASS no /tmp final-4 task dirs remain
+
+COMMAND=ps -axo pid=,command= | awk generated-demo/server matcher excluding awk self
+
+AWK_SERVER_EXIT_STATUS=0
+RESULT=PASS no generated app server/probe processes found
+
+FAILURES=0

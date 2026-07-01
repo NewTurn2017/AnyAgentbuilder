@@ -1,0 +1,6 @@
+missing_skill_status=1
+missing_generated_status=1
+unknown_flag_status=1
+missing_value_status=1
+missing_mode_status=1
+placeholder_generated_status=1

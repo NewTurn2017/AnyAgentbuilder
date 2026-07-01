@@ -1,0 +1,4 @@
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+EXIT_STATUS=0
+RESULT=PASS generated library app contract valid

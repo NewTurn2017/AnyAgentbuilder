@@ -1,0 +1,17 @@
+node syntax check
+node_check_status=0
+
+backend compile check without pycache writes
+ok generated/library-reservation-demo/backend/agents.py
+ok generated/library-reservation-demo/backend/context.py
+ok generated/library-reservation-demo/backend/demo_data.py
+ok generated/library-reservation-demo/backend/events.py
+ok generated/library-reservation-demo/backend/main.py
+ok generated/library-reservation-demo/backend/memory.py
+ok generated/library-reservation-demo/backend/tools.py
+python_compile_status=0
+
+pure LOC check
+scaffold-agent-system.mjs pure_loc=997
+validate-domain-spec.mjs pure_loc=780
+generated App.jsx pure_loc=140

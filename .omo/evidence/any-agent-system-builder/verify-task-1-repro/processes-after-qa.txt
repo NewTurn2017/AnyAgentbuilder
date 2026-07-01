@@ -1,0 +1,8 @@
+29860 29830 node /Users/genie/test/project/node_modules/.bin/vite
+77884 77850 node /Users/genie/dev/active/erpsystem/node_modules/.bin/next dev
+85902 11058 /bin/zsh -c { ps -axo pid,ppid,command | rg 'generated/library-reservation-demo|uvicorn|vite|next dev|qa-generated-demo|agentic-system-builder' || true; printf '\nEXIT_CODE=%s\n' "$?"; } > .omo/evidence/any-agent-system-builder/verify-task-1-repro/processes-after-qa.txt 2>&1
+85908 85902 rg generated/library-reservation-demo|uvicorn|vite|next dev|qa-generated-demo|agentic-system-builder
+52479 52455 node /Users/genie/dev/active/warmtalent-ai/node_modules/.bin/../concurrently/dist/bin/concurrently.js -n next,convex,inngest -c blue,magenta,green next dev --turbo convex dev /tmp/inngest-dev/node_modules/.bin/inngest dev -u http://localhost:3000/api/inngest -u http://localhost:3000/api/inngest-ddaneung
+52486 52479 node /Users/genie/dev/active/warmtalent-ai/node_modules/.bin/../next/dist/bin/next dev --turbo
+
+EXIT_CODE=0

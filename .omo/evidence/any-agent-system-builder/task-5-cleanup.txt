@@ -1,0 +1,4 @@
+SCENARIO=cleanup temp dirs from Todo 5 validation probes
+INVOCATION=find /tmp -maxdepth 1 -type d ( aab-task5-* probe dirs ) -print
+POST_CLEANUP_LEFTOVERS=none
+RESULT=PASS no Todo 5 temp dirs remain

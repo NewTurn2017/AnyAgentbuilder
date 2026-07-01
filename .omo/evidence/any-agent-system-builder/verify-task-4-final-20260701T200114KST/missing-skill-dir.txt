@@ -1,0 +1,5 @@
+declared_command=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill .omo/evidence/any-agent-system-builder/verify-task-4-final-20260701T200114KST/fixtures/no-such-skill
+runner=perl alarm 60s
+ERROR: missing skill directory: .omo/evidence/any-agent-system-builder/verify-task-4-final-20260701T200114KST/fixtures/no-such-skill
+
+exit=1

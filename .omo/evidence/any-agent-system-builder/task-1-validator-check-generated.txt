@@ -1,0 +1,1 @@
+ERROR: missing generated app directory: generated/library-reservation-demo

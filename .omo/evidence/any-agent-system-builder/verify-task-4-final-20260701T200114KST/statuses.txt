@@ -1,0 +1,8 @@
+required-pass=0
+node-check=0
+missing-skill-dir=1
+missing-generated-app=1
+placeholder-regression=1
+tokenstuff-inert-generated=0
+unknown-flag=1
+missing-value=1

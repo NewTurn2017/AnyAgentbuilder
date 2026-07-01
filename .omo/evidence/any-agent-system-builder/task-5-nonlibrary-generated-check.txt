@@ -1,0 +1,10 @@
+SCENARIO=non-library pcbang generated app uses its own public/internal fields
+TEMP_DIR=/tmp/aab-task5-nonlibrary.8a2GJF
+SCAFFOLD_INVOCATION=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain pcbang --out /tmp/aab-task5-nonlibrary.8a2GJF/pcbang --force
+OK: scaffolded pcbang agent system at /tmp/aab-task5-nonlibrary.8a2GJF/pcbang
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+SCAFFOLD_EXIT_STATUS=0
+CHECK_INVOCATION=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-nonlibrary.8a2GJF/pcbang
+OK: generated pcbang app skeleton valid: /tmp/aab-task5-nonlibrary.8a2GJF/pcbang
+CHECK_EXIT_STATUS=0
+RESULT=PASS non-library generated app validated with domain-owned fields

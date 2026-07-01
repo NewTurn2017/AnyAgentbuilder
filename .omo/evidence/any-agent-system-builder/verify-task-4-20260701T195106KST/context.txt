@@ -1,0 +1,7 @@
+workdir=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T19:51:06+09:00
+node=v22.22.2
+npm=10.9.7
+git-status=fatal: not a git repository (or any of the parent directories): .git
+
+find-git=

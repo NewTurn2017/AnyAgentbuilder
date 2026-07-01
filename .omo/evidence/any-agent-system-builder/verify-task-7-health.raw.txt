@@ -1,0 +1,11 @@
+$ curl -i /health
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    83  100    83    0     0  38461      0 --:--:-- --:--:-- --:--:-- 41500
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 14:08:32 GMT
+server: uvicorn
+content-length: 83
+content-type: application/json
+
+{"status":"ok","runtime":"mock","domain_key":"library","active_stream_listeners":0}

@@ -1,0 +1,3 @@
+ERROR: generated backend/tools.py must contain executable data/logic beyond literal marker strings
+
+EXIT_STATUS=1

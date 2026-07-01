@@ -1,0 +1,52 @@
+tmp_root=/tmp/aab-task5-final2-domains.sywbme
+date=2026-07-01T12:31:48Z
+
+SCENARIO: scaffold-and-validate-airline
+COMMAND: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain airline --out /tmp/aab-task5-final2-domains.sywbme/airline --force
+OK: scaffolded airline agent system at /tmp/aab-task5-final2-domains.sywbme/airline
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-domains.sywbme/airline
+OK: generated airline app skeleton valid: /tmp/aab-task5-final2-domains.sywbme/airline
+validate_exit=0
+RESULT=PASS generated validator accepted airline
+COMMAND: rg -n -S 'LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron' /tmp/aab-task5-final2-domains.sywbme/airline
+marker_scan=PASS no stale marker residue
+COMMAND: rg -n -S 'patron_display_name|loan_titles|member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost' /tmp/aab-task5-final2-domains.sywbme/airline
+library_field_residue=PASS no library-only field residue
+
+SCENARIO: scaffold-and-validate-pcbang
+COMMAND: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain pcbang --out /tmp/aab-task5-final2-domains.sywbme/pcbang --force
+OK: scaffolded pcbang agent system at /tmp/aab-task5-final2-domains.sywbme/pcbang
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-domains.sywbme/pcbang
+OK: generated pcbang app skeleton valid: /tmp/aab-task5-final2-domains.sywbme/pcbang
+validate_exit=0
+RESULT=PASS generated validator accepted pcbang
+COMMAND: rg -n -S 'LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron' /tmp/aab-task5-final2-domains.sywbme/pcbang
+marker_scan=PASS no stale marker residue
+COMMAND: rg -n -S 'patron_display_name|loan_titles|member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost' /tmp/aab-task5-final2-domains.sywbme/pcbang
+library_field_residue=PASS no library-only field residue
+
+SCENARIO: scaffold-and-validate-generic
+COMMAND: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain generic --out /tmp/aab-task5-final2-domains.sywbme/generic --force
+OK: scaffolded generic agent system at /tmp/aab-task5-final2-domains.sywbme/generic
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-domains.sywbme/generic
+OK: generated generic app skeleton valid: /tmp/aab-task5-final2-domains.sywbme/generic
+validate_exit=0
+RESULT=PASS generated validator accepted generic
+COMMAND: rg -n -S 'LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron' /tmp/aab-task5-final2-domains.sywbme/generic
+marker_scan=PASS no stale marker residue
+COMMAND: rg -n -S 'patron_display_name|loan_titles|member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost' /tmp/aab-task5-final2-domains.sywbme/generic
+library_field_residue=PASS no library-only field residue
+
+SCENARIO: source-stale-marker-scan
+COMMAND: rg -n -S 'LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron' agentic-system-builder generated/library-reservation-demo
+source_marker_scan=PASS no stale marker residue in source/generated library
+
+COMMAND: rm -rf /tmp/aab-task5-final2-domains.sywbme
+cleanup_exists=no
+failures=0

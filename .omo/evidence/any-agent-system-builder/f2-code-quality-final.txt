@@ -1,0 +1,142 @@
+F2 Final Code Quality Review - any-agent-system-builder
+=======================================================
+
+codeQualityStatus: BLOCK
+recommendation: REQUEST_CHANGES
+reportPath: .omo/evidence/any-agent-system-builder/f2-code-quality-final.txt
+
+Scope Reviewed
+--------------
+- Current filesystem state under /Users/genie/dev/tools/skills/AnyAgentbuilder.
+- Prior rejection report: .omo/evidence/any-agent-system-builder/f2-code-quality.txt.
+- Claimed fix summary and evidence:
+  - .omo/evidence/any-agent-system-builder/f2-fix-summary.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-backend-types.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-validator-regression.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-final-command.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-cleanup.txt
+- Changed files claimed by worker:
+  - agentic-system-builder/scripts/scaffold-agent-system.mjs
+  - agentic-system-builder/scripts/validate-domain-spec.mjs
+  - agentic-system-builder/templates/backend/*.tmpl
+  - generated/library-reservation-demo/backend/*
+- Notepad consulted:
+  - .omo/start-work/any-agent-system-builder-notepad.md
+
+Repository Baseline
+-------------------
+- /Users/genie/dev/tools/skills/AnyAgentbuilder is not a Git repository, so a full diff/merge-base review was not possible.
+- The user did not provide a full diff artifact in this turn. This review is therefore based on current source, the previous rejection report, and the referenced evidence artifacts.
+- No AGENTS.md applies under this workspace root.
+
+Skill Perspective Check
+-----------------------
+- Ran the required skill-perspective check.
+- Loaded and applied omo:remove-ai-slops. Relevant criteria applied: destructive cleanup safety, deletion ladder, over-defensive false confidence, implementation-mirroring checks, unnecessary production complexity, and cleanup residue.
+- Loaded and applied omo:programming plus the Python reference and code-smells reference. Relevant criteria applied: no broad Any/dict public boundaries, parse-don't-validate at boundaries, no brittle prompt/source tests, no needless validation/parsing complexity, and oversized-file risk.
+- Result: backend public API/state typing no longer violates the F2 dict[str, Any] concern. The scaffold deletion fix still violates the safety/ownership-marker perspective. The validator still carries non-blocking implementation-mirroring and oversized-module risk, although the specific F2 negatives are stronger than before.
+
+Read-Only Verification Re-run
+-----------------------------
+- PASS: node --check agentic-system-builder/scripts/scaffold-agent-system.mjs
+- PASS: node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+- PASS: npm run validate:skill
+- PASS: npm run validate:examples
+- PASS: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+- PASS: source scan found no dict[str, Any] or typing.Any in generated backend/templates public API/state implementation; remaining dict hits are typed JsonValue maps or concrete queue/state maps.
+- PASS: f2-fix-cleanup.txt records backend/frontend PIDs 71857/72525 dead and ports 57412/57413 closed; fresh lsof/ps checks agreed.
+- NOT RERUN: full qa:generated-demo, because it scaffolds/installs/starts servers and this review was read-only except for this report.
+- NOT RERUN: temp negative probes that create/delete fixtures, because this review was read-only except for this report.
+
+Findings
+--------
+
+CRITICAL
+
+- None.
+
+HIGH
+
+1. Existing unmarked directories under generated/ can still be recursively deleted with --force.
+
+Evidence:
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:301 defines safeGeneratedChild as any child path under GENERATED_ROOT.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:304 reads the ownership marker, but line 305 only rejects unowned outputs when !safeGeneratedChild && !owned.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:308 then runs await rm(outputDir, { recursive: true, force: true }).
+- .omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt proves unmarked temp dirs outside generated/ are rejected, but it does not prove an unmarked existing generated/ child is rejected.
+
+Impact:
+- The previous arbitrary-root deletion risk is narrowed, but the requested safety criterion was "dangerous paths and unmarked dirs cannot be deleted; marked generated dirs still replaceable."
+- Current code still allows a command such as --out generated/<existing-unmarked-dir> --force to remove that directory recursively without an ownership marker.
+- This is still destructive cleanup behavior gated by location rather than ownership. It creates data-loss risk for any user-created or copied directory under generated/.
+
+Required fix:
+- Require a valid .any-agent-builder-generated.json marker before deleting any existing output directory, including children of generated/, or otherwise prove the directory was created by this scaffold run before recursive removal.
+- Keep the protected path checks, but do not let "inside generated/" bypass ownership.
+
+MEDIUM
+
+1. The validator is stronger, but still relies heavily on source-shape and regex implementation checks.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:438 tightens /chat response parsing to a fetch response variable and .json() call.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:734 adds required Pydantic model checks and route response_model checks.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:1133 rejects dict[str, Any]/typing.Any in generated backend implementation.
+- .omo/evidence/any-agent-system-builder/f2-fix-validator-regression.txt shows previous negatives still fail, including broad-dict-any, null frontend, inert chat, and unsafe scaffold-copy probes.
+- Residual risk remains at agentic-system-builder/scripts/validate-domain-spec.mjs:944 and agentic-system-builder/scripts/validate-domain-spec.mjs:969, where markdown/domain parsing is still ad hoc regex and line splitting.
+- Residual risk also remains across agentic-system-builder/scripts/validate-domain-spec.mjs:1044 through agentic-system-builder/scripts/validate-domain-spec.mjs:1178, where generated behavior is mostly asserted by source-string structure rather than executable contracts.
+
+Impact:
+- The previous validator false-confidence risk is reduced, not eliminated.
+- This is not the blocking issue for this F2 re-review because the worker added materially better negative probes and the read-only checks pass, but future edits can still satisfy the validator without proving runtime behavior.
+
+2. validate-domain-spec.mjs remains oversized.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:5 has a SIZE_OK rationale.
+- Reviewer pure LOC measurement: 1104.
+
+Impact:
+- The SIZE_OK rationale explains the portability tradeoff, but the file remains a maintenance hotspot that combines CLI parsing, markdown parsing, source scanning, generated backend validation, frontend validation, and dependency checks.
+- Carrying this is acceptable only as explicit debt; future validator changes should avoid growing this file further.
+
+LOW
+
+1. Generated Python cache artifacts remain in the deliverable tree.
+
+Evidence:
+- generated/library-reservation-demo/backend/__pycache__/ exists.
+- generated/library-reservation-demo/backend/__pycache__/*.pyc files exist.
+
+Impact:
+- This is cleanup residue, not a functional blocker. It should be removed before packaging or presenting the generated tree as source-only output.
+
+2. Generated backend still deviates from the strict Python programming reference in non-F2 areas.
+
+Evidence:
+- generated/library-reservation-demo/backend/main.py:1 imports asyncio.
+- generated/library-reservation-demo/backend/events.py:1 imports asyncio.
+- generated/library-reservation-demo/backend/models.py:11 and following Pydantic models use ConfigDict(extra="forbid") but not frozen=True.
+
+Impact:
+- These are not the F2 blockers under review, but they are residual programming-perspective risks if this generated backend is intended to model the strict stack rather than a lightweight demo.
+
+Positive Checks
+---------------
+- Protected exact paths are blocked by source and evidence: /, HOME, repo root, agentic-system-builder, and .omo.
+- Existing unmarked temp output outside generated/ is rejected and preserved according to f2-fix-scaffold-safety.txt.
+- Marked generated output replacement is proven by f2-fix-scaffold-safety.txt.
+- Backend public FastAPI endpoints now declare typed response_model values and return typed Pydantic response objects.
+- Public/internal state separation is represented by PublicContextModel, InternalContextModel, ConversationStateModel, StateResponse, and ChatResponse rather than broad dict[str, Any].
+- Validator negatives now cover missing generated dir, missing typed models, broad dict[str, Any], null frontend, inert chat fetch, and scaffold guard-marker removal.
+- Full final command evidence exists at f2-fix-final-command.txt and exited 0.
+- Cleanup evidence exists and fresh read-only pid/port checks found no latest harness processes or listeners.
+
+Blockers
+--------
+- Fix scaffold deletion safety so existing unmarked directories under generated/ cannot be recursively deleted with --force.
+
+Final Status
+------------
+REJECT: REQUEST_CHANGES

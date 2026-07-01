@@ -1,0 +1,54 @@
+COMMANDS: source freshness and size audit
+
+stat:
+Jul  1 20:16:51 2026 agentic-system-builder/scripts/validate-domain-spec.mjs
+Jul  1 20:17:44 2026 .omo/evidence/any-agent-system-builder/task-4-validator.txt
+Jul  1 20:17:43 2026 .omo/evidence/any-agent-system-builder/task-4-generated-placeholder-negative.txt
+Jul  1 20:18:35 2026 .omo/evidence/any-agent-system-builder/task-4-generated-tokenstuff-negative.txt
+Jul  1 20:18:35 2026 .omo/evidence/any-agent-system-builder/task-4-generated-route-tokenstuff-negative.txt
+
+sha256:
+f20caad9f00bd15516cfc8a7ec1299bd4b7783200175e46628e6af8535f660ac  agentic-system-builder/scripts/validate-domain-spec.mjs
+703cfe06920a7823ebe0408959342d7510fe5c9dd7fd163742292eaffc0e2b7c  .omo/evidence/any-agent-system-builder/task-4-validator.txt
+5192d15594307c85e566b610a25f8449be0ee4263dfb5111e036764f9a148460  .omo/evidence/any-agent-system-builder/task-4-generated-placeholder-negative.txt
+6fcd3335982e1cd69a79e9038286bb8e60ec9128c9c193c9a1ee5b96ee2bd235  .omo/evidence/any-agent-system-builder/task-4-generated-tokenstuff-negative.txt
+5e5a595c2889ba31d85577773f6ec9671e0b516886a66749010acb2497c49dad  .omo/evidence/any-agent-system-builder/task-4-generated-route-tokenstuff-negative.txt
+
+line counts:
+     819 agentic-system-builder/scripts/validate-domain-spec.mjs
+pure_loc=     739
+
+SIZE_OK line:
+#!/usr/bin/env node
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { extname, join, resolve } from "node:path";
+
+// SIZE_OK: single-file, built-in-only validator kept portable for copied skill bundles.
+
+const SCHEMA_TERMS = [
+  "domain_key",
+
+review report skill/slop lines:
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:15:  - `.omo/evidence/any-agent-system-builder/task-4-generated-placeholder-negative.txt`
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:21:  - `.omo/evidence/any-agent-system-builder/verify-task-4-20260701T195133KST/fixtures/generated-placeholder-pass`
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:28:- `omo:remove-ai-slops` loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/remove-ai-slops/SKILL.md`.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:29:- `omo:programming` loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/SKILL.md`.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:33:- remove-ai-slops: no approval-blocking violation remains. The previous superficial generated-app placeholder false-pass is fixed; current checks reject comment-only placeholder backend files and `return null` frontend entries.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:34:- programming: no approval-blocking violation for this Todo 4 re-review. The validator is deterministic and uses Node built-ins only. Medium maintainability concern remains because the standalone script is 615 pure LOC without a `SIZE_OK` rationale.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:43:- `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-20260701T195133KST/fixtures/generated-placeholder-pass` -> FAIL as expected, `ERROR: generated backend main.py has only placeholder content`
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:49:The requested evidence file `.omo/evidence/any-agent-system-builder/task-4-generated-placeholder-negative.txt` records `status=1` and `ERROR: generated backend main.py has only placeholder content`. I did not trust that artifact by itself; I re-ran the validator against the previous false-positive fixture and observed the same nonzero rejection.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:63:1. `agentic-system-builder/scripts/validate-domain-spec.mjs:1` exceeds the programming skill size ceiling.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:65:The validator is 615 pure LOC and has no explicit `SIZE_OK` rationale in the first few lines. It is still a coherent standalone deterministic CLI, so I am not treating this as an approval blocker for the Todo 4 false-pass re-review. Before further expansion, split by responsibility or add a concise size exception rationale.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:71:Generated backend route checks at `agentic-system-builder/scripts/validate-domain-spec.mjs:571` now require FastAPI decorator-like route declarations, which is meaningful for the prior blocker. A highly adversarial source could still place decorator-looking text in inline comments or string literals. That is a residual static-analysis limitation, not a blocker for the requested placeholder comments/null frontend fix.
+.omo/evidence/any-agent-system-builder/task-4-code-review-final.md:83:PASS. The previous placeholder false-pass blocker is fixed. The validator now provides meaningful generated backend/frontend contract checks, clear nonzero CLI failures, deterministic Node built-in behavior, and no observed server/network/OpenAI side effects.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:28:- `omo:remove-ai-slops` was loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/remove-ai-slops/SKILL.md`.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:29:- `omo:programming` was loaded from `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/SKILL.md`.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:33:- remove-ai-slops / overfit-slop: violated. The generated-app validator can falsely pass a placeholder app through token presence and file existence checks.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:34:- programming perspective: violated. The validator is deterministic and dependency-free, but the generated-app contract check is not honest enough for the claimed behavior, and the script is 460 pure LOC without an explicit size exception.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:46:The targeted fake generated-app probe created only required filenames plus placeholder comments and a null frontend component, then ran:
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:67:1. `--check-generated` falsely accepts placeholder apps with no real backend routes or frontend contract.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:99:This can pass even if the methodology lacks a coherent section-level public/internal boundary. The domain block checks are stronger, but this specific docs check still matches the anti-slop smell of global token presence where section-level validation is expected.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:103:2. Validator size exceeds the programming/remove-ai-slops 250 pure LOC ceiling.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:107:Measured pure LOC: `460`. The file combines CLI parsing, skill validation, example validation, generated-app validation, Markdown link parsing, simple frontmatter parsing, and recursive tree reads. The programming skill allows genuinely indivisible standalone checkers only with an explicit size exception comment near the top; this file has no such exception.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:109:Required fix: either split by responsibility, or add an explicit size exception with rationale if this is intentionally kept as one standalone validator. Given the false-pass issue above, a split between skill/example/generated-app validators would likely improve maintainability.
+.omo/evidence/any-agent-system-builder/task-4-code-review.md:131:- Fix `checkGenerated` so placeholder comments and a null frontend component cannot pass as a valid generated app contract.

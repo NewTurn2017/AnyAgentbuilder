@@ -1,0 +1,13 @@
+required-pass=0
+missing-skill=1
+missing-generated=1
+unknown-flag=1
+missing-check-skill-value=1
+missing-require-domain-value=1
+missing-mode=1
+require-domain-wrong-mode=1
+node-check=0
+overlap-example=1
+generated-missing-endpoints=1
+generated-frontend-internal-leak=1
+generated-placeholder-false-positive=0

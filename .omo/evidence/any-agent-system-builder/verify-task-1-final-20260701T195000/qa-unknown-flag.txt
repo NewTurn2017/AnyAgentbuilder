@@ -1,0 +1,3 @@
+ERROR: unknown flag or argument: --unknown
+
+EXIT:1

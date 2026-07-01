@@ -1,0 +1,24 @@
+$ /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 62067
+INFO:     Started server process [4672]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:62067 (Press CTRL+C to quit)
+INFO:     127.0.0.1:62082 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62083 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62084 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62085 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62086 - "POST /chat HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:62087 - "POST /chat HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:62088 - "GET /state?thread_id=qa-unknown-thread HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62089 - "GET /state/stream?thread_id=demo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /state/bootstrap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62143 - "GET /state/bootstrap HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62146 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62147 - "POST /chat HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4672]
+
+[process exit] code=null signal=SIGTERM

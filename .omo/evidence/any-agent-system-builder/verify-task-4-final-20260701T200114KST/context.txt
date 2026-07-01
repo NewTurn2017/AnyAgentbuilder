@@ -1,0 +1,22 @@
+pwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01 20:03:29 KST
+workdir_git_status=fatal: not a git repository (or any of the parent directories): .git
+
+node_version=v22.22.2
+npm_version=10.9.7
+
+source_sha256
+116a8d0044d76baba6df9bab2858705d940aff96480dc7f0cf1cc2a7ba0946e3  package.json
+dac695e5f6649ea0900954e5cc05245fb566e7a05c396c5b016eeab4bb477381  agentic-system-builder/SKILL.md
+78fca19475bcbb374733f4944f40786cac217d4b4f7529ac7e9a6a63fc287fdc  agentic-system-builder/REFERENCE.md
+aca5c6b7e9e914a521357ddde0e0f29092b05296050d4fc51f2f175cffeb7344  agentic-system-builder/EXAMPLES.md
+de55f9c2ea0c678a58000bbb78ddce9b4df727bc98f82e1d4819245458a60c5b  agentic-system-builder/scripts/validate-domain-spec.mjs
+
+source_stat
+-rw-r--r--@ 1 genie  staff  13138 Jul  1 19:28:19 2026 agentic-system-builder/EXAMPLES.md
+-rw-r--r--@ 1 genie  staff  12438 Jul  1 19:28:19 2026 agentic-system-builder/REFERENCE.md
+-rw-r--r--@ 1 genie  staff   4093 Jul  1 19:26:11 2026 agentic-system-builder/SKILL.md
+-rw-r--r--@ 1 genie  staff  22284 Jul  1 19:55:19 2026 agentic-system-builder/scripts/validate-domain-spec.mjs
+-rw-r--r--@ 1 genie  staff    722 Jul  1 18:57:12 2026 package.json
+
+pure_loc_validate_domain_spec=615

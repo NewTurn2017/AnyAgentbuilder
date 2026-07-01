@@ -1,0 +1,7 @@
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --definitely-unknown --evidence .omo/evidence/any-agent-system-builder
+ERROR: unknown flag or argument: --definitely-unknown
+UNKNOWN_FLAG_EXIT=1
+---
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario airline --evidence .omo/evidence/any-agent-system-builder
+ERROR: unsupported --scenario value: airline; only library is wired for generated-demo QA
+BAD_SCENARIO_EXIT=1

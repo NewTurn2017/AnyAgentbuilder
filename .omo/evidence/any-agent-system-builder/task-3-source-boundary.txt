@@ -1,0 +1,4 @@
+pinned_sdk_concepts=OK
+airline_guide_citation_reference=OK
+airline_guide_citation_examples=OK
+external_guide_handling=treated as cited inspiration; no commands or code copied from guide

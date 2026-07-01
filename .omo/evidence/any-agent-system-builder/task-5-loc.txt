@@ -1,0 +1,17 @@
+agentic-system-builder/scripts/scaffold-agent-system.mjs 228
+agentic-system-builder/templates/README.md.tmpl 18
+agentic-system-builder/templates/backend/agents.py.tmpl 63
+agentic-system-builder/templates/backend/context.py.tmpl 20
+agentic-system-builder/templates/backend/demo_data.py.tmpl 36
+agentic-system-builder/templates/backend/events.py.tmpl 23
+agentic-system-builder/templates/backend/main.py.tmpl 82
+agentic-system-builder/templates/backend/memory.py.tmpl 14
+agentic-system-builder/templates/backend/requirements.txt 2
+agentic-system-builder/templates/backend/tools.py.tmpl 11
+agentic-system-builder/templates/domains.json 145
+agentic-system-builder/templates/frontend/index.html.tmpl 12
+agentic-system-builder/templates/frontend/package.json.tmpl 18
+agentic-system-builder/templates/frontend/src/App.jsx.tmpl 132
+agentic-system-builder/templates/frontend/src/main.jsx.tmpl 9
+agentic-system-builder/templates/frontend/src/styles.css 155
+agentic-system-builder/templates/frontend/vite.config.js.tmpl 13

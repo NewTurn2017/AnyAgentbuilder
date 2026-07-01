@@ -1,0 +1,1 @@
+NO_MATCHES: exact rg placeholder scan returned no matches after generated ignore metadata excluded local dependency and cache trees.

@@ -1,0 +1,4 @@
+declared_command=node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+runner=perl alarm 60s
+
+exit=0

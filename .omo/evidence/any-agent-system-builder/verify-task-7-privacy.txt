@@ -1,0 +1,22 @@
+Todo 7 public/internal privacy verification
+
+apiArtifacts=verify-task-7-health.raw.txt, verify-task-7-chat.raw.txt, verify-task-7-guardrail.raw.txt, verify-task-7-422.raw.txt, verify-task-7-unknown-thread.raw.txt, verify-task-7-sse.raw.txt, task-7-health.txt, task-7-chat.txt, task-7-guardrail.txt, task-7-422.txt, task-7-unknown-thread.txt, task-7-sse.txt, run-manifest.json
+forbiddenMarkers=member_id, internal_notes, policy_overrides, raw_hold_queue, staff_token, inventory_cost
+apiForbiddenMarkerHits=0
+
+sourceControlNote: internal markers intentionally remain in backend context/demo_data seeds so privacy can be tested at the API boundary; they must not appear in public API artifacts.
+sourceInternalMarkerHits=12
+sourceHit=generated/library-reservation-demo/backend/context.py: member_id
+sourceHit=generated/library-reservation-demo/backend/context.py: internal_notes
+sourceHit=generated/library-reservation-demo/backend/context.py: policy_overrides
+sourceHit=generated/library-reservation-demo/backend/context.py: raw_hold_queue
+sourceHit=generated/library-reservation-demo/backend/context.py: staff_token
+sourceHit=generated/library-reservation-demo/backend/context.py: inventory_cost
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: member_id
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: internal_notes
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: policy_overrides
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: raw_hold_queue
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: staff_token
+sourceHit=generated/library-reservation-demo/backend/demo_data.py: inventory_cost
+
+result=PASS

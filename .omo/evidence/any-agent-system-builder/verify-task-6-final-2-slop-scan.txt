@@ -1,0 +1,66 @@
+Dead-code/slop scan, rerun after dead-export cleanup
+
+$ pure LOC for harness/helpers
+ 994 agentic-system-builder/scripts/validate-domain-spec.mjs
+ 229 agentic-system-builder/scripts/scaffold-agent-system.mjs
+ 175 agentic-system-builder/scripts/qa-lib/provider-security.mjs
+ 172 agentic-system-builder/scripts/qa-lib/processes.mjs
+ 135 agentic-system-builder/scripts/qa-generated-demo.mjs
+ 120 agentic-system-builder/scripts/qa-lib/commands.mjs
+  65 agentic-system-builder/scripts/qa-lib/http-checks.mjs
+  49 agentic-system-builder/scripts/qa-lib/args.mjs
+  32 agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+  32 agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+  15 agentic-system-builder/scripts/qa-lib/paths.mjs
+  13 agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+  11 agentic-system-builder/scripts/qa-lib/ports.mjs
+   7 agentic-system-builder/scripts/qa-lib/manifest.mjs
+   7 agentic-system-builder/scripts/qa-lib/errors.mjs
+
+$ ensureDir/appendProcessLog references
+## ensureDir
+## appendProcessLog
+
+$ exported helper inventory in qa-lib
+agentic-system-builder/scripts/qa-lib/args.mjs:12:export function parseArgs(argv) {
+agentic-system-builder/scripts/qa-lib/args.mjs:51:export function modeFromArgs(args) {
+agentic-system-builder/scripts/qa-lib/browser-qa.mjs:17:export async function runBrowserQa(frontendPort, evidenceDir) {
+agentic-system-builder/scripts/qa-lib/browser-qa.mjs:7:export async function requireBrowserQaDependency() {
+agentic-system-builder/scripts/qa-lib/commands.mjs:4:export function commandLabel(command) {
+agentic-system-builder/scripts/qa-lib/commands.mjs:8:export function buildPlannedCommands(backendPort, frontendPort) {
+agentic-system-builder/scripts/qa-lib/errors.mjs:1:export class HarnessError extends Error {
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs:4:export function ensureEvidenceDir(path) {
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs:8:export async function pathExists(path) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:24:export function assertHttpStatus(result, expected, label) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:31:export function assertNoInternalMarkers(text, label) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:38:export async function runCurlChecks(commands, evidenceDir, provider) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:6:export async function waitForHttp(url, label, timeoutMs = 30000) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:23:export async function ensureBackendDependencies(commands, provider) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:32:export async function ensureFrontendDependencies(commands, provider) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:7:export async function runSetup(commands, manifest, provider) {
+agentic-system-builder/scripts/qa-lib/manifest.mjs:4:export async function writeManifest(evidenceDir, manifest) {
+agentic-system-builder/scripts/qa-lib/paths.mjs:10:export const INTERNAL_FIELD_MARKERS = [
+agentic-system-builder/scripts/qa-lib/paths.mjs:4:export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+agentic-system-builder/scripts/qa-lib/paths.mjs:5:export const GENERATED_ROOT = join(ROOT, "generated/library-reservation-demo");
+agentic-system-builder/scripts/qa-lib/paths.mjs:6:export const BACKEND_ROOT = join(GENERATED_ROOT, "backend");
+agentic-system-builder/scripts/qa-lib/paths.mjs:7:export const FRONTEND_ROOT = join(GENERATED_ROOT, "frontend");
+agentic-system-builder/scripts/qa-lib/paths.mjs:8:export const EVIDENCE_DEFAULT = ".omo/evidence/any-agent-system-builder";
+agentic-system-builder/scripts/qa-lib/ports.mjs:3:export async function freePort() {
+agentic-system-builder/scripts/qa-lib/processes.mjs:104:export function processStillAlive(pid) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:114:export async function stopProcess(child, label) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:151:export async function cleanupProcesses(state, evidenceDir, manifest) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:24:export async function runCommand(command, options = {}) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:72:export async function writeCommandArtifact(path, result) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:86:export async function startManagedProcess(command, manifest, manifestKey, logPath, provider) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:9:export function spawnChild(command, options = {}) {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:154:export function scanMockProviderBoundary(root = BACKEND_ROOT) {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:180:export function assertMockProviderSafe(root = BACKEND_ROOT) {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:19:export function makeProviderEnv() {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:31:export function requireMockRuntime(provider) {
+
+$ node syntax checks
+observable=all node --check invocations exited 0
+
+Direct slop assessment:
+- PASS: ensureDir and appendProcessLog no longer appear in the harness/helper/generated runtime search scope.
+- Helper sizes: qa-generated-demo 135 pure LOC; qa-lib files all <=175 pure LOC. Broader validate-domain-spec.mjs is 994 pure LOC, outside Todo 6 helper split but relevant maintenance debt.

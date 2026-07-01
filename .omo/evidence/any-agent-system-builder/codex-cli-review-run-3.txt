@@ -1,0 +1,2 @@
+review_root=/tmp/any-agent-plan-review3.U6rCcf
+codex_home=/tmp/any-agent-codex-home3.35W2aK

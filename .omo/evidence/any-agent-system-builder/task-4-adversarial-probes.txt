@@ -1,0 +1,25 @@
+Wed Jul  1 20:14:09 KST 2026
+
+[required pass]
+sh -c 'node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder && npm run validate:examples' > .omo/evidence/any-agent-system-builder/task-4-validator.txt 2>&1 -> exit 0
+
+[negative probes]
+target=generated/library-reservation-demo
+exit=1
+ERROR: missing generated app directory: generated/library-reservation-demo
+
+target=.omo/evidence/any-agent-system-builder/verify-task-4-final-20260701T200114KST/fixtures/generated-placeholder-regression
+exit=1
+ERROR: generated backend main.py has only placeholder content
+
+target=.omo/evidence/any-agent-system-builder/verify-task-4-final-20260701T200114KST/fixtures/generated-tokenstuff-pass
+exit=1
+ERROR: generated backend/tools.py must contain executable data/logic beyond literal marker strings
+
+[frontend static fixture]
+fixture=/tmp/anyagentbuilder-static-frontend.F80zev
+ERROR: generated frontend/src/App.jsx agent-activity region must render dynamic state/data, not static marker text
+exit=1
+
+[syntax]
+node --check exit=0

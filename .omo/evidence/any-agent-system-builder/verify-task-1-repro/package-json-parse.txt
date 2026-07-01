@@ -1,0 +1,3 @@
+package-json-ok
+
+EXIT_CODE=0

@@ -1,0 +1,12 @@
+$ npm run dev -- --port 55200
+
+> library-reservation-demo@0.1.0 dev
+> vite --host 127.0.0.1 --port 55200
+
+
+  VITE v5.4.11  ready in 266 ms
+
+  ➜  Local:   http://127.0.0.1:55200/
+10:12:12 PM [vite] Pre-transform error: The service was stopped: write EPIPE
+
+[process exit] code=0 signal=null

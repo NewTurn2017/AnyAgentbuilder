@@ -1,0 +1,24 @@
+Scenario: scaffold non-library built-in domains to temp dirs and scan generated files for stale library-only residue
+Invocation: node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain <airline|pcbang|generic> --out /tmp/aab-task5-nonlibrary.m8LKB6/<domain> --force
+Scan invocation: rg -n --hidden -S "LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron|library-reservation|patron_display_name|loan_titles|member_id|raw_hold_queue|staff_token|스터디룸|도서관" /tmp/aab-task5-nonlibrary.m8LKB6/<domain>
+Temp root: /tmp/aab-task5-nonlibrary.m8LKB6
+
+## domain=airline
+OK: scaffolded airline agent system at /tmp/aab-task5-nonlibrary.m8LKB6/airline
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+RESULT: PASS no stale library-only residue found for airline
+
+## domain=pcbang
+OK: scaffolded pcbang agent system at /tmp/aab-task5-nonlibrary.m8LKB6/pcbang
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+RESULT: PASS no stale library-only residue found for pcbang
+
+## domain=generic
+OK: scaffolded generic agent system at /tmp/aab-task5-nonlibrary.m8LKB6/generic
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+scaffold_exit=0
+RESULT: PASS no stale library-only residue found for generic
+
+Overall result: PASS

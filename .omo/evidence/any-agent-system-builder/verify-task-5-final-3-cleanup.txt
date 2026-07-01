@@ -1,0 +1,26 @@
+SCENARIO=final cleanup scan after Todo 5 final-3 verification
+DATE_UTC=2026-07-01T12:46:47Z
+
+SECTION=temp directory scan
+COMMAND=find /tmp -maxdepth 1 -type d for aab-task5-final3-* and older task5 probe prefixes
+RESULT=PASS no task5 temp dirs remain
+
+SECTION=repo-local transient generated dirs
+COMMAND=find generated -maxdepth 1 transient task/bad dirs
+RESULT=PASS no repo transient generated dirs remain
+
+SECTION=generated app server process scan
+RESULT=PASS no generated app server/probe processes found
+PROCESS_SCAN_EXIT=0
+
+SECTION=prior run-manifest port listener check
+COMMAND=parse .omo/evidence/any-agent-system-builder/run-manifest.json and lsof each recorded port
+RECORDED_PORTS=60271,60272
+PORT=60271
+LSOF_EXIT=1
+RESULT=PASS no listener on 60271
+PORT=60272
+LSOF_EXIT=1
+RESULT=PASS no listener on 60272
+
+FAILURES=0

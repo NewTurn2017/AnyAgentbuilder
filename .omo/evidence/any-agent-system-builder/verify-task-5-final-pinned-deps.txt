@@ -1,0 +1,18 @@
+# verify-task-5-final-pinned-deps
+files=generated/library-reservation-demo/frontend/package.json, agentic-system-builder/templates/frontend/package.json.tmpl
+
+## generated/library-reservation-demo/frontend/package.json
+json_parse=ok
+@vitejs/plugin-react=4.3.4 pinned=yes
+vite=5.4.11 pinned=yes
+react=18.3.1 pinned=yes
+react-dom=18.3.1 pinned=yes
+
+## agentic-system-builder/templates/frontend/package.json.tmpl
+json_parse=ok
+@vitejs/plugin-react=4.3.4 pinned=yes
+vite=5.4.11 pinned=yes
+react=18.3.1 pinned=yes
+react-dom=18.3.1 pinned=yes
+
+result=PASS no latest/range dependency versions found in generated/template frontend package data

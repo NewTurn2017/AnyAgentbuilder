@@ -1,0 +1,5 @@
+declared_command=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill
+runner=perl alarm 60s
+ERROR: --check-skill requires a value
+
+exit=1

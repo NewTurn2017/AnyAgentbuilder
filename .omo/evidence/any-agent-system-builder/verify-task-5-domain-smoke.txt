@@ -1,0 +1,33 @@
+second built-in domain probe: pcbang
+OK: scaffolded pcbang agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/verify-task-5-pcbang-smoke
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+pcbang_scaffold_status=0
+
+expected pcbang markers
+generated/verify-task-5-pcbang-smoke/README.md:1:# PC방 좌석 매니저
+generated/verify-task-5-pcbang-smoke/backend/context.py:8:  "pc_tier",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:4:BRAND_NAME = "PC방 좌석 매니저"
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:8:  "seat_label": "B12, B13",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:9:  "pc_tier": "프리미엄",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:20:    "B12 cleaned",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:26:    "label": "B12",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:43:  "seat_allocation_agent",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:48:  "triage_agent -> seat_allocation_agent",
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:49:  "seat_allocation_agent -> time_pass_agent"
+generated/verify-task-5-pcbang-smoke/backend/agents.py:6:  "seat_allocation_agent",
+generated/verify-task-5-pcbang-smoke/backend/agents.py:11:  "triage_agent -> seat_allocation_agent",
+generated/verify-task-5-pcbang-smoke/backend/agents.py:12:  "seat_allocation_agent -> time_pass_agent"
+generated/verify-task-5-pcbang-smoke/backend/agents.py:51:    return "seat_allocation_agent"
+generated/verify-task-5-pcbang-smoke/backend/agents.py:77:        "assistant_message": "좌석 배치도를 확인했고, 나란히 앉을 수 있는 고사양 좌석 두 자리를 임시 확보했습니다.",
+generated/verify-task-5-pcbang-smoke/frontend/src/App.jsx:8:  "pc_tier": "PC 등급",
+generated/verify-task-5-pcbang-smoke/frontend/src/App.jsx:75:          <h1>PC방 좌석 매니저</h1>
+generated/verify-task-5-pcbang-smoke/frontend/src/App.jsx:130:          <h2>좌석 배치도</h2>
+generated/verify-task-5-pcbang-smoke/frontend/index.html:6:    <title>PC방 좌석 매니저</title>
+
+library/stale marker scan in pcbang output
+generated/verify-task-5-pcbang-smoke/backend/demo_data.py:87:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+
+validator check on pcbang output
+ERROR: generated backend missing public context field markers: patron_display_name, resource_label, loan_titles
+pcbang_generated_validator_status=1
+domain_smoke_cleanup=ok generated/verify-task-5-pcbang-smoke absent

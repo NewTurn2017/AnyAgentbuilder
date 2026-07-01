@@ -1,0 +1,86 @@
+SCENARIO=Todo 5 content audit for prior blockers and generated library demo contents
+DATE_UTC=2026-07-01T12:45:17Z
+
+SECTION=pinned frontend dependency scan
+COMMAND=rg -n loose dependency patterns in package files
+LOOSE_FRONTEND_SCAN_EXIT=1
+RESULT=PASS no loose frontend dependency patterns found
+
+SECTION=backend requirement pins
+FILE=agentic-system-builder/templates/backend/requirements.txt
+LINES=fastapi==0.115.6,uvicorn==0.34.0
+RESULT=PASS exact == pins
+FILE=generated/library-reservation-demo/backend/requirements.txt
+LINES=fastapi==0.115.6,uvicorn==0.34.0
+RESULT=PASS exact == pins
+BACKEND_PIN_CHECK_EXIT=0
+
+SECTION=JSON literal preservation current source and generated output
+COMMAND=rg -n "function pythonLiteral|JSON.stringify|True|False|None" agentic-system-builder/scripts/scaffold-agent-system.mjs
+148:    sample_chat_json_shell: shellQuote(JSON.stringify({ thread_id: "demo", message: input.user_prompt || "예약을 도와주세요" })),
+169:  return JSON.stringify(value, null, 2);
+172:function pythonLiteral(value, depth = 0) {
+175:  if (value === null) return "None";
+176:  if (typeof value === "boolean") return value ? "True" : "False";
+181:  if (typeof value === "string") return JSON.stringify(value);
+189:    return `{\n${entries.map(([key, item]) => `${nextIndent}${JSON.stringify(key)}: ${pythonLiteral(item, depth + 1)}`).join(",\n")},\n${indent}}`;
+SOURCE_LITERAL_SCAN_EXIT=0
+JSON_SPEC=/tmp/aab-task5-final3-json.9OxdbT/json-spec.json
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --spec /tmp/aab-task5-final3-json.9OxdbT/json-spec.json --out /tmp/aab-task5-final3-json.9OxdbT/json-app --force
+OK: scaffolded jsonprobe agent system at /tmp/aab-task5-final3-json.9OxdbT/json-app
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+JSON_SCAFFOLD_EXIT=0
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final3-json.9OxdbT/json-app
+OK: generated jsonprobe app skeleton valid: /tmp/aab-task5-final3-json.9OxdbT/json-app
+JSON_GENERATED_CHECK_EXIT=0
+COMMAND=grep literal markers in /tmp/aab-task5-final3-json.9OxdbT/json-app/backend/demo_data.py
+6:  "customer_display_name": "true false null",
+7:  "reservation_id": "false",
+8:  "resource_label": "null",
+10:  "reservation_status": True,
+14:  "secret_flag": False,
+15:  "nullable_value": None,
+JSON_LITERAL_GREP_EXIT=0
+RESULT=PASS JSON strings and booleans/null rendered distinctly
+JSON_CLEANUP=PASS temp dir removed
+
+SECTION=stale marker scan
+COMMAND=rg -n -S "LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron" agentic-system-builder generated/library-reservation-demo
+MARKER_SCAN_EXIT=1
+RESULT=PASS stale marker absent
+
+SECTION=generated library README/backend/frontend contract
+REQUIRED_FILE README.md PASS
+REQUIRED_FILE backend/main.py PASS
+REQUIRED_FILE backend/agents.py PASS
+REQUIRED_FILE backend/tools.py PASS
+REQUIRED_FILE backend/context.py PASS
+REQUIRED_FILE backend/demo_data.py PASS
+REQUIRED_FILE backend/memory.py PASS
+REQUIRED_FILE backend/events.py PASS
+REQUIRED_FILE backend/requirements.txt PASS
+REQUIRED_FILE frontend/package.json PASS
+REQUIRED_FILE frontend/src/App.jsx PASS
+REQUIRED_FILE frontend/src/main.jsx PASS
+REQUIRED_FILE frontend/src/styles.css PASS
+ENDPOINT GET /health PASS
+ENDPOINT GET /state/bootstrap PASS
+ENDPOINT GET /state PASS
+ENDPOINT GET /state/stream PASS
+ENDPOINT POST /chat PASS
+PUBLIC_FIELDS=["patron_display_name","reservation_id","resource_label","time_window","reservation_status","loan_titles","policy_summary"]
+INTERNAL_FIELDS=["member_id","internal_notes","policy_overrides","raw_hold_queue","staff_token","inventory_cost"]
+PUBLIC_FIELDS_EXACT PASS
+INTERNAL_FIELDS_EXACT PASS
+FRONTEND_PUBLIC_FIELDS PASS
+FRONTEND_INTERNAL_LEAKS PASS
+README_TERMS PASS
+PUBLIC_SERVING_INTERNAL_SCAN PASS
+CONTENT_CONTRACT_EXIT=0
+
+SECTION=mock runtime import/call scan
+COMMAND=rg -n "from openai|import openai|OpenAI\(" agentic-system-builder/scripts agentic-system-builder/templates/backend generated/library-reservation-demo/backend generated/library-reservation-demo/frontend/src
+OPENAI_RUNTIME_SCAN_EXIT=1
+RESULT=PASS no direct OpenAI runtime import/call found in code/template surfaces
+
+FAILURES=0

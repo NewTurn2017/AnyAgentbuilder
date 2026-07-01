@@ -1,0 +1,22 @@
+started_at=2026-07-01T14:30:50Z
+
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+validator_exit_code=0
+
+$ npm run build --prefix generated/library-reservation-demo/frontend
+
+> library-reservation-demo@0.1.0 build
+> vite build
+
+vite v5.4.11 building for production...
+transforming...
+✓ 31 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB │ gzip:  0.30 kB
+dist/assets/index-DbuskNNr.css    2.64 kB │ gzip:  0.99 kB
+dist/assets/index-BVz7tkHV.js   146.46 kB │ gzip: 47.76 kB
+✓ built in 224ms
+frontend_build_exit_code=0
+finished_at=2026-07-01T14:30:51Z

@@ -1,0 +1,43 @@
+Provider boundary adversarial scan, rerun after dead-export cleanup
+
+CASE current-generated-backend
+expectedAllowed=true actualAllowed=true pass=true
+scannedFiles=generated/library-reservation-demo/backend/agents.py, generated/library-reservation-demo/backend/context.py, generated/library-reservation-demo/backend/demo_data.py, generated/library-reservation-demo/backend/events.py, generated/library-reservation-demo/backend/main.py, generated/library-reservation-demo/backend/memory.py, generated/library-reservation-demo/backend/tools.py
+findings=[]
+
+CASE allowed-local-agents-helper
+expectedAllowed=true actualAllowed=true pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/allowed-local-agents-helper/agents.py, .omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/allowed-local-agents-helper/main.py
+findings=[]
+
+CASE pinned-new-sdk-symbols
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-new-sdk-symbols/agents.py, .omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-new-sdk-symbols/main.py
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-new-sdk-symbols/main.py","line":1,"kind":"python-agents-sdk-import","match":"from agents import SQLiteSession, RunContextWrapper, input_guardrail, GuardrailFunctionOutput"}]
+
+CASE pinned-previous-sdk-symbols
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-previous-sdk-symbols/agents.py, .omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-previous-sdk-symbols/main.py
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-previous-sdk-symbols/main.py","line":1,"kind":"python-agents-sdk-import","match":"from agents import Agent, Runner, function_tool, handoff"}]
+
+CASE bare-import-agents
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/bare-import-agents/agents.py, .omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/bare-import-agents/main.py
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/bare-import-agents/main.py","line":1,"kind":"python-agents-module-import","match":"import agents"}]
+
+CASE missing-local-agents-from-import
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/missing-local-agents-from-import/main.py
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/missing-local-agents-from-import/main.py","line":1,"kind":"python-agents-import","match":"from agents import run_mock_agent_turn"}]
+
+CASE js-openai-import-and-call
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-import-and-call/worker.js
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-import-and-call/worker.js","line":1,"kind":"js-openai-import","match":"import OpenAI from \"openai\";"},{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-import-and-call/worker.js","line":2,"kind":"js-openai-call","match":"const client = new OpenAI({ apiKey: \"fake\" });"}]
+
+CASE js-openai-dynamic-import-call
+expectedAllowed=false actualAllowed=false pass=true
+scannedFiles=.omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-dynamic-import-call/worker.mjs
+findings=[{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-dynamic-import-call/worker.mjs","line":1,"kind":"js-openai-import","match":"const mod = await import(\"openai\");"},{"file":".omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/js-openai-dynamic-import-call/worker.mjs","line":2,"kind":"js-openai-call","match":"const client = new mod.OpenAI();"}]
+
+ASSERT pinned-new-sdk-symbols blocked status=failed-provider-boundary message=mock backend provider boundary blocked disallowed provider imports/calls: .omo/evidence/any-agent-system-builder/provider-boundary-cases-final-2/pinned-new-sdk-symbols/main.py:1 python-agents-sdk-import from agents import SQLiteSession, RunContextWrapper, input_guardrail, GuardrailFunctionOutput

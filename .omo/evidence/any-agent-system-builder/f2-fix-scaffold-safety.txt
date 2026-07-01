@@ -1,0 +1,122 @@
+SCENARIO=F2 scaffold recursive deletion safety symlink regression
+CWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+DATE=2026-07-01T15:58:38Z
+TMP_BASE=/tmp/f2-scaffold-safety.Ouui06
+
+## node-check
+COMMAND=node --check agentic-system-builder/scripts/scaffold-agent-system.mjs
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## normal-scaffold
+COMMAND=npm run scaffold:library-demo
+
+> scaffold:library-demo
+> node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/library-reservation-demo --force
+
+OK: scaffolded library agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+EXIT=0
+MARKER_PRESENT=true
+RESULT=EXPECTED_PASS
+
+## symlink-protected-child-rejects
+WORK_LINK=/tmp/f2-scaffold-safety.Ouui06/work-link
+WORK_LINK_REALPATH=/Users/genie/dev/tools/skills/AnyAgentbuilder
+
+TARGET=/tmp/f2-scaffold-safety.Ouui06/work-link/agentic-system-builder/f2-symlink-agentic-subdir
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out /tmp/f2-scaffold-safety.Ouui06/work-link/agentic-system-builder/f2-symlink-agentic-subdir --force
+ERROR: refusing unsafe output path inside protected workspace: /tmp/f2-scaffold-safety.Ouui06/work-link/agentic-system-builder/f2-symlink-agentic-subdir
+EXIT=1
+PROTECTED_CHILD_CREATED=false
+RESULT=EXPECTED_FAIL_NO_WRITE
+
+TARGET=/tmp/f2-scaffold-safety.Ouui06/work-link/.omo/f2-symlink-omo-subdir
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out /tmp/f2-scaffold-safety.Ouui06/work-link/.omo/f2-symlink-omo-subdir --force
+ERROR: refusing unsafe output path inside protected workspace: /tmp/f2-scaffold-safety.Ouui06/work-link/.omo/f2-symlink-omo-subdir
+EXIT=1
+PROTECTED_CHILD_CREATED=false
+RESULT=EXPECTED_FAIL_NO_WRITE
+
+## reject-unmarked-existing-generated-child
+TEMP_DIR=generated/f2-unmarked.GJC9WH
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/f2-unmarked.GJC9WH --force
+ERROR: refusing to overwrite existing unowned output: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/f2-unmarked.GJC9WH; add .any-agent-builder-generated.json only for generated outputs
+EXIT=1
+FILE_SURVIVED=true
+RESULT=EXPECTED_FAIL_PRESERVED
+
+## replace-marked-existing-generated-child
+TEMP_DIR=generated/f2-marked.yQB88P
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/f2-marked.yQB88P --force
+OK: scaffolded library agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/f2-marked.yQB88P
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+EXIT=0
+OLD_FILE_REMOVED=true
+GENERATED_README_PRESENT=true
+MARKER_PRESENT=true
+RESULT=EXPECTED_PASS_REPLACED
+
+## source-guard-lines
+240:  await assertSafeOutputPath(path);
+241:  await assertSafeOutputPath(dirname(path));
+242:  await mkdir(dirname(path), { recursive: true });
+243:  await writeFile(path, content.trimStart(), "utf8");
+251:const PROTECTED_EXACT_PATHS = [
+260:const PROTECTED_WORKSPACE_SUBTREES = [join(ROOT, "agentic-system-builder"), join(ROOT, ".omo")].map((path) => resolve(path));
+263:  if (PROTECTED_EXACT_PATHS.includes(path)) {
+266:  for (const protectedDir of PROTECTED_WORKSPACE_SUBTREES) {
+273:async function intendedRealPath(path) {
+285:async function assertSafeOutputPath(outputDir) {
+288:  assertNotProtectedPath(await intendedRealPath(normalized), outputDir);
+307:  await assertSafeOutputPath(markerPath);
+308:  await writeFile(markerPath, `${JSON.stringify(marker, null, 2)}\n`, "utf8");
+312:  await assertSafeOutputPath(outputDir);
+319:    await assertSafeOutputPath(outputDir);
+320:    await rm(outputDir, { recursive: true, force: true });
+322:  await assertSafeOutputPath(outputDir);
+323:  await mkdir(outputDir, { recursive: true });
+328:  await assertSafeOutputPath(outputDir);
+332:  await assertSafeOutputPath(outputDir);
+333:  await rm(outputDir, { recursive: true, force: true });
+
+## temp-cleanup
+WORK_LINK_REMOVED=true
+UNMARKED_REMOVED=true
+MARKED_REMOVED=true
+TMP_BASE_REMOVED=true
+AGENTIC_PROBE_ABSENT=true
+OMO_PROBE_ABSENT=true
+
+## symlink-exact-protected-root-rejects
+TMP_BASE=/tmp/f2-scaffold-exact.nXfFl9
+
+TARGET_LABEL=workspace-root
+TARGET=/tmp/f2-scaffold-exact.nXfFl9/workspace-root-link
+TARGET_REALPATH=/Users/genie/dev/tools/skills/AnyAgentbuilder
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out /tmp/f2-scaffold-exact.nXfFl9/workspace-root-link --force
+ERROR: refusing unsafe output path: /tmp/f2-scaffold-exact.nXfFl9/workspace-root-link
+EXIT=1
+SYMLINK_STILL_PRESENT=true
+RESULT=EXPECTED_FAIL_NO_REMOVE
+
+TARGET_LABEL=home
+TARGET=/tmp/f2-scaffold-exact.nXfFl9/home-link
+TARGET_REALPATH=/Users/genie
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out /tmp/f2-scaffold-exact.nXfFl9/home-link --force
+ERROR: refusing unsafe output path: /tmp/f2-scaffold-exact.nXfFl9/home-link
+EXIT=1
+SYMLINK_STILL_PRESENT=true
+RESULT=EXPECTED_FAIL_NO_REMOVE
+
+TARGET_LABEL=filesystem-root
+TARGET=/tmp/f2-scaffold-exact.nXfFl9/fs-root-link
+TARGET_REALPATH=/
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out /tmp/f2-scaffold-exact.nXfFl9/fs-root-link --force
+ERROR: refusing unsafe output path: /tmp/f2-scaffold-exact.nXfFl9/fs-root-link
+EXIT=1
+SYMLINK_STILL_PRESENT=true
+RESULT=EXPECTED_FAIL_NO_REMOVE
+
+## symlink-exact-cleanup
+TMP_BASE_REMOVED=true

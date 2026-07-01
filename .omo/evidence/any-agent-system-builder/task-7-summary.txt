@@ -1,0 +1,85 @@
+Todo 7 generated backend starter contract summary
+
+Scenario: backend-only generated library demo in mock runtime
+Invocation: env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder
+Binary observable: exit 0; run-manifest.json status=passed; backend started on dynamic port; cleanup ok.
+Artifacts:
+- .omo/evidence/any-agent-system-builder/run-manifest.json
+- .omo/evidence/any-agent-system-builder/task-7-health.txt
+- .omo/evidence/any-agent-system-builder/task-7-chat.txt
+- .omo/evidence/any-agent-system-builder/task-7-guardrail.txt
+- .omo/evidence/any-agent-system-builder/task-7-422.txt
+- .omo/evidence/any-agent-system-builder/task-7-unknown-thread.txt
+- .omo/evidence/any-agent-system-builder/task-7-sse.txt
+- .omo/evidence/any-agent-system-builder/task-7-cleanup-pids.txt
+- .omo/evidence/any-agent-system-builder/task-7-cleanup-ports.txt
+
+Scenario: GET /health
+Invocation: harness curl -i http://127.0.0.1:${backendPort}/health
+Binary observable: HTTP 200; JSON includes status=ok, runtime=mock, domain_key=library, active_stream_listeners=0.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-health.txt
+
+Scenario: happy POST /chat
+Invocation: harness curl -i -X POST /chat with thread_id=demo and message=도서관 스터디룸 예약하고 싶어요
+Binary observable: HTTP 200; JSON includes assistant_message, active_agent, public_context, events, status=ok.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-chat.txt
+
+Scenario: guardrail POST /chat
+Invocation: harness curl -i -X POST /chat with thread_id=demo and message=무관한 주식 추천해줘
+Binary observable: HTTP 200; JSON includes status=blocked and guardrail name/reason.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-guardrail.txt
+
+Scenario: malformed POST /chat
+Invocation: harness curl invalid JSON body, then bad message shape body.
+Binary observable: both responses HTTP 422.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-422.txt
+
+Scenario: unknown thread state
+Invocation: harness curl -i /state?thread_id=qa-unknown-thread
+Binary observable: HTTP 200; JSON includes public_context and empty messages/events arrays.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-unknown-thread.txt
+
+Scenario: SSE stream and disconnect cleanup
+Invocation: harness curl -i -N /state/stream?thread_id=demo --max-time 5, followed by /health polling.
+Binary observable: stream includes state.snapshot and state.delta; post-disconnect health reports active_stream_listeners=0.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-sse.txt
+
+Scenario: generated app validator
+Invocation: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+Binary observable: exit 0; generated library app skeleton valid.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-generated-check.txt
+
+Scenario: Python backend compile
+Invocation: python3 -m compileall -q generated/library-reservation-demo/backend
+Binary observable: exit 0.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-py-compile.txt
+
+Scenario: changed QA script syntax
+Invocation: node --check on changed qa-generated-demo.mjs, commands.mjs, http-checks.mjs, and processes.mjs
+Binary observable: exit 0.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-js-check.txt
+
+Scenario: mock provider boundary
+Invocation: env -u OPENAI_API_KEY AGENT_RUNTIME=mock node --input-type=module scanMockProviderBoundary
+Binary observable: allowed=true; findings=[]; scanned generated backend runtime files only.
+Artifact: .omo/evidence/any-agent-system-builder/task-7-provider-boundary.txt
+
+Scenario: process and port cleanup
+Invocation: harness cleanupProcesses after backend-only QA
+Binary observable: backend pid alive=false; frontend pid null alive=false; backend and frontend ports listener=no.
+Artifacts:
+- .omo/evidence/any-agent-system-builder/task-7-cleanup-pids.txt
+- .omo/evidence/any-agent-system-builder/task-7-cleanup-ports.txt
+
+Changed files:
+- agentic-system-builder/templates/backend/main.py.tmpl
+- agentic-system-builder/templates/backend/events.py.tmpl
+- agentic-system-builder/scripts/qa-generated-demo.mjs
+- agentic-system-builder/scripts/qa-lib/commands.mjs
+- agentic-system-builder/scripts/qa-lib/http-checks.mjs
+- agentic-system-builder/scripts/qa-lib/processes.mjs
+- generated/library-reservation-demo/backend/main.py
+- generated/library-reservation-demo/backend/events.py
+
+Cleanup: no backend/frontend listener remains on manifest ports; no generated QA server remains running.
+Risks: real OpenAI Agents SDK mode was not API-key verified; this task intentionally verified mock runtime only.

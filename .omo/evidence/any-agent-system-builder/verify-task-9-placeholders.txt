@@ -1,0 +1,7 @@
+artifact=.omo/evidence/any-agent-system-builder/task-9-placeholders.txt
+artifact_contents:
+NO_MATCHES: exact rg placeholder scan returned no matches after generated ignore metadata excluded local dependency and cache trees.
+
+current_scan_command=rg -n "TODO|FIXME|<fill|placeholder|lorem" agentic-system-builder generated/library-reservation-demo -g !generated/library-reservation-demo/.venv/** -g !generated/library-reservation-demo/frontend/node_modules/** -g !generated/library-reservation-demo/backend/__pycache__/**
+rg_exit_code=1
+verdict=PASS no matches

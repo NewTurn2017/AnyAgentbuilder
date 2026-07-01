@@ -1,0 +1,30 @@
+SCENARIO=library exact-field adversarial mutations
+TEMP_DIR=/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-library-exact-fields-tmp.yvwdTi
+
+CASE=extra-public-field-names
+MUTATION=add vip_code to backend/context.py PUBLIC_FIELD_NAMES
+EXPECTED_ERROR=unexpected extra public context fields: vip_code
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-library-exact-fields-tmp.yvwdTi/extra-public-field-names
+ERROR: generated library backend has unexpected extra public context fields: vip_code
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+CASE=extra-demo-public-seed
+MUTATION=add vip_code to backend/demo_data.py DEMO_PUBLIC_SEED only
+EXPECTED_ERROR=DEMO_PUBLIC_SEED has unexpected extra public context fields: vip_code
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-library-exact-fields-tmp.yvwdTi/extra-demo-public-seed
+ERROR: generated library backend DEMO_PUBLIC_SEED has unexpected extra public context fields: vip_code
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+CASE=missing-demo-public-seed-loan-titles
+MUTATION=remove loan_titles from backend/demo_data.py DEMO_PUBLIC_SEED only
+EXPECTED_ERROR=DEMO_PUBLIC_SEED missing required public context fields: loan_titles
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-library-exact-fields-tmp.yvwdTi/missing-demo-public-seed-loan-titles
+ERROR: generated library backend DEMO_PUBLIC_SEED missing required public context fields: loan_titles
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+expected_failures=3
+unexpected_passes=0
+CLEANUP=PASS temp dir removed

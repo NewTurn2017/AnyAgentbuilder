@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill /tmp/does-not-exist
+ERROR: missing skill directory: /tmp/does-not-exist
+
+exit=1

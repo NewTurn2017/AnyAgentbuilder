@@ -1,0 +1,13 @@
+manifest=.omo/evidence/any-agent-system-builder/run-manifest.json
+backendPid=26477
+frontendPid=27132
+backendPort=50305
+frontendPort=50306
+backend_pid_verdict=PASS gone
+frontend_pid_verdict=PASS gone
+
+backend_lsof:
+
+frontend_lsof:
+backend_port_verdict=PASS no listener
+frontend_port_verdict=PASS no listener

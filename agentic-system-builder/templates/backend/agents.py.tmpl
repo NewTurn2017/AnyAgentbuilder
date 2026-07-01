@@ -1,0 +1,67 @@
+from events import make_event
+from models import ChatResponse, ConversationStateModel, GuardrailCheckModel, GuardrailModel
+from tools import availability_tool, policy_tool, reservation_tool
+
+AGENT_ROSTER = {{PY:agents}}
+HANDOFF_GRAPH = {{PY:handoffs}}
+GUARDRAIL_NAMES = {{PY:guardrails}}
+POLICY_SUMMARY = {{PY:policy_summary}}
+
+
+def guardrail_check(message: str) -> GuardrailCheckModel:
+    lowered = message.lower()
+    blocked_terms = ["prompt", "system", "internal", "token", "관리자", "프롬프트", "내부", "비밀번호"]
+    if any(term in lowered for term in blocked_terms):
+        return GuardrailCheckModel(
+            status="blocked",
+            guardrail=GuardrailModel(name="privacy_guardrail", reason="공개 가능한 예약 정보만 안내할 수 있습니다."),
+        )
+    unrelated_terms = ["주식", "코인", "투자", "날씨"]
+    if any(term in lowered for term in unrelated_terms):
+        return GuardrailCheckModel(
+            status="blocked",
+            guardrail=GuardrailModel(name="relevance_guardrail", reason={{PY:relevance_guardrail_reason}}),
+        )
+    return GuardrailCheckModel(status="allowed", guardrail=None)
+
+
+def route_agent(message: str) -> str:
+    lowered = message.lower()
+    for agent in AGENT_ROSTER:
+        key = agent.replace("_agent", "").replace("_", " ")
+        if key in lowered:
+            return agent
+    return {{PY:active_agent}}
+
+
+def run_mock_agent_turn(message: str, state: ConversationStateModel) -> ChatResponse:
+    guardrail = guardrail_check(message)
+    if guardrail.status == "blocked" and guardrail.guardrail is not None:
+        event = make_event("guardrail.blocked", guardrail.guardrail.reason, guardrail.guardrail.model_dump())
+        return ChatResponse(
+            assistant_message=guardrail.guardrail.reason,
+            active_agent="triage_agent",
+            public_context=state.public_context,
+            events=[event],
+            status="blocked",
+            guardrail=guardrail.guardrail,
+        )
+
+    active_agent = route_agent(message)
+    available = availability_tool(state.resources)
+    current_status = getattr(state.public_context, "reservation_status", "held")
+    state.public_context = reservation_tool(state.public_context, current_status)
+    policy = policy_tool(POLICY_SUMMARY)
+    events = [
+        make_event("handoff.started", f"triage_agent -> {active_agent}", {"active_agent": active_agent}),
+        make_event("tool.called", "availability_tool", {"count": len(available)}),
+        make_event("state.delta", "public context refreshed", {"policy_summary": str(policy["policy_summary"])}),
+    ]
+    return ChatResponse(
+        assistant_message={{PY:assistant_message}},
+        active_agent=active_agent,
+        public_context=state.public_context,
+        events=events,
+        status="ok",
+        guardrail=None,
+    )

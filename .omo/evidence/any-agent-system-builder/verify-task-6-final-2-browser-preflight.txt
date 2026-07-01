@@ -1,0 +1,14 @@
+Browser preflight verification, rerun after dead-export cleanup
+$ pre: ls frontend node_modules/package-lock
+ls: generated/library-reservation-demo/frontend/node_modules: No such file or directory
+ls: generated/library-reservation-demo/frontend/package-lock.json: No such file or directory
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+ERROR: browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA
+exit=1
+$ post: ls frontend node_modules/package-lock
+ls: generated/library-reservation-demo/frontend/node_modules: No such file or directory
+ls: generated/library-reservation-demo/frontend/package-lock.json: No such file or directory

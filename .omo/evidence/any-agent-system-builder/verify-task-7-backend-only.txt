@@ -1,0 +1,26 @@
+command: manual read-only backend runtime equivalent for Todo 7
+reason exact harness not run in-place: qa-generated-demo --backend-only force-runs scaffold and pip install outside .omo/evidence
+cwd: /Users/genie/dev/tools/skills/AnyAgentbuilder
+backendPort: 64709
+python: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python
+start: env -u OPENAI_API_KEY AGENT_RUNTIME=mock PYTHONDONTWRITEBYTECODE=1 /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 64709
+backendPid: 35628
+startup: ready
+raw artifacts:
+- .omo/evidence/any-agent-system-builder/verify-task-7-health.raw.txt
+- .omo/evidence/any-agent-system-builder/verify-task-7-chat.raw.txt
+- .omo/evidence/any-agent-system-builder/verify-task-7-guardrail.raw.txt
+- .omo/evidence/any-agent-system-builder/verify-task-7-422.raw.txt
+- .omo/evidence/any-agent-system-builder/verify-task-7-unknown-thread.raw.txt
+- .omo/evidence/any-agent-system-builder/verify-task-7-sse.raw.txt
+
+status lines:
+.omo/evidence/any-agent-system-builder/verify-task-7-health.raw.txt: 5:HTTP/1.1 200 OK
+.omo/evidence/any-agent-system-builder/verify-task-7-chat.raw.txt: 5:HTTP/1.1 200 OK
+.omo/evidence/any-agent-system-builder/verify-task-7-guardrail.raw.txt: 5:HTTP/1.1 200 OK
+.omo/evidence/any-agent-system-builder/verify-task-7-422.raw.txt: 5:HTTP/1.1 422 Unprocessable Content
+16:HTTP/1.1 422 Unprocessable Content
+.omo/evidence/any-agent-system-builder/verify-task-7-unknown-thread.raw.txt: 5:HTTP/1.1 200 OK
+.omo/evidence/any-agent-system-builder/verify-task-7-sse.raw.txt: 32:HTTP/1.1 200 OK
+
+result=PASS

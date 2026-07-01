@@ -1,0 +1,103 @@
+Runtime verification, final-3
+
+$ AGENT_RUNTIME=mock env -u OPENAI_API_KEY node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder/verify-task-6-final-3-runtime-artifacts --dry-run
+mock mode active: no provider credentials present
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+DRY RUN: generated-demo QA harness lifecycle plan
+scenario=library
+mode=full
+backendPort=56763
+frontendPort=56764
+planned commands:
+- validateSkill: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+- validateExamples: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+- scaffoldLibrary: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/library-reservation-demo --force
+- validateGenerated: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+- backendVenv: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo) python3 -m venv .venv
+- backendInstall: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo) /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m pip install --disable-pip-version-check -r backend/requirements.txt
+- backendStart: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend) /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 56763
+- frontendInstall: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend) npm install
+- frontendStart: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend) npm run dev -- --port 56764
+- curlHealth: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i http://127.0.0.1:56763/health
+- curlChat: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:56763/chat -H content-type: application/json -d {"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}
+- curlGuardrail: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:56763/chat -H content-type: application/json -d {"thread_id":"demo","message":"무관한 주식 추천해줘"}
+- curlMalformed: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:56763/chat -H content-type: application/json --data-binary @-
+- curlSse: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -N http://127.0.0.1:56763/state/stream?thread_id=demo --max-time 5
+cleanup handlers:
+- SIGINT/SIGTERM process-group termination
+- PID liveness receipt
+- lsof listener receipt
+DRY RUN: no servers started, no dependency installs performed
+exit=0
+
+Backend-only actual runtime not rerun in final-3: it is not read-only-safe because qa-generated-demo --backend-only scaffolds generated/library-reservation-demo and installs/checks dependencies. Current post-cleanup backend-only evidence inspected instead.
+
+$ existing backend-only manifest summary: .omo/evidence/any-agent-system-builder/verify-task-6-final-2-mock-env-manifest.json
+{
+  "status": "passed",
+  "mode": "backend",
+  "runtime": "mock",
+  "dryRun": false,
+  "generatedAppChecked": true,
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "boundaryAllowed": true,
+  "boundaryFindings": 0,
+  "backendPid": 94627,
+  "frontendPid": null,
+  "backendPort": 54487,
+  "frontendPort": 54488,
+  "cleanupOk": true
+}
+
+$ existing HTTP artifact status/body summary: .omo/evidence/any-agent-system-builder/verify-task-6-final-2-http-artifacts.txt
+HTTP artifact and manifest verification, rerun after dead-export cleanup
+
+$ manifest flags
+{
+  "expected": {
+    "status": "passed",
+    "mode": "backend",
+    "runtime": "mock",
+    "generatedAppChecked": true,
+    "openaiImportAttempted": false,
+    "openaiCalls": false,
+    "cleanupOk": true,
+    "boundaryAllowed": true,
+    "providerCredentialScrubbedOPENAI": true
+  },
+  "actual": {
+    "status": "passed",
+    "mode": "backend",
+    "runtime": "mock",
+    "generatedAppChecked": true,
+    "openaiImportAttempted": false,
+    "openaiCalls": false,
+    "cleanupOk": true,
+    "boundaryAllowed": true,
+    "providerCredentialScrubbedOPENAI": true
+  },
+  "pass": true
+}
+
+$ HTTP status lines
+task-6-health.txt: 4:HTTP/1.1 200 OK
+task-6-chat.txt: 4:HTTP/1.1 200 OK
+task-6-guardrail.txt: 4:HTTP/1.1 200 OK
+task-6-422.txt: 4:HTTP/1.1 422 Unprocessable Content
+task-6-sse.txt: 4:HTTP/1.1 200 OK
+
+$ required body markers
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:10:event: state.snapshot
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:11:data: {"domain_key": "library", "brand_name": "도서관 예약 도우미", "public_context": {"patron_display_name": "김서연", "reservation_id": "LIB-RSV-1042", "resource_label": "2층 스터디룸 A", "time_window": "14:00-16:00", "reservation_status": "held", "loan_titles": ["도시와 사람", "자료 구조 입문"], "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."}, "resources": [{"label": "2층 스터디룸 A", "status": "available", "detail": "4명, 화이트보드"}, {"label": "3층 미디어룸", "status": "available", "detail": "6명, 모니터"}, {"label": "1층 열람실 부스", "status": "waitlisted", "detail": "대기 1명"}], "agents": ["triage_agent", "room_reservation_agent", "lending_agent", "policy_agent", "escalation_agent"], "handoffs": ["triage_agent -> room_reservation_agent", "room_reservation_agent -> policy_agent"], "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"], "messages": [{"role": "user", "content": "도서관 스터디룸 예약하고 싶어요"}, {"role": "assistant", "content": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다."}, {"role": "user", "content": "무관한 주식 추천해줘"}, {"role": "assistant", "content": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}], "events": [{"type": "handoff.started", "detail": "triage_agent -> room_reservation_agent", "public_payload": {"active_agent": "room_reservation_agent"}}, {"type": "tool.called", "detail": "availability_tool", "public_payload": {"count": 3}}, {"type": "state.delta", "detail": "public context refreshed", "public_payload": {"policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}, {"type": "guardrail.blocked", "detail": "이 데스크는 도서관 공간 예약 업무만 처리합니다.", "public_payload": {"name": "relevance_guardrail", "reason": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}}]}
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:13:event: state.delta
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:16:event: state.delta
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:19:event: state.delta
+.omo/evidence/any-agent-system-builder/task-6-sse.txt:22:event: state.delta
+.omo/evidence/any-agent-system-builder/task-6-chat.txt:10:{"assistant_message":"예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.","active_agent":"room_reservation_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"handoff.started","detail":"triage_agent -> room_reservation_agent","public_payload":{"active_agent":"room_reservation_agent"}},{"type":"tool.called","detail":"availability_tool","public_payload":{"count":3}},{"type":"state.delta","detail":"public context refreshed","public_payload":{"policy_summary":"회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}],"status":"ok","guardrail":null}
+.omo/evidence/any-agent-system-builder/task-6-guardrail.txt:10:{"assistant_message":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","active_agent":"triage_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"guardrail.blocked","detail":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","public_payload":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}],"status":"blocked","guardrail":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}
+
+$ forbidden internal markers in HTTP artifacts

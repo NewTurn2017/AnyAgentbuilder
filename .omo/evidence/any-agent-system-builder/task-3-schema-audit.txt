@@ -1,0 +1,6 @@
+file=agentic-system-builder/EXAMPLES.md
+mtime=2026-07-01T10:28:19.384Z
+airline: OK all schema terms present
+library: OK all schema terms present
+pcbang: OK all schema terms present
+generic: OK all schema terms present

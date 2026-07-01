@@ -1,0 +1,7 @@
+SCENARIO=library generated app missing loan_titles only in DEMO_PUBLIC_SEED
+TEMP_DIR=/tmp/aab-task5-missing-seed.xgnAhQ
+MUTATION=removed loan_titles from backend/demo_data.py DEMO_PUBLIC_SEED only
+INVOCATION=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-missing-seed.xgnAhQ/library
+ERROR: generated library backend DEMO_PUBLIC_SEED missing required public context fields: loan_titles
+EXIT_STATUS=1
+RESULT=PASS validator rejected missing DEMO_PUBLIC_SEED key

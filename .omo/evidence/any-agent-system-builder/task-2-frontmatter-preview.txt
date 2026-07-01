@@ -1,0 +1,5 @@
+---
+name: agentic-system-builder
+description: It guides agents to derive operational multi-agent chat systems from a real service workflow, including shared context, specialist agents, handoffs, guardrails, tools, widgets, and proof plans. Use when building agentic chat systems, reservation or lending or booking workflows, multi-agent service systems, or domain-specific operational assistants.
+---
+

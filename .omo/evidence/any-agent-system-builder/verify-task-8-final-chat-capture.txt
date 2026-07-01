@@ -1,0 +1,13 @@
+source_artifact=.omo/evidence/any-agent-system-builder/task-8-chat-api-capture.txt
+PASS happy_chat_api_bodies=1
+PASS guardrail_chat_api_bodies=1
+PASS total_chat_api_bodies=2
+PASS happy status ok captured
+PASS happy active agent captured
+PASS happy public context captured
+PASS guardrail status blocked captured
+PASS guardrail object captured
+PASS guardrail reason captured
+PASS result PASS
+api_body_lines=2
+internal_marker_leaks=none

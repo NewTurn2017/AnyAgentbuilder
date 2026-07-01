@@ -1,0 +1,1 @@
+ERROR: unknown built-in domain "unknown"; choose one of airline, library, pcbang, generic or pass --spec <json>

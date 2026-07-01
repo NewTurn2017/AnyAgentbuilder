@@ -1,0 +1,23 @@
+SCENARIO=scaffold built-in non-library domains and validate generated contract
+TEMP_DIR=/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR
+
+DOMAIN=pcbang
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain pcbang --out /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/pcbang --force
+OK: scaffolded pcbang agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/pcbang
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+SCAFFOLD_EXIT_STATUS=0
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/pcbang
+OK: generated pcbang app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/pcbang
+VALIDATE_EXIT_STATUS=0
+
+DOMAIN=generic
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain generic --out /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/generic --force
+OK: scaffolded generic agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/generic
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+SCAFFOLD_EXIT_STATUS=0
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/generic
+OK: generated generic app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-nonlibrary-tmp.COkodR/generic
+VALIDATE_EXIT_STATUS=0
+
+FAILURES=0
+CLEANUP=PASS temp dir removed

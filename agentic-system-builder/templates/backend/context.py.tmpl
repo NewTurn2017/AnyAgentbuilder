@@ -1,0 +1,18 @@
+from collections.abc import Mapping
+
+from models import InternalContextModel, JsonValue, PublicContextModel
+
+PUBLIC_FIELD_NAMES = {{PY:publicFields}}
+INTERNAL_FIELD_NAMES = {{PY:internalFields}}
+
+
+def only_fields(seed: Mapping[str, JsonValue], fields: list[str]) -> dict[str, JsonValue]:
+    return {key: seed[key] for key in fields if key in seed}
+
+
+def build_public_context(seed: Mapping[str, JsonValue]) -> PublicContextModel:
+    return PublicContextModel.model_validate(only_fields(seed, PUBLIC_FIELD_NAMES))
+
+
+def build_internal_context(seed: Mapping[str, JsonValue]) -> InternalContextModel:
+    return InternalContextModel.model_validate(only_fields(seed, INTERNAL_FIELD_NAMES))

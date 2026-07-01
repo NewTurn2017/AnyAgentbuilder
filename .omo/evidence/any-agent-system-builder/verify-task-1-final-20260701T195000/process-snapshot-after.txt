@@ -1,0 +1,4 @@
+99181 11058 sh -c ps -axo pid,ppid,command | rg "(agentic-system-builder|generated/library-reservation-demo|qa-generated-demo|validate-domain-spec|npm run validate:skill)" > .omo/evidence/any-agent-system-builder/verify-task-1-final-20260701T195000/process-snapshot-after.txt; status=$?; printf "\nEXIT:%s\n" "$status" >> .omo/evidence/any-agent-system-builder/verify-task-1-final-20260701T195000/process-snapshot-after.txt
+99187 99181 rg (agentic-system-builder|generated/library-reservation-demo|qa-generated-demo|validate-domain-spec|npm run validate:skill)
+
+EXIT:0

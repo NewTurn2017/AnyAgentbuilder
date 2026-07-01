@@ -1,0 +1,10 @@
+manifest=.omo/evidence/any-agent-system-builder/run-manifest.json
+manifest_status=passed
+manifest_cleanup_ok=true
+backend_pid=3395 alive=false
+frontend_pid=3704 alive=false
+backend_port=63169 listener=no
+frontend_port=63170 listener=no
+task8_cleanup_pids_receipt=frontend: pid 3704 alive=false | backend: pid 3395 alive=false | backend pid=3395 alive=false | frontend pid=3704 alive=false
+task8_cleanup_ports_receipt=$ lsof -nP -iTCP:63169 -sTCP:LISTEN | backend port=63169 listener=no | $ lsof -nP -iTCP:63170 -sTCP:LISTEN | frontend port=63170 listener=no
+relevant_browser_or_server_processes=none

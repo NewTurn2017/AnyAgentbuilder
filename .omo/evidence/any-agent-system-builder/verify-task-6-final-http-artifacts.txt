@@ -1,0 +1,132 @@
+## HTTP artifact contract inspection
+
+### .omo/evidence/any-agent-system-builder/task-6-health.txt
+status-lines:
+4:HTTP/1.1 200 OK
+required-term-checks:
+10:{"status":"ok","runtime":"mock","domain_key":"library"}
+
+--- excerpt ---
+$ curl -i http://127.0.0.1:63635/health
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 13:31:17 GMT
+server: uvicorn
+content-length: 55
+content-type: application/json
+
+{"status":"ok","runtime":"mock","domain_key":"library"}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    55  100    55    0     0  52631      0 --:--:-- --:--:-- --:--:-- 55000
+### .omo/evidence/any-agent-system-builder/task-6-chat.txt
+status-lines:
+4:HTTP/1.1 200 OK
+required-term-checks:
+10:{"assistant_message":"예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.","active_agent":"room_reservation_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"handoff.started","detail":"triage_agent -> room_reservation_agent","public_payload":{"active_agent":"room_reservation_agent"}},{"type":"tool.called","detail":"availability_tool","public_payload":{"count":3}},{"type":"state.delta","detail":"public context refreshed","public_payload":{"policy_summary":"회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}],"status":"ok","guardrail":null}
+
+--- excerpt ---
+$ curl -i -X POST http://127.0.0.1:63635/chat -H content-type: application/json -d {"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 13:31:17 GMT
+server: uvicorn
+content-length: 987
+content-type: application/json
+
+{"assistant_message":"예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.","active_agent":"room_reservation_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"handoff.started","detail":"triage_agent -> room_reservation_agent","public_payload":{"active_agent":"room_reservation_agent"}},{"type":"tool.called","detail":"availability_tool","public_payload":{"count":3}},{"type":"state.delta","detail":"public context refreshed","public_payload":{"policy_summary":"회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}],"status":"ok","guardrail":null}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1065  100   987  100    78   950k  76923 --:--:-- --:--:-- --:--:-- 1040k
+### .omo/evidence/any-agent-system-builder/task-6-guardrail.txt
+status-lines:
+4:HTTP/1.1 200 OK
+required-term-checks:
+10:{"assistant_message":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","active_agent":"triage_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"guardrail.blocked","detail":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","public_payload":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}],"status":"blocked","guardrail":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}
+
+--- excerpt ---
+$ curl -i -X POST http://127.0.0.1:63635/chat -H content-type: application/json -d {"thread_id":"demo","message":"무관한 주식 추천해줘"}
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 13:31:17 GMT
+server: uvicorn
+content-length: 841
+content-type: application/json
+
+{"assistant_message":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","active_agent":"triage_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"guardrail.blocked","detail":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","public_payload":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}],"status":"blocked","guardrail":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   903  100   841  100    62  1148k  86713 --:--:-- --:--:-- --:--:--  881k
+### .omo/evidence/any-agent-system-builder/task-6-422.txt
+status-lines:
+4:HTTP/1.1 422 Unprocessable Content
+required-term-checks:
+4:HTTP/1.1 422 Unprocessable Content
+10:{"detail":[{"type":"json_invalid","loc":["body",30],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting value"}}]}
+
+--- excerpt ---
+$ curl -i -X POST http://127.0.0.1:63635/chat -H content-type: application/json --data-binary @-
+exit=0
+--- stdout ---
+HTTP/1.1 422 Unprocessable Content
+date: Wed, 01 Jul 2026 13:31:17 GMT
+server: uvicorn
+content-length: 125
+content-type: application/json
+
+{"detail":[{"type":"json_invalid","loc":["body",30],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting value"}}]}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   155  100   125  100    30   173k  42674 --:--:-- --:--:-- --:--:--  151k
+### .omo/evidence/any-agent-system-builder/task-6-sse.txt
+status-lines:
+4:HTTP/1.1 200 OK
+required-term-checks:
+10:event: state.snapshot
+11:data: {"domain_key": "library", "brand_name": "도서관 예약 도우미", "public_context": {"patron_display_name": "김서연", "reservation_id": "LIB-RSV-1042", "resource_label": "2층 스터디룸 A", "time_window": "14:00-16:00", "reservation_status": "held", "loan_titles": ["도시와 사람", "자료 구조 입문"], "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."}, "resources": [{"label": "2층 스터디룸 A", "status": "available", "detail": "4명, 화이트보드"}, {"label": "3층 미디어룸", "status": "available", "detail": "6명, 모니터"}, {"label": "1층 열람실 부스", "status": "waitlisted", "detail": "대기 1명"}], "agents": ["triage_agent", "room_reservation_agent", "lending_agent", "policy_agent", "escalation_agent"], "handoffs": ["triage_agent -> room_reservation_agent", "room_reservation_agent -> policy_agent"], "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"], "messages": [{"role": "user", "content": "도서관 스터디룸 예약하고 싶어요"}, {"role": "assistant", "content": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다."}, {"role": "user", "content": "무관한 주식 추천해줘"}, {"role": "assistant", "content": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}], "events": [{"type": "handoff.started", "detail": "triage_agent -> room_reservation_agent", "public_payload": {"active_agent": "room_reservation_agent"}}, {"type": "tool.called", "detail": "availability_tool", "public_payload": {"count": 3}}, {"type": "state.delta", "detail": "public context refreshed", "public_payload": {"policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}, {"type": "guardrail.blocked", "detail": "이 데스크는 도서관 공간 예약 업무만 처리합니다.", "public_payload": {"name": "relevance_guardrail", "reason": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}}]}
+13:event: state.delta
+14:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+16:event: state.delta
+17:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+19:event: state.delta
+20:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+22:event: state.delta
+23:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+
+--- excerpt ---
+$ curl -i -N http://127.0.0.1:63635/state/stream?thread_id=demo --max-time 5
+exit=28
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 13:31:17 GMT
+server: uvicorn
+content-type: text/event-stream; charset=utf-8
+Transfer-Encoding: chunked
+
+event: state.snapshot
+data: {"domain_key": "library", "brand_name": "도서관 예약 도우미", "public_context": {"patron_display_name": "김서연", "reservation_id": "LIB-RSV-1042", "resource_label": "2층 스터디룸 A", "time_window": "14:00-16:00", "reservation_status": "held", "loan_titles": ["도시와 사람", "자료 구조 입문"], "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."}, "resources": [{"label": "2층 스터디룸 A", "status": "available", "detail": "4명, 화이트보드"}, {"label": "3층 미디어룸", "status": "available", "detail": "6명, 모니터"}, {"label": "1층 열람실 부스", "status": "waitlisted", "detail": "대기 1명"}], "agents": ["triage_agent", "room_reservation_agent", "lending_agent", "policy_agent", "escalation_agent"], "handoffs": ["triage_agent -> room_reservation_agent", "room_reservation_agent -> policy_agent"], "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"], "messages": [{"role": "user", "content": "도서관 스터디룸 예약하고 싶어요"}, {"role": "assistant", "content": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다."}, {"role": "user", "content": "무관한 주식 추천해줘"}, {"role": "assistant", "content": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}], "events": [{"type": "handoff.started", "detail": "triage_agent -> room_reservation_agent", "public_payload": {"active_agent": "room_reservation_agent"}}, {"type": "tool.called", "detail": "availability_tool", "public_payload": {"count": 3}}, {"type": "state.delta", "detail": "public context refreshed", "public_payload": {"policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}, {"type": "guardrail.blocked", "detail": "이 데스크는 도서관 공간 예약 업무만 처리합니다.", "public_payload": {"name": "relevance_guardrail", "reason": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}}]}
+
+event: state.delta
+data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+
+event: state.delta
+data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+
+event: state.delta
+data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+
+event: state.delta
+data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  2131    0  2131    0     0   2128      0 --:--:--  0:00:01 --:--:--  2128100  2323    0  2323    0     0   1159      0 --:--:--  0:00:02 --:--:--  1159100  2419    0  2419    0     0    804      0 --:--:--  0:00:03 --:--:--   805100  2419    0  2419    0     0    603      0 --:--:--  0:00:04 --:--:--   603100  2515    0  2515    0     0    502      0 --:--:--  0:00:05 --:--:--   502
+curl: (28) Operation timed out after 5006 milliseconds with 2515 bytes received
+## Internal marker scan over HTTP artifacts

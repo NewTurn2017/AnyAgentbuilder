@@ -1,0 +1,2 @@
+node --check changed qa scripts
+exit=0

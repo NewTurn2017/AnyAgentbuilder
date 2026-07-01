@@ -1,0 +1,36 @@
+$ env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: no provider credentials present
+mock mode active: harness will not import OpenAI or call provider APIs
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend import scan passed; openaiImportAttempted=false; openaiCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+installing frontend dependencies locally in generated/library-reservation-demo/frontend
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+ERROR: browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA
+EXIT_STATUS=1
+--- browser manifest summary ---
+{
+  "status": "failed-browser-dependency",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "mode": "browser",
+  "backendPort": 55199,
+  "frontendPort": 55200,
+  "backendPid": 49526,
+  "frontendPid": 49750,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- recorded PID checks ---
+backend pid 49526 alive=no
+frontend pid 49750 alive=no
+--- recorded port checks ---
+backend port 55199
+frontend port 55200

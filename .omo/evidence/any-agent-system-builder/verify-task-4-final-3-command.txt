@@ -1,0 +1,8 @@
+OK: skill structure valid: agentic-system-builder/SKILL.md
+
+> validate:examples
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+
+OK: example domains valid: airline, library, pcbang, generic
+
+EXIT_STATUS=0

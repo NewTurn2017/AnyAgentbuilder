@@ -1,0 +1,4 @@
+SCENARIO=syntax check for validator
+INVOCATION=node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+EXIT_STATUS=0
+RESULT=PASS validator syntax check succeeded

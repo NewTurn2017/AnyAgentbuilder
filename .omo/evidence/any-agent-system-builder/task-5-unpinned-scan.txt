@@ -1,0 +1,1 @@
+no unpinned latest/range markers in generated package, package template, or scaffold script

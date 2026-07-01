@@ -1,0 +1,15 @@
+generated/library-reservation-demo/README.md
+generated/library-reservation-demo/backend/agents.py
+generated/library-reservation-demo/backend/context.py
+generated/library-reservation-demo/backend/demo_data.py
+generated/library-reservation-demo/backend/events.py
+generated/library-reservation-demo/backend/main.py
+generated/library-reservation-demo/backend/memory.py
+generated/library-reservation-demo/backend/requirements.txt
+generated/library-reservation-demo/backend/tools.py
+generated/library-reservation-demo/frontend/index.html
+generated/library-reservation-demo/frontend/package.json
+generated/library-reservation-demo/frontend/src/App.jsx
+generated/library-reservation-demo/frontend/src/main.jsx
+generated/library-reservation-demo/frontend/src/styles.css
+generated/library-reservation-demo/frontend/vite.config.js

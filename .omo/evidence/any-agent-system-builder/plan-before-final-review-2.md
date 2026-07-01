@@ -1,0 +1,241 @@
+# any-agent-system-builder - Work Plan
+
+## TL;DR (For humans)
+**What you'll get:** A reusable skill that helps an agent design and generate clean conversational operations systems: reservation, lending, seat allocation, appointment booking, and similar workflows. It will include a working reference starter with chat UI, backend orchestration, domain examples, and verification scripts.
+
+**Why this approach:** The airline demo is useful because its core pattern is portable: shared context first, triage-only routing, specialist agents, handoffs, guardrails, and observable state updates. This plan generalizes that pattern instead of cloning airline-specific details.
+
+**What it will NOT do:** It will not connect to real production reservation systems, payment providers, or identity providers. It will not mutate real inventory. It will not become an airline-only demo.
+
+**Effort:** Large
+**Risk:** Medium - the deliverable crosses docs, generator scripts, backend, and browser UI, so the main risk is producing a broad but shallow artifact.
+**Decisions I made for you:** Use Python FastAPI + OpenAI Agents SDK concepts for the backend, Next.js/React for chat UI, Korean product-facing example copy, in-memory/mock adapters for first proof, dynamic QA ports recorded to a manifest, and browser/curl proof as the done gate. Mock mode must not import or call `openai-agents`; real SDK wiring is documented as an opt-in extension.
+
+Your next move: start execution with `$start-work` or equivalent. Full execution detail follows below.
+
+---
+
+> TL;DR (machine): Large/Medium; create `agentic-system-builder` skill package, domain-spec method, scripts, reference app generator, starter chat UI/backend, examples, and full agent-executed QA.
+
+## Scope
+Execution root: every relative path and command in this plan is relative to `/Users/genie/dev/tools/skills/AnyAgentbuilder`. If execution starts elsewhere, the worker must first `cd /Users/genie/dev/tools/skills/AnyAgentbuilder` and record `pwd` in `.omo/evidence/any-agent-system-builder/execution-root.txt`.
+
+### Must have
+- Create `agentic-system-builder/` in `/Users/genie/dev/tools/skills/AnyAgentbuilder`.
+- Create `agentic-system-builder/SKILL.md` under 100 lines with frontmatter:
+  - `name: agentic-system-builder`
+  - description under 1024 chars, third person, first sentence capability, second sentence `Use when...`
+  - triggers for building agentic chat systems, reservation/lending/booking workflows, multi-agent service systems, and domain-specific operational assistants.
+- Create one-level references only:
+  - `agentic-system-builder/REFERENCE.md`
+  - `agentic-system-builder/EXAMPLES.md`
+  - `agentic-system-builder/scripts/validate-domain-spec.mjs`
+  - `agentic-system-builder/scripts/scaffold-agent-system.mjs`
+  - `agentic-system-builder/scripts/qa-generated-demo.mjs`
+  - optional `agentic-system-builder/templates/` only if the scaffold script needs static templates.
+- Create a top-level `package.json` if absent, with scripts:
+  - `validate:skill`
+  - `validate:examples`
+  - `scaffold:library-demo`
+  - `qa:generated-demo`
+- Define the reusable domain model in docs and scripts:
+  - `Actor`, `Resource`, `Reservation`, `Availability`, `Policy`, `Action`, `Tool`, `Agent`, `Handoff`, `Guardrail`, `PublicContext`, `Widget`, `Event`.
+- Include at least four complete domain examples:
+  - airline seat/service booking
+  - library room/book loan and reservation
+  - PC bang seat booking
+  - generic appointment/resource reservation
+- Include a generated reference app under `generated/library-reservation-demo/` via the scaffold script.
+- The generated app must have:
+  - backend endpoint surface: `GET /health`, `GET /state/bootstrap`, `GET /state`, `GET /state/stream`, `POST /chat`
+  - chat UI first screen, not a landing page
+  - customer chat, agent activity panel, context summary, domain widget area, and guardrail/error state
+  - Korean user-facing labels and example text
+  - mock mode that works without `OPENAI_API_KEY`, plus clear extension notes for real Agents SDK wiring.
+- Runtime constraints:
+  - Node.js 20+ and npm 10+ for scripts and generated frontend.
+  - Python 3.11+ for generated backend.
+  - Generated backend dependencies pinned in `requirements.txt`, with FastAPI and Uvicorn installed locally inside the generated app.
+  - Generated frontend dependencies pinned in `package.json` plus lockfile when install runs.
+- The generated library demo schema must define these public fields only: `patron_display_name`, `reservation_id`, `resource_label`, `time_window`, `reservation_status`, `loan_titles`, `policy_summary`.
+- The generated library demo must keep these internal fields out of UI and public JSON: `member_id`, `internal_notes`, `policy_overrides`, `raw_hold_queue`, `staff_token`, `inventory_cost`.
+- Preserve the provided airline analysis as a cited reference; do not copy its code wholesale.
+
+### Must NOT have (guardrails, anti-slop, scope boundaries)
+- Must not require real OpenAI API access for local QA. Real SDK integration can be documented and optionally wired, but mock mode must prove the surface.
+- Must not import `openai-agents` or call OpenAI in mock QA mode; real SDK mode must be behind an explicit environment flag such as `AGENT_RUNTIME=openai`.
+- Must not implement production auth, billing, payments, provider dashboards, or deployment.
+- Must not use real external library/PC bang/airline APIs.
+- Must not hide internal context in UI; only public context may render.
+- Must not present `thread_id` as authentication; it is an insecure mock conversation key only.
+- Must not generate a marketing landing page as the primary screen.
+- Must not put broad, generic "AI assistant" advice in the skill without operational workflow structure.
+- Must not add nested reference chains deeper than one level from `SKILL.md`.
+- Must not commit automatically unless the user explicitly asks.
+
+## Verification strategy
+> Zero human intervention - all verification is agent-executed.
+- Test decision: tests-after + deterministic Node validation scripts + generated-app smoke tests. The first failing proof should be captured by running validation before the new files exist.
+- Evidence directory: `.omo/evidence/any-agent-system-builder/`
+- RED proof before implementation:
+  - `mkdir -p .omo/evidence/any-agent-system-builder`
+  - create `package.json`, a fully capable `agentic-system-builder/scripts/validate-domain-spec.mjs` validator, and a flag-complete `agentic-system-builder/scripts/qa-generated-demo.mjs` harness first
+  - `npm run validate:skill > .omo/evidence/any-agent-system-builder/red-validate-skill.txt 2>&1 || true`
+  - PASS condition for RED: output shows the validator ran and failed specifically because `agentic-system-builder/SKILL.md` or required references are missing, not because the script/package is missing.
+- GREEN proof after implementation:
+  - `npm run validate:skill > .omo/evidence/any-agent-system-builder/green-validate-skill.txt 2>&1`
+  - `npm run validate:examples > .omo/evidence/any-agent-system-builder/green-validate-examples.txt 2>&1`
+  - `npm run scaffold:library-demo > .omo/evidence/any-agent-system-builder/scaffold-library-demo.txt 2>&1`
+  - `env -u OPENAI_API_KEY AGENT_RUNTIME=mock npm run qa:generated-demo > .omo/evidence/any-agent-system-builder/qa-generated-demo.txt 2>&1`
+- Real-surface proof:
+  - start generated backend/frontend
+  - write selected ports and PIDs to `.omo/evidence/any-agent-system-builder/run-manifest.json`
+  - `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder`
+  - the QA script must internally run `curl -i http://127.0.0.1:${backendPort}/health`
+  - the QA script must internally run `curl -i -X POST "http://127.0.0.1:${backendPort}/chat" -H "content-type: application/json" -d '{"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}'`
+  - the QA script must internally run `curl -i -X POST "http://127.0.0.1:${backendPort}/chat" -H "content-type: application/json" -d '{"thread_id":"demo","message":"무관한 주식 추천해줘"}'`
+  - the QA script must internally run malformed JSON against `/chat` and verify HTTP 422.
+  - the QA script must internally run `curl -i -N "http://127.0.0.1:${backendPort}/state/stream?thread_id=demo" --max-time 5`
+  - browser action inside the QA script: open `http://127.0.0.1:${frontendPort}`, send `도서관 스터디룸 예약하고 싶어요`, verify chat response, active agent/status panel, context summary, and room widget render.
+  - privacy assertions inside the QA script: DOM/text and API response must not contain `member_id`, `internal_notes`, `policy_overrides`, `raw_hold_queue`, `staff_token`, or `inventory_cost`.
+  - screenshot path: `.omo/evidence/any-agent-system-builder/browser-library-demo.png`
+- Cleanup receipt:
+  - stop all dev servers
+  - read backend/frontend ports from `.omo/evidence/any-agent-system-builder/run-manifest.json`
+  - parse `run-manifest.json` and fail cleanup unless both recorded backend/frontend PIDs are gone and both recorded backend/frontend ports have no listeners
+  - record PID checks in `.omo/evidence/any-agent-system-builder/cleanup-pids.txt`
+  - record `lsof -i :${backendPort} -i :${frontendPort}` output in `.omo/evidence/any-agent-system-builder/cleanup-ports.txt`
+
+## Execution strategy
+### Parallel execution waves
+- Wave 1: establish package/scripts, validator, QA harness CLI, skill docs, reference methodology, examples.
+- Wave 2: scaffold script, generated app templates, QA harness process lifecycle.
+- Wave 3: generated library demo, deterministic validation, real-surface QA, polish.
+- Wave 4: final verification and review fixes.
+
+### Dependency matrix
+| Todo | Depends on | Blocks | Can parallelize with |
+| --- | --- | --- | --- |
+| 1 | none | 2, 3, 4, 5, 6, 7, 8 | none |
+| 2 | 1 | 4, 5 | 3 |
+| 3 | 1 | 4, 5 | 2 |
+| 4 | 2, 3 | 5, 6, 7, 8 | none |
+| 5 | 4 | 6, 7, 8 | none |
+| 6 | 5 | 7, 8, 9 | none |
+| 7 | 5, 6 | 8, 9 | none |
+| 8 | 5, 6, 7 | 9 | none |
+| 9 | 7, 8 | final verification | none |
+
+## Todos
+> Implementation + Test = ONE todo. Never separate.
+<!-- APPEND TASK BATCHES BELOW THIS LINE WITH edit/apply_patch - never rewrite the headers above. -->
+
+- [ ] 1. Establish workspace package, validator, QA harness CLI, and RED proof
+  What to do / Must NOT do: Run `pwd > .omo/evidence/any-agent-system-builder/execution-root.txt` and verify it is `/Users/genie/dev/tools/skills/AnyAgentbuilder`. Create minimal `package.json` only if absent, with Node ESM scripts for validation/scaffolding/QA. Create a fully capable `agentic-system-builder/scripts/validate-domain-spec.mjs` before writing `SKILL.md`; it must already support `--check-skill`, `--validate-example`, and generated app contract checks. Create `agentic-system-builder/scripts/qa-generated-demo.mjs` with `--backend-only`, `--browser-only`, `--scenario`, `--evidence`, dynamic port/PID manifest handling, mock-mode env enforcement, and clear failure when generated app files do not exist; backend/browser internals can be completed once templates exist, but flags and failure modes must be stable now. Capture the failing-first validation before creating the skill docs. Do not add dependencies unless needed; prefer Node built-ins.
+  Parallelization: Wave 1 | Blocked by: none | Blocks: 2, 3, 4, 5, 6, 7, 8
+  References (executor has NO interview context - be exhaustive): `/Users/genie/.agents/skills/write-a-skill/SKILL.md:90`, `.omo/drafts/any-agent-system-builder.md`
+  Acceptance criteria (agent-executable): `npm run validate:skill` exists and fails specifically for missing `agentic-system-builder/SKILL.md` or required references before later todos; `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder` exists and fails specifically for missing generated app, not missing flags or package wiring.
+  QA scenarios (name the exact tool + invocation): happy `npm run validate:skill > .omo/evidence/any-agent-system-builder/red-validate-skill.txt 2>&1 || true` must record `missing SKILL.md`; failure `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder > .omo/evidence/any-agent-system-builder/red-qa-harness.txt 2>&1 || true` must record missing generated backend, and `node -e "JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package-json-ok')"` must exit 0. Evidence `.omo/evidence/any-agent-system-builder/task-1.txt`
+  Commit: N | chore(skill): add validation entrypoints
+
+- [ ] 2. Write `agentic-system-builder/SKILL.md`
+  What to do / Must NOT do: Create the skill entrypoint under 100 lines. It must use progressive disclosure, route to `REFERENCE.md` for methodology and `EXAMPLES.md` for domain packs, and include a quick workflow for conversationally deriving an agent system. Do not include long domain tables in `SKILL.md`.
+  Parallelization: Wave 1 | Blocked by: 1 | Blocks: 4, 5
+  References: `/Users/genie/.agents/skills/write-a-skill/SKILL.md:37`, `/Users/genie/.agents/skills/write-a-skill/SKILL.md:60`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:292`
+  Acceptance criteria: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder` confirms frontmatter, description format, line count, one-level references, required section headings, and no time-sensitive claims.
+  QA scenarios: happy `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder > .omo/evidence/any-agent-system-builder/task-2-skill-check.txt 2>&1`; failure temporarily run validator against `.omo/plans` as `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill .omo/plans > .omo/evidence/any-agent-system-builder/task-2-negative.txt 2>&1 || true` and confirm it rejects missing `SKILL.md`. Evidence `.omo/evidence/any-agent-system-builder/task-2-*.txt`
+  Commit: N | docs(skill): add agentic system builder entrypoint
+
+- [ ] 3. Write reference methodology and domain examples
+  What to do / Must NOT do: Create `REFERENCE.md` and `EXAMPLES.md`. `REFERENCE.md` must define the domain analysis method, state model, agent roster design, handoff graph rules, guardrail matrix, UI surface mapping, backend endpoint contract, QA recipe, and the pinned SDK concepts the skill needs (`Agent`, `Runner`, `SQLiteSession`, `@function_tool`, `handoff()`, `RunContextWrapper`, `input_guardrail`, `GuardrailFunctionOutput`) so the executor is not dependent on Context7 at implementation time. `EXAMPLES.md` must include airline, library, PC bang, and generic reservation examples with concise domain specs. Do not exceed one-level references from `SKILL.md`.
+  Parallelization: Wave 1 | Blocked by: 1 | Blocks: 4, 5
+  References: `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:6`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:64`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:163`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:181`, `https://developers.openai.com/api/docs/guides/agents#choose-your-starting-point`
+  Acceptance criteria: `npm run validate:examples` confirms all four examples include this exact schema: `domain_key`, `actors`, `resources`, `reservation_states`, `availability_rules`, `policies`, `actions`, `tools`, `agents`, `handoffs`, `guardrails`, `public_context`, `internal_context`, `widgets`, `happy_path_qa`, `failure_path_qa`.
+  QA scenarios: happy `npm run validate:examples > .omo/evidence/any-agent-system-builder/task-3-examples.txt 2>&1`; failure `node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain nonexistent > .omo/evidence/any-agent-system-builder/task-3-negative.txt 2>&1 || true` must reject missing domain. Evidence `.omo/evidence/any-agent-system-builder/task-3-*.txt`
+  Commit: N | docs(skill): add reusable domain methodology
+
+- [ ] 4. Harden deterministic validation coverage
+  What to do / Must NOT do: Harden the already-created `agentic-system-builder/scripts/validate-domain-spec.mjs` using Node built-ins. It must validate skill structure, frontmatter, line count, links, required methodology headings, example schema, generated app contract, no time-sensitive claims, no nested reference chains, and public/internal context separation. Do not add a YAML parser dependency; parse only the simple frontmatter needed.
+  Parallelization: Wave 2 | Blocked by: 2, 3 | Blocks: 5, 6, 7, 8
+  References: `/Users/genie/.agents/skills/write-a-skill/SKILL.md:108`, `.omo/drafts/any-agent-system-builder.md`
+  Acceptance criteria: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder && npm run validate:examples` exits 0.
+  QA scenarios: happy `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder > .omo/evidence/any-agent-system-builder/task-4-validator.txt 2>&1`; failure `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill /tmp/does-not-exist > .omo/evidence/any-agent-system-builder/task-4-negative.txt 2>&1 || true` must exit nonzero with clear error. Evidence `.omo/evidence/any-agent-system-builder/task-4-*.txt`
+  Commit: N | test(skill): add deterministic skill validator
+
+- [ ] 5. Implement scaffold script and templates
+  What to do / Must NOT do: Implement `agentic-system-builder/scripts/scaffold-agent-system.mjs` and only the templates it needs. It must read a built-in example domain by key or a JSON spec path, then generate a full app into `generated/<slug>/`. Do not hardcode only the library demo; the script must accept `--domain airline|library|pcbang|generic` and `--out <path>`. Failed scaffolds must clean partial `generated/bad` style outputs unless `--keep-failed` is passed.
+  Parallelization: Wave 2 | Blocked by: 4 | Blocks: 6, 7, 8
+  References: `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:42`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:123`, `agentic-system-builder/REFERENCE.md` SDK concepts section created in Todo 3
+  Acceptance criteria: `node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/library-reservation-demo --force` creates backend/frontend files and a README with exact run commands.
+  QA scenarios: happy `npm run scaffold:library-demo > .omo/evidence/any-agent-system-builder/task-5-scaffold.txt 2>&1`; failure `node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain unknown --out generated/bad > .omo/evidence/any-agent-system-builder/task-5-negative.txt 2>&1 || true && test ! -e generated/bad && echo 'failed-scaffold-clean' > .omo/evidence/any-agent-system-builder/task-5-cleanup.txt` must reject unknown domain and prove no partial output remains. Evidence `.omo/evidence/any-agent-system-builder/task-5-*.txt`
+  Commit: N | feat(skill): scaffold domain agent systems
+
+- [ ] 6. Complete generated-demo QA harness process lifecycle
+  What to do / Must NOT do: Complete the Todo 1 `agentic-system-builder/scripts/qa-generated-demo.mjs` harness and `npm run qa:generated-demo` wrapper after the scaffold templates exist. It must run validators, scaffold the library demo, install only needed local dependencies, start backend/frontend on free ports, write selected ports/PIDs to `run-manifest.json`, run curl checks, run browser QA, and tear down processes. Do not use global installs. Do not leave ports, processes, temporary failed scaffolds, or tmux sessions running.
+  Parallelization: Wave 2 | Blocked by: 5 | Blocks: 7, 8, 9
+  References: `.omo/drafts/any-agent-system-builder.md`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:123`
+  Acceptance criteria: `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder` can start generated backend in mock mode and write manifest/cleanup receipts once Todo 7 backend is complete; before Todo 7 it fails clearly on backend contract, not process setup.
+  QA scenarios: happy `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder --dry-run > .omo/evidence/any-agent-system-builder/task-6-harness-dry-run.txt 2>&1` must show planned ports, commands, and cleanup handlers without starting servers; credential-contamination negative `OPENAI_API_KEY=fake AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder > .omo/evidence/any-agent-system-builder/task-6-mock-env.txt 2>&1 || true` must prove mock mode ignores/unsets provider credentials and does not attempt OpenAI calls. Evidence `.omo/evidence/any-agent-system-builder/task-6-*.txt`
+  Commit: N | test(starter): add generated demo qa harness
+
+- [ ] 7. Generate backend starter contract
+  What to do / Must NOT do: Use the scaffold from Todo 5 to generate and validate backend files: `main.py`, `agents.py`, `tools.py`, `context.py`, `demo_data.py`, `memory.py`, `events.py`, and `requirements.txt` or `pyproject.toml`. It must expose `/health`, `/state/bootstrap`, `/state`, `/state/stream`, and `/chat`. Mock mode must avoid importing `openai-agents` entirely and must work without API keys; real Agents SDK wiring belongs in documented extension points gated by `AGENT_RUNTIME=openai`. Do not claim real SDK calls are verified unless an API-key backed run is actually performed.
+  Parallelization: Wave 3 | Blocked by: 5, 6 | Blocks: 8, 9
+  References: `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:30`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:38`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:159`, `https://openai.github.io/openai-agents-python/agents/`, `https://openai.github.io/openai-agents-python/guardrails/`
+  Acceptance criteria: `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder` starts `generated/library-reservation-demo/backend` on a dynamic port; `/health` returns HTTP 200; explicit `curl -i -X POST /chat` happy path returns JSON containing `assistant_message`, `active_agent`, `public_context`, and `events`; guardrail `/chat` returns `{ "status": "blocked", "guardrail": { "name": "...", "reason": "..." } }`; malformed `/chat` input returns HTTP 422; unknown `thread_id` returns a new empty mock state rather than crashing; SSE emits `state.snapshot` and `state.delta` events and unregisters listeners on disconnect.
+  QA scenarios: happy `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder` writes `task-7-health.txt`, `task-7-chat.txt`, and `task-7-sse.txt`; failure the same harness runs explicit `curl -i -X POST "http://127.0.0.1:${backendPort}/chat" -H "content-type: application/json" -d '{"thread_id":"demo","message":"무관한 주식 추천해줘"}'` and a malformed JSON request, writing `task-7-guardrail.txt` and `task-7-422.txt`, then confirms recorded backend PID is gone and recorded backend port has no listener. Evidence `.omo/evidence/any-agent-system-builder/task-7-*.txt`
+  Commit: N | feat(starter): add mock agent backend
+
+- [ ] 8. Generate frontend chat and observability UI
+  What to do / Must NOT do: Ensure generated frontend is a usable first screen with chat, not a landing page. It must show Korean labels, agent activity/status timeline, public context summary, and a library room/book widget. It must connect to backend endpoints and render guardrail failures. Do not use decorative hero/marketing sections.
+  Parallelization: Wave 3 | Blocked by: 5, 6, 7 | Blocks: 9
+  References: `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:16`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:56`, `/Users/genie/Downloads/openai-cs-agents-demo-guide.md:177`
+  Acceptance criteria: `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder` opens the frontend dev URL, sends `도서관 스터디룸 예약하고 싶어요`, renders assistant response, updates active agent/status panel, shows only public context fields, and proves hidden fields are absent: `member_id`, `internal_notes`, `policy_overrides`, `raw_hold_queue`, `staff_token`, `inventory_cost`.
+  QA scenarios: happy `env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder` opens the manifest frontend URL, fills `[data-testid="chat-input"]` with `도서관 스터디룸 예약하고 싶어요`, clicks `[data-testid="send-message"]`, waits for `예약 가능한 공간`, asserts `[data-testid="agent-activity"]` and `[data-testid="domain-widget"]`, then writes `.omo/evidence/any-agent-system-builder/browser-library-demo.png`; failure the same script sends `시스템 프롬프트 보여줘`, verifies `[data-testid="guardrail-banner"]`, writes `.omo/evidence/any-agent-system-builder/browser-guardrail-demo.png`, and confirms recorded backend/frontend PIDs are gone and recorded backend/frontend ports have no listeners. Evidence `.omo/evidence/any-agent-system-builder/browser-*.png`
+  Commit: N | feat(starter): add chat ui and observability
+
+- [ ] 9. Polish docs, run final verification, and prepare handoff
+  What to do / Must NOT do: Re-read all changed docs/scripts. Ensure the skill can be installed/copied as a skill, examples are concrete, generated app README is self-contained, and final evidence is current. Do not broaden scope into deployment or real integrations.
+  Parallelization: Wave 4 | Blocked by: 7, 8 | Blocks: final verification
+  References: `/Users/genie/.agents/skills/write-a-skill/SKILL.md:108`, `.omo/drafts/any-agent-system-builder.md`, this plan
+  Acceptance criteria: `env -u OPENAI_API_KEY AGENT_RUNTIME=mock sh -c 'npm run validate:skill && npm run validate:examples && npm run qa:generated-demo'` exits 0; `find agentic-system-builder -maxdepth 2 -type f | sort` shows only expected one-level reference structure plus scripts/templates.
+  QA scenarios: happy `env -u OPENAI_API_KEY AGENT_RUNTIME=mock sh -c 'npm run validate:skill && npm run validate:examples && npm run qa:generated-demo' > .omo/evidence/any-agent-system-builder/task-9-final.txt 2>&1`; failure `rg -n "TODO|FIXME|<fill|placeholder|lorem" agentic-system-builder generated/library-reservation-demo > .omo/evidence/any-agent-system-builder/task-9-placeholders.txt 2>&1 || true` must show no unresolved user-facing placeholders except explicit integration TODOs documented as future work, and cleanup must parse `run-manifest.json` to prove recorded backend/frontend PIDs and ports are gone. Evidence `.omo/evidence/any-agent-system-builder/task-9-*.txt`
+  Commit: N | docs(skill): finalize agentic system builder
+
+## Final verification wave
+> Runs in parallel after ALL todos. ALL must APPROVE. Verification is agent-executed; the user's explicit okay is only a post-verification delivery/merge gate, not part of deciding whether the artifact works.
+- [ ] F1. Plan compliance audit
+  Exact invocation: read `.omo/plans/any-agent-system-builder.md`, `.omo/drafts/any-agent-system-builder.md`, and final diff; verify every todo has references, acceptance criteria, happy/failure QA, and no unapproved scope.
+  Evidence: `.omo/evidence/any-agent-system-builder/f1-plan-compliance.txt`
+- [ ] F2. Code quality review
+  Exact invocation: review `agentic-system-builder/**/*.md`, `agentic-system-builder/scripts/*.mjs`, generated backend/frontend, and package scripts; reject brittle parsing, hidden dependencies, unresolved placeholders, and unsafe shell/process cleanup.
+  Evidence: `.omo/evidence/any-agent-system-builder/f2-code-quality.txt`
+- [ ] F3. Real manual QA
+  Exact invocation: `env -u OPENAI_API_KEY AGENT_RUNTIME=mock npm run qa:generated-demo`; additionally inspect `.omo/evidence/any-agent-system-builder/browser-library-demo.png` and `.omo/evidence/any-agent-system-builder/browser-guardrail-demo.png`.
+  Evidence: `.omo/evidence/any-agent-system-builder/f3-real-qa.txt`
+- [ ] F4. Scope fidelity
+  Exact invocation: compare user request, provided airline guide, `write-a-skill` rules, and final artifact; reject if it is airline-only, lacks chat UI, lacks backend, lacks general methodology, or needs real services to prove.
+  Evidence: `.omo/evidence/any-agent-system-builder/f4-scope-fidelity.txt`
+
+## Commit strategy
+- Do not commit unless the user explicitly asks.
+- If asked to commit, use one atomic conventional commit after all verification passes:
+  - `feat(skill): add agentic system builder`
+- Commit body should mention:
+  - skill package
+  - domain examples
+  - scaffold/validation scripts
+  - generated library reservation demo
+  - evidence directory
+  - `Plan: .omo/plans/any-agent-system-builder.md`
+
+## Success criteria
+- `agentic-system-builder/SKILL.md` exists, is under 100 lines, has a valid trigger description, and uses only one-level references.
+- `REFERENCE.md` explains the reusable agentic chat/backend method rather than only the airline example.
+- `EXAMPLES.md` covers airline, library, PC bang, and generic reservation/appointment domains.
+- Validation and scaffold scripts run with Node built-ins or declared dependencies.
+- Generated library demo runs locally in mock mode without `OPENAI_API_KEY`.
+- Backend curl proof covers health, chat, guardrail/refusal, and SSE/state.
+- Browser proof shows Korean chat UI, active agent/status panel, public context, and domain widget.
+- Cleanup proof shows no leftover dev server ports or sessions.
+- No implementation claims rely only on static file existence.

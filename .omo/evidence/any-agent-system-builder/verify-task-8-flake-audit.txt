@@ -1,0 +1,40 @@
+verdict=PASS_WITH_NOTE
+auditor=independent gate verification
+artifacts_checked=
+  agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+  generated/library-reservation-demo/frontend/src/App.jsx
+  agentic-system-builder/templates/frontend/src/App.jsx.tmpl
+  agentic-system-builder/scripts/validate-domain-spec.mjs
+
+selector_specificity:
+  result=PASS
+  evidence=browser QA drives [data-testid="chat-input"] and [data-testid="send-message"], then checks scoped containers [data-testid="chat-messages"], [data-testid="agent-activity"], [data-testid="public-context"], [data-testid="domain-widget"], and [data-testid="guardrail-banner"].
+  evidence=frontend template/generated App.jsx renders matching data-testid attributes as JSX attributes, not comments or loose strings.
+  evidence=validate-domain-spec.mjs statically checks the same frontend contract markers.
+
+wait_strategy:
+  result=PASS
+  evidence=page.goto uses waitUntil=networkidle; expectText waits for the scoped locator and polls actual innerText until required content appears or throws a HarnessError after 10000 ms.
+  fixed_delay_note=browser-qa.mjs has page.waitForTimeout(150), but it is only the interval between content checks inside a bounded assertion loop. It is not used as a pass mechanism; the test passes only when expected text is present.
+
+overfit_slop_direct_pass:
+  deletion_only_tests=not_found
+  requested_removal_only_tests=not_found
+  tautological_tests=not_found
+  implementation_mirroring=not_found for Todo 8 browser gate; assertions are against user-visible text/containers and privacy markers.
+  excessive_or_useless_tests=not_found
+  unnecessary_production_extraction=not_found in Todo 8 UI/harness changes inspected.
+
+programming_maintainability_pass:
+  relevant_file_sizes=
+    App.jsx.tmpl 161 pure LOC
+    browser-qa.mjs 102 pure LOC
+    commands.mjs 147 pure LOC
+    lifecycle.mjs 51 pure LOC
+    processes.mjs 182 pure LOC
+    qa-generated-demo.mjs 132 pure LOC
+    generated App.jsx 169 pure LOC
+  note=validate-domain-spec.mjs is 993 pure LOC but has a top-of-file SIZE_OK portability rationale. This is a known validator risk, not a Todo 8 frontend/UI behavior blocker.
+
+residual_note:
+  browser-qa.mjs contains catch blocks around optional JSON parsing/screenshot cleanup and one console.log success line. They do not hide the tested behavior because contract failures throw HarnessError and make the command nonzero.

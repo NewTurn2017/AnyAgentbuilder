@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-20260701T195133KST/fixtures/generated-leak
+ERROR: generated frontend leaks internal context field markers: member_id
+
+exit=1

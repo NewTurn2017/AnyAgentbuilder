@@ -1,0 +1,9 @@
+ITERATE - blocking fixes:
+
+1. Add explicit `curl -i -X POST /chat` happy, guardrail, and malformed JSON commands to the real-surface/Todo 7 QA. Current plan only makes health/SSE curl explicit and delegates `/chat` to the harness. Record `task-7-chat.txt`, `task-7-guardrail.txt`, and `task-7-422.txt`.
+
+2. Fix mock env scoping. `.omo/plans/any-agent-system-builder.md:196` only applies `env -u OPENAI_API_KEY AGENT_RUNTIME=mock` to the first npm command. Use:
+   `env -u OPENAI_API_KEY AGENT_RUNTIME=mock sh -c 'npm run validate:skill && npm run validate:examples && npm run qa:generated-demo'`
+   Also make the green QA proof at line 89 run under the same mock env.
+
+3. Strengthen cleanup proof. Lines 99-102 only record port `lsof`. Require parsing `run-manifest.json` and failing unless both recorded backend/frontend PIDs are gone and recorded ports have no listeners, with evidence for both PID and port checks.

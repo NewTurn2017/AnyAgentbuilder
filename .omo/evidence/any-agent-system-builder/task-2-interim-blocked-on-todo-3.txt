@@ -1,0 +1,11 @@
+BLOCKED: waiting for Todo 3 reference files
+
+Required skill-check command:
+node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder > .omo/evidence/any-agent-system-builder/task-2-skill-check.txt 2>&1
+
+Observed output:
+ERROR: SKILL.md references missing REFERENCE.md: agentic-system-builder/REFERENCE.md
+
+Reference presence:
+REFERENCE.md missing
+EXAMPLES.md missing

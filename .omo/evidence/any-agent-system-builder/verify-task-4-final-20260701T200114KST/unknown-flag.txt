@@ -1,0 +1,5 @@
+declared_command=node agentic-system-builder/scripts/validate-domain-spec.mjs --unknown
+runner=perl alarm 60s
+ERROR: unknown flag or argument: --unknown
+
+exit=1

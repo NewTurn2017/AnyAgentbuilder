@@ -1,0 +1,14 @@
+$ curl -i http://127.0.0.1:62067/state?thread_id=qa-unknown-thread
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 15:58:59 GMT
+server: uvicorn
+content-length: 954
+content-type: application/json
+
+{"domain_key":"library","brand_name":"도서관 예약 도우미","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"resources":[{"label":"2층 스터디룸 A","status":"available","detail":"4명, 화이트보드"},{"label":"3층 미디어룸","status":"available","detail":"6명, 모니터"},{"label":"1층 열람실 부스","status":"waitlisted","detail":"대기 1명"}],"agents":["triage_agent","room_reservation_agent","lending_agent","policy_agent","escalation_agent"],"handoffs":["triage_agent -> room_reservation_agent","room_reservation_agent -> policy_agent"],"guardrails":["relevance_guardrail","privacy_guardrail","policy_guardrail"],"messages":[],"events":[]}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   954  100   954    0     0  1111k      0 --:--:-- --:--:-- --:--:--  931k

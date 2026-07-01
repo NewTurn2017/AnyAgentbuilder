@@ -1,0 +1,9 @@
+## Unknown flag
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --definitely-unknown --evidence .omo/evidence/any-agent-system-builder
+ERROR: unknown flag or argument: --definitely-unknown
+[exit=1]
+
+## Bad scenario
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario badscenario --evidence .omo/evidence/any-agent-system-builder --dry-run
+ERROR: unsupported --scenario value: badscenario; only library is wired for generated-demo QA
+[exit=1]

@@ -1,0 +1,26 @@
+Todo 7 cleanup verification
+
+fresh direct runtime cleanup:
+Todo 7 cleanup verification
+
+fresh direct runtime cleanup:
+parsedFreshBackendPort=64709
+parsedFreshBackendPid=35628
+freshBackendPidAlive=no
+freshBackendPortListener=no
+
+existing exact-harness cleanup:
+frontend: not-started
+backend: pid 15285 alive=false
+backend pid=15285 alive=false
+frontend pid=null alive=false
+$ lsof -nP -iTCP:61206 -sTCP:LISTEN
+backend port=61206 listener=no
+$ lsof -nP -iTCP:61207 -sTCP:LISTEN
+frontend port=61207 listener=no
+
+current process scan:
+
+result=PASS when freshBackendPidAlive=no, freshBackendPortListener=no, existing cleanup says listener=no, and process scan empty
+
+result=PASS

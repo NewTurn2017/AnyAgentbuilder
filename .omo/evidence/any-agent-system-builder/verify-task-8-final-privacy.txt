@@ -1,0 +1,12 @@
+source_roots_scanned=
+- agentic-system-builder/templates/frontend
+- generated/library-reservation-demo/frontend/src
+- generated/library-reservation-demo/frontend/dist
+source_files_scanned=12
+frontend_source_internal_marker_leaks=none
+chat_api_body_lines_scanned=2
+chat_api_internal_marker_leaks=none
+privacy_receipt_result=PASS
+privacy_receipt_chat_api_responses=2
+frontend_public_field_keys=present
+expected_internal_marker_assertion_location=agentic-system-builder/scripts/qa-lib/browser-qa.mjs marker receipt string only

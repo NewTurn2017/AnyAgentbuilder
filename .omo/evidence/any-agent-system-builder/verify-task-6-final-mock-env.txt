@@ -1,0 +1,50 @@
+$ OPENAI_API_KEY=fake AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend runtime scan passed; providerImportAttempted=false; providerCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+running backend curl checks
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+
+[exit=0]
+
+--- mock-env manifest provider fields ---
+{
+  "status": "passed",
+  "mode": "backend",
+  "runtime": "mock",
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "mockProviderBoundary": {
+    "root": "generated/library-reservation-demo/backend",
+    "scannedFiles": [
+      "generated/library-reservation-demo/backend/agents.py",
+      "generated/library-reservation-demo/backend/context.py",
+      "generated/library-reservation-demo/backend/demo_data.py",
+      "generated/library-reservation-demo/backend/events.py",
+      "generated/library-reservation-demo/backend/main.py",
+      "generated/library-reservation-demo/backend/memory.py",
+      "generated/library-reservation-demo/backend/tools.py"
+    ],
+    "findings": [],
+    "allowed": true
+  },
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  },
+  "backendPid": 71152,
+  "frontendPid": null,
+  "backendPort": 63635,
+  "frontendPort": 63636
+}

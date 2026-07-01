@@ -1,0 +1,230 @@
+# verify-task-5-final-content-audit
+cwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T12:13:48Z
+app=generated/library-reservation-demo
+
+## required file presence
+present README.md
+present backend/main.py
+present backend/agents.py
+present backend/tools.py
+present backend/context.py
+present backend/demo_data.py
+present backend/memory.py
+present backend/events.py
+present backend/requirements.txt
+present frontend/package.json
+present frontend/index.html
+present frontend/vite.config.js
+present frontend/src/App.jsx
+present frontend/src/main.jsx
+present frontend/src/styles.css
+missing_count=0
+
+## endpoint method/path declarations
+35:@app.get("/health")
+endpoint_present=@app.get("/health")
+40:@app.get("/state/bootstrap")
+endpoint_present=@app.get("/state/bootstrap")
+45:@app.get("/state")
+endpoint_present=@app.get("/state")
+51:@app.get("/state/stream")
+endpoint_present=@app.get("/state/stream")
+73:@app.post("/chat")
+endpoint_present=@app.post("/chat")
+
+## README run commands
+9:python3 -m venv .venv
+11:pip install -r requirements.txt
+12:AGENT_RUNTIME=mock uvicorn main:app --reload --port 8000
+19:npm install
+20:VITE_API_BASE=http://127.0.0.1:8000 npm run dev
+26:curl -i http://127.0.0.1:8000/health
+27:curl -i -X POST http://127.0.0.1:8000/chat -H 'content-type: application/json' -d '{"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}'
+
+## library public/internal fields in backend context
+from dataclasses import dataclass, field
+from typing import Any
+
+PUBLIC_FIELD_NAMES = [
+  "patron_display_name",
+  "reservation_id",
+  "resource_label",
+  "time_window",
+  "reservation_status",
+  "loan_titles",
+  "policy_summary",
+]
+INTERNAL_FIELD_NAMES = [
+  "member_id",
+  "internal_notes",
+  "policy_overrides",
+  "raw_hold_queue",
+  "staff_token",
+  "inventory_cost",
+]
+
+
+@dataclass
+class PublicContext:
+    public_context: dict[str, Any] = field(default_factory=dict)
+
+    def as_dict(self) -> dict[str, Any]:
+        return {key: self.public_context.get(key) for key in PUBLIC_FIELD_NAMES}
+
+
+@dataclass
+class InternalContext:
+    internal_context: dict[str, Any] = field(default_factory=dict)
+
+    def as_dict(self) -> dict[str, Any]:
+        return {key: self.internal_context.get(key) for key in INTERNAL_FIELD_NAMES}
+
+
+def build_public_context(seed: dict[str, Any]) -> dict[str, Any]:
+    public_context = PublicContext(seed)
+    return public_context.as_dict()
+
+
+def build_internal_context(seed: dict[str, Any]) -> dict[str, Any]:
+    internal_context = InternalContext(seed)
+    return internal_context.as_dict()
+
+## frontend internal-field scan
+frontend_internal_scan=PASS no internal field marker in frontend files
+
+## public runtime JSON surface probe without server
+{
+  "initial_state": {
+    "domain_key": "library",
+    "brand_name": "도서관 예약 도우미",
+    "public_context": {
+      "patron_display_name": "김서연",
+      "reservation_id": "LIB-RSV-1042",
+      "resource_label": "2층 스터디룸 A",
+      "time_window": "14:00-16:00",
+      "reservation_status": "held",
+      "loan_titles": [
+        "도시와 사람",
+        "자료 구조 입문"
+      ],
+      "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."
+    },
+    "resources": [
+      {
+        "label": "2층 스터디룸 A",
+        "status": "available",
+        "detail": "4명, 화이트보드"
+      },
+      {
+        "label": "3층 미디어룸",
+        "status": "available",
+        "detail": "6명, 모니터"
+      },
+      {
+        "label": "1층 열람실 부스",
+        "status": "waitlisted",
+        "detail": "대기 1명"
+      }
+    ],
+    "agents": [
+      "triage_agent",
+      "room_reservation_agent",
+      "lending_agent",
+      "policy_agent",
+      "escalation_agent"
+    ],
+    "handoffs": [
+      "triage_agent -> room_reservation_agent",
+      "room_reservation_agent -> policy_agent"
+    ],
+    "guardrails": [
+      "relevance_guardrail",
+      "privacy_guardrail",
+      "policy_guardrail"
+    ],
+    "messages": [],
+    "events": []
+  },
+  "chat_result": {
+    "assistant_message": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.",
+    "active_agent": "room_reservation_agent",
+    "public_context": {
+      "patron_display_name": "김서연",
+      "reservation_id": "LIB-RSV-1042",
+      "resource_label": "2층 스터디룸 A",
+      "time_window": "14:00-16:00",
+      "reservation_status": "held",
+      "loan_titles": [
+        "도시와 사람",
+        "자료 구조 입문"
+      ],
+      "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."
+    },
+    "events": [
+      {
+        "type": "handoff.started",
+        "detail": "triage_agent -> room_reservation_agent",
+        "public_payload": {
+          "active_agent": "room_reservation_agent"
+        }
+      },
+      {
+        "type": "tool.called",
+        "detail": "availability_tool",
+        "public_payload": {
+          "count": 3
+        }
+      },
+      {
+        "type": "state.delta",
+        "detail": "public context refreshed",
+        "public_payload": {
+          "policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."
+        }
+      }
+    ],
+    "status": "ok",
+    "guardrail": null
+  },
+  "blocked_result": {
+    "assistant_message": "공개 가능한 예약 정보만 안내할 수 있습니다.",
+    "active_agent": "triage_agent",
+    "public_context": {
+      "patron_display_name": "김서연",
+      "reservation_id": "LIB-RSV-1042",
+      "resource_label": "2층 스터디룸 A",
+      "time_window": "14:00-16:00",
+      "reservation_status": "held",
+      "loan_titles": [
+        "도시와 사람",
+        "자료 구조 입문"
+      ],
+      "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."
+    },
+    "events": [
+      {
+        "type": "guardrail.blocked",
+        "detail": "공개 가능한 예약 정보만 안내할 수 있습니다.",
+        "public_payload": {
+          "name": "privacy_guardrail",
+          "reason": "공개 가능한 예약 정보만 안내할 수 있습니다."
+        }
+      }
+    ],
+    "status": "blocked",
+    "guardrail": {
+      "name": "privacy_guardrail",
+      "reason": "공개 가능한 예약 정보만 안내할 수 있습니다."
+    }
+  }
+}
+internal_leaks=[]
+missing_public_fields=[]
+public_surface_probe=PASS
+public_surface_probe_exit_status=0
+
+## stale marker scan
+generated/library-reservation-demo/backend/demo_data.py:91:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+agentic-system-builder/templates/backend/demo_data.py.tmpl:42:LIBRARY_RESERVATION_PATRON_MARKER = "library reservation patron"
+stale_marker_scan=FAIL marker present in generated/template code

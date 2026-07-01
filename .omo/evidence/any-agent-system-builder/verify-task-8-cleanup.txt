@@ -1,0 +1,38 @@
+verdict=PASS
+auditor=independent gate verification
+artifacts_checked=
+  .omo/evidence/any-agent-system-builder/run-manifest.json
+  .omo/evidence/any-agent-system-builder/task-8-cleanup-pids.txt
+  .omo/evidence/any-agent-system-builder/task-8-cleanup-ports.txt
+  .omo/evidence/any-agent-system-builder/verify-task-8-browser.txt
+
+manifest:
+  status=passed
+  backendPid=87047
+  frontendPid=87315
+  backendPort=58637
+  frontendPort=58638
+  cleanup_ok=true
+
+recorded_cleanup_receipts:
+  task-8-cleanup-pids.txt:
+    frontend: pid 87315 alive=false
+    backend: pid 87047 alive=false
+    backend pid=87047 alive=false
+    frontend pid=87315 alive=false
+  task-8-cleanup-ports.txt:
+    backend port=58637 listener=no
+    frontend port=58638 listener=no
+
+independent_live_checks:
+  command=lsof -nP -iTCP:58637 -sTCP:LISTEN 2>&1 || true
+  result=no output, no listener
+  command=lsof -nP -iTCP:58638 -sTCP:LISTEN 2>&1 || true
+  result=no output, no listener
+  command=ps -p 87047 -o pid=,stat=,command= 2>&1 || true
+  result=no output, backend PID dead
+  command=ps -p 87315 -o pid=,stat=,command= 2>&1 || true
+  result=no output, frontend PID dead
+
+browser_closed:
+  evidence=verify-task-8-browser.txt shows cleanup: ok after Playwright run; no Playwright-launched Chromium process remained from this harness. pgrep only matched unrelated Chrome Remote Desktop chromoting process, not a test browser.

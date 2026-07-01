@@ -1,0 +1,16 @@
+{
+  "scenario": "library",
+  "mode": "backend",
+  "runtime": "mock",
+  "backendPort": 63500,
+  "frontendPort": 63501,
+  "backendPid": null,
+  "frontendPid": null,
+  "status": "blocked-missing-generated-app",
+  "openaiCalls": false,
+  "missing": [
+    "generated backend directory: generated/library-reservation-demo/backend",
+    "generated backend main.py: generated/library-reservation-demo/backend/main.py",
+    "generated backend requirements.txt: generated/library-reservation-demo/backend/requirements.txt"
+  ]
+}

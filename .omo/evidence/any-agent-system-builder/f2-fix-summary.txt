@@ -1,0 +1,40 @@
+DoneClaim: F2 symlink protected-path bypass fixed
+
+Changed files:
+- agentic-system-builder/scripts/scaffold-agent-system.mjs
+- .omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-final-command.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-cleanup.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-summary.txt
+
+Implementation:
+- Added nearest-existing-ancestor realpath canonicalization before safety decisions.
+- Rejected canonicalized paths that resolve to /, home, workspace root, generated root, agentic-system-builder, .omo, or descendants of agentic-system-builder/.omo.
+- Applied the async safety check before scaffold mkdir, marker write, project file mkdir/write, and output rm paths.
+
+Tests/results:
+- Syntax: node --check agentic-system-builder/scripts/scaffold-agent-system.mjs exited 0.
+- Symlink protected children: temp symlink to workspace root, then --out <link>/agentic-system-builder/f2-symlink-agentic-subdir and --out <link>/.omo/f2-symlink-omo-subdir both exited 1; protected child paths were not created.
+- Symlink exact roots: symlinks resolving to workspace root, home, and / all exited 1 before removing the symlink.
+- Unmarked generated child preservation: node scaffold --out generated/f2-unmarked.* --force exited 1 and keep.txt survived.
+- Marked generated child replacement: node scaffold --out generated/f2-marked.* --force exited 0, old.txt was removed, README.md and marker were generated.
+- Normal scaffold: npm run scaffold:library-demo exited 0 and generated/library-reservation-demo has .any-agent-builder-generated.json.
+- Full final command: env -u OPENAI_API_KEY AGENT_RUNTIME=mock sh -c 'npm run validate:skill && npm run validate:examples && npm run qa:generated-demo' exited 0.
+
+Evidence:
+- .omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-final-command.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-cleanup.txt
+- .omo/evidence/any-agent-system-builder/f2-fix-summary.txt
+- .omo/evidence/any-agent-system-builder/run-manifest.json
+- .omo/evidence/any-agent-system-builder/browser-library-demo.png
+- .omo/evidence/any-agent-system-builder/browser-guardrail-demo.png
+
+Cleanup:
+- Full QA backend PID 4672 and frontend PID 5359 are dead.
+- Ports 62067 and 62068 have no LISTEN sockets.
+- No f2-scaffold-safety.*, f2-scaffold-exact.*, f2-symlink-*, f2-unmarked.*, or f2-marked.* temp artifacts remain.
+
+Risks:
+- Workspace root is not a git repository, so changed-file accounting is filesystem/evidence based rather than git status based.
+- Full QA regenerates generated/library-reservation-demo as part of its documented scaffold step.

@@ -1,0 +1,3 @@
+$ find generated/library-reservation-demo/frontend -maxdepth 1 \( -name node_modules -o -name package-lock.json \) -print
+frontend install artifacts: none
+PASS: no generated frontend node_modules/package-lock artifacts

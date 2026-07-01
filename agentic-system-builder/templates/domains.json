@@ -1,0 +1,145 @@
+{
+  "airline": {
+    "domain_key": "airline",
+    "slug": "airline-service-demo",
+    "brand_name": "하늘길 서비스 데스크",
+    "user_prompt": "좌석을 창가 자리로 바꾸고 싶어요",
+    "assistant_message": "좌석 서비스 담당자가 여정을 확인했고, 사용 가능한 창가 좌석을 보여드릴게요.",
+    "active_agent": "seat_service_agent",
+    "widget_title": "좌석 선택",
+    "widget_empty": "선택 가능한 좌석을 확인 중입니다.",
+    "resource_kind": "항공편 좌석",
+    "public_context": {
+      "passenger_display_name": "김민준",
+      "confirmation_number": "HANEUL7",
+      "flight_number": "HA217",
+      "trip_status": "정상 운항",
+      "selected_seat": "12A",
+      "compensation_case_id": ""
+    },
+    "internal_context": {
+      "raw_itinerary": [{ "leg": "ICN-SFO", "fare_bucket": "M" }],
+      "baggage_claim_id": "BAG-9231",
+      "fare_rules": "운임 규정 원문",
+      "staff_notes": "장거리 연결편 주의",
+      "model_routing_reason": "seat intent"
+    },
+    "agents": ["triage_agent", "flight_information_agent", "booking_agent", "seat_service_agent", "refund_compensation_agent"],
+    "handoffs": ["triage_agent -> seat_service_agent", "seat_service_agent -> flight_information_agent"],
+    "guardrails": ["relevance_guardrail", "jailbreak_guardrail", "policy_guardrail"],
+    "resources": [
+      { "label": "12A 창가", "status": "available", "detail": "전방 창가 좌석" },
+      { "label": "14C 통로", "status": "available", "detail": "빠른 하차 가능" },
+      { "label": "18F 창가", "status": "held", "detail": "다른 승객 확인 중" }
+    ],
+    "policy_summary": "예약 조회가 끝난 활성 여정에서만 좌석을 변경할 수 있습니다."
+  },
+  "library": {
+    "domain_key": "library",
+    "slug": "library-reservation-demo",
+    "brand_name": "도서관 예약 도우미",
+    "user_prompt": "도서관 스터디룸 예약하고 싶어요",
+    "assistant_message": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.",
+    "active_agent": "room_reservation_agent",
+    "widget_title": "스터디룸 시간 선택",
+    "widget_empty": "예약 가능한 공간을 확인 중입니다.",
+    "resource_kind": "도서관 공간",
+    "public_context": {
+      "patron_display_name": "김서연",
+      "reservation_id": "LIB-RSV-1042",
+      "resource_label": "2층 스터디룸 A",
+      "time_window": "14:00-16:00",
+      "reservation_status": "held",
+      "loan_titles": ["도시와 사람", "자료 구조 입문"],
+      "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."
+    },
+    "internal_context": {
+      "member_id": "M-88421",
+      "internal_notes": "연체 이력 없음",
+      "policy_overrides": [],
+      "raw_hold_queue": ["M-88421"],
+      "staff_token": "staff-demo-token",
+      "inventory_cost": 820000
+    },
+    "agents": ["triage_agent", "room_reservation_agent", "lending_agent", "policy_agent", "escalation_agent"],
+    "handoffs": ["triage_agent -> room_reservation_agent", "room_reservation_agent -> policy_agent"],
+    "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"],
+    "resources": [
+      { "label": "2층 스터디룸 A", "status": "available", "detail": "4명, 화이트보드" },
+      { "label": "3층 미디어룸", "status": "available", "detail": "6명, 모니터" },
+      { "label": "1층 열람실 부스", "status": "waitlisted", "detail": "대기 1명" }
+    ],
+    "policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."
+  },
+  "pcbang": {
+    "domain_key": "pcbang",
+    "slug": "pcbang-seat-demo",
+    "brand_name": "PC방 좌석 매니저",
+    "user_prompt": "친구랑 같이 앉을 수 있는 두 자리 예약해줘",
+    "assistant_message": "좌석 배치도를 확인했고, 나란히 앉을 수 있는 고사양 좌석 두 자리를 임시 확보했습니다.",
+    "active_agent": "seat_allocation_agent",
+    "widget_title": "좌석 배치도",
+    "widget_empty": "사용 가능한 좌석을 확인 중입니다.",
+    "resource_kind": "게임 좌석",
+    "public_context": {
+      "guest_display_name": "게스트 24",
+      "reservation_id": "PCB-2208",
+      "seat_label": "B12, B13",
+      "pc_tier": "프리미엄",
+      "time_window": "19:00-21:00",
+      "reservation_status": "held",
+      "policy_summary": "나란한 좌석은 결제 전 10분 동안만 보류됩니다."
+    },
+    "internal_context": {
+      "payment_token": "pay-demo-token",
+      "incident_notes": "공개 금지",
+      "age_verification_result": "not_required",
+      "station_admin_password": "hidden",
+      "cleanup_log": ["B12 cleaned", "B13 cleaned"]
+    },
+    "agents": ["triage_agent", "seat_allocation_agent", "time_pass_agent", "safety_policy_agent"],
+    "handoffs": ["triage_agent -> seat_allocation_agent", "seat_allocation_agent -> time_pass_agent"],
+    "guardrails": ["relevance_guardrail", "safety_guardrail", "privacy_guardrail"],
+    "resources": [
+      { "label": "B12", "status": "available", "detail": "RTX 고사양" },
+      { "label": "B13", "status": "available", "detail": "RTX 고사양" },
+      { "label": "C04", "status": "cleaning", "detail": "정리 중" }
+    ],
+    "policy_summary": "연령 제한과 직원 확인이 필요한 요청은 좌석 배정 전에 차단됩니다."
+  },
+  "generic": {
+    "domain_key": "generic",
+    "slug": "generic-reservation-demo",
+    "brand_name": "예약 운영 데스크",
+    "user_prompt": "상담 가능한 시간을 예약하고 싶어요",
+    "assistant_message": "가능한 시간대를 확인했고, 첫 번째 슬롯을 임시 예약으로 잡았습니다.",
+    "active_agent": "appointment_agent",
+    "widget_title": "예약 가능한 시간",
+    "widget_empty": "예약 가능한 리소스를 확인 중입니다.",
+    "resource_kind": "예약 리소스",
+    "public_context": {
+      "customer_display_name": "방문 고객",
+      "reservation_id": "GEN-5109",
+      "resource_label": "상담실 1",
+      "time_window": "10:30-11:00",
+      "reservation_status": "held",
+      "policy_summary": "확정 전까지 시간 변경이 가능합니다."
+    },
+    "internal_context": {
+      "account_id": "A-1009",
+      "operator_notes": "반복 문의",
+      "routing_score": 0.88,
+      "private_calendar_ref": "cal-private",
+      "billing_flag": "none"
+    },
+    "agents": ["triage_agent", "availability_agent", "appointment_agent", "policy_agent"],
+    "handoffs": ["triage_agent -> availability_agent", "availability_agent -> appointment_agent"],
+    "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"],
+    "resources": [
+      { "label": "상담실 1", "status": "available", "detail": "30분 슬롯" },
+      { "label": "상담실 2", "status": "available", "detail": "화상 가능" },
+      { "label": "전문가 A", "status": "busy", "detail": "다음 슬롯 가능" }
+    ],
+    "policy_summary": "예약 범위 밖의 요청과 내부 운영 정보 요청은 차단됩니다."
+  }
+}

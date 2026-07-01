@@ -1,0 +1,3 @@
+OK: generated app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+
+status=0

@@ -1,0 +1,23 @@
+command=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+validator_exit_code=0
+
+screenshots:
+-rw-r--r--@ 1 genie  staff  126793 Jul  2 00:00 .omo/evidence/any-agent-system-builder/browser-guardrail-demo.png
+-rw-r--r--@ 1 genie  staff  108636 Jul  2 00:00 .omo/evidence/any-agent-system-builder/browser-library-demo.png
+.omo/evidence/any-agent-system-builder/browser-library-demo.png:   PNG image data, 1280 x 1238, 8-bit/color RGB, non-interlaced
+.omo/evidence/any-agent-system-builder/browser-guardrail-demo.png: PNG image data, 1280 x 1299, 8-bit/color RGB, non-interlaced
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/browser-library-demo.png
+  pixelWidth: 1280
+  pixelHeight: 1238
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/browser-guardrail-demo.png
+  pixelWidth: 1280
+  pixelHeight: 1299
+
+internal_field_scan_command=rg -n "member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost" generated/library-reservation-demo/frontend/src generated/library-reservation-demo/README.md
+internal_field_scan_exit_code=1
+internal_field_verdict=PASS absent from frontend source and README
+
+api_public_artifact_internal_field_scan_command=rg -n "member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost" .omo/evidence/any-agent-system-builder/task-7-chat.txt .omo/evidence/any-agent-system-builder/task-7-guardrail.txt .omo/evidence/any-agent-system-builder/task-7-sse.txt .omo/evidence/any-agent-system-builder/task-8-chat-api-capture.txt
+api_internal_field_scan_exit_code=1
+api_internal_field_verdict=PASS absent from captured public API artifacts

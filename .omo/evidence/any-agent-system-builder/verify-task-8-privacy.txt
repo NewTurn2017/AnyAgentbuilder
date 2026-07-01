@@ -1,0 +1,33 @@
+verdict=PASS
+auditor=independent gate verification
+artifacts_checked=
+  .omo/evidence/any-agent-system-builder/task-8-privacy.txt
+  agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+  agentic-system-builder/scripts/qa-lib/http-checks.mjs
+  agentic-system-builder/scripts/qa-lib/paths.mjs
+  generated/library-reservation-demo/backend/context.py
+  generated/library-reservation-demo/backend/demo_data.py
+  generated/library-reservation-demo/backend/main.py
+  generated/library-reservation-demo/backend/agents.py
+  generated/library-reservation-demo/frontend/src/App.jsx
+  generated/library-reservation-demo/frontend/dist
+
+runtime_privacy_receipt:
+  command_source=.omo/evidence/any-agent-system-builder/verify-task-8-browser.txt
+  result=.omo/evidence/any-agent-system-builder/task-8-privacy.txt has result=PASS
+  dom_scanned=happy and guardrail page body text
+  api_scanned=2 /chat API responses
+  hidden_fields_absent=member_id,internal_notes,policy_overrides,raw_hold_queue,staff_token,inventory_cost
+
+independent_static_checks:
+  internal_marker_frontend_scan=PASS
+  command=rg -n "member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost" generated/library-reservation-demo/frontend agentic-system-builder/templates/frontend generated/library-reservation-demo/frontend/dist .omo/evidence/any-agent-system-builder/browser-*.png .omo/evidence/any-agent-system-builder/task-8-privacy.txt 2>/dev/null || true
+  result=only task-8-privacy.txt lists the forbidden marker names as an absence receipt.
+
+public_context_visibility:
+  runtime_assertions=agentic-system-builder/scripts/qa-lib/browser-qa.mjs asserts "김서연" and "스터디룸은 1회 2시간" inside [data-testid="public-context"].
+  screenshot_evidence=browser-library-demo.png and browser-guardrail-demo.png visibly show 이용자 김서연, 예약 번호 LIB-RSV-1042, 리소스 2층 스터디룸 A, 시간 14:00-16:00, 상태 held, 대출 도서, and 정책 요약.
+  backend_boundary=generated backend initial_state() omits internal_context from public state; /chat returns result from run_mock_agent_turn with public_context only.
+
+notes:
+  demo_data.py intentionally contains DEMO_INTERNAL_SEED, but public endpoints and frontend rendering do not expose those internal fields.

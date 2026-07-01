@@ -1,0 +1,14 @@
+$ curl -i -X POST http://127.0.0.1:54487/chat -H content-type: application/json --data-binary @-
+exit=0
+--- stdout ---
+HTTP/1.1 422 Unprocessable Content
+date: Wed, 01 Jul 2026 13:47:08 GMT
+server: uvicorn
+content-length: 125
+content-type: application/json
+
+{"detail":[{"type":"json_invalid","loc":["body",30],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting value"}}]}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   155  100   125  100    30   178k  43988 --:--:-- --:--:-- --:--:--  151k

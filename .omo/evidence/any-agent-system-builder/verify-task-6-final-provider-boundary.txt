@@ -1,0 +1,33 @@
+$ node --input-type=module provider-boundary negative scan
+{
+  "root": ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend",
+  "scannedFiles": [
+    ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/agents.py",
+    ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/main.py",
+    ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/openai-client.mjs"
+  ],
+  "findings": [
+    {
+      "file": ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/main.py",
+      "line": 1,
+      "kind": "python-agents-sdk-import",
+      "match": "from agents import Agent, Runner, function_tool, handoff"
+    },
+    {
+      "file": ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/openai-client.mjs",
+      "line": 1,
+      "kind": "js-openai-import",
+      "match": "import OpenAI from \"openai\";"
+    },
+    {
+      "file": ".omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/openai-client.mjs",
+      "line": 2,
+      "kind": "js-openai-call",
+      "match": "const client = new OpenAI();"
+    }
+  ],
+  "allowed": false
+}
+expected findings present: python-agents-sdk-import, js-openai-import, js-openai-call
+assertMockProviderSafe blocked: failed-provider-boundary: mock backend provider boundary blocked disallowed provider imports/calls: .omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/main.py:1 python-agents-sdk-import from agents import Agent, Runner, function_tool, handoff; .omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/openai-client.mjs:1 js-openai-import import OpenAI from "openai";; .omo/evidence/any-agent-system-builder/provider-boundary-negative/backend/openai-client.mjs:2 js-openai-call const client = new OpenAI();
+[exit=0]

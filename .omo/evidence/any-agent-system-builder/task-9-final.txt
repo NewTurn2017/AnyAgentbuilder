@@ -1,0 +1,29 @@
+
+> validate:skill
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+
+OK: skill structure valid: agentic-system-builder/SKILL.md
+
+> validate:examples
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+
+OK: example domains valid: airline, library, pcbang, generic
+
+> qa:generated-demo
+> node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder
+
+mock mode active: no provider credentials present
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend runtime scan passed; providerImportAttempted=false; providerCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+running backend curl checks
+installing frontend dependencies locally in generated/library-reservation-demo/frontend
+installing browser runtime locally via generated frontend Playwright
+browser QA wrote browser-library-demo.png and browser-guardrail-demo.png
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok

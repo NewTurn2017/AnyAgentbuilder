@@ -1,0 +1,21 @@
+Files inspected:
+- agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+- generated/library-reservation-demo/frontend/src/App.jsx
+
+Selector audit:
+- PASS: generated UI exposes stable data-testid selectors for chat-input, send-message, chat-messages, guardrail-banner, agent-activity, public-context, and domain-widget in App.jsx lines 85, 99, 111, 115, 121, 135, and 147.
+- PASS: browser QA uses those stable data-testid selectors rather than generated CSS classes or text-only selectors for primary interactions and panel checks.
+
+Wait/assertion audit:
+- PASS: initial navigation waits for networkidle before interaction.
+- PASS: expectText waits for the locator to exist and then polls bounded text content for up to 10s before failing with HarnessError.
+- PASS: /chat capture no longer relies on a passive listener without assertion; waitForChatApiBodies fails if happy or guardrail path captures zero response bodies.
+- PASS: assertChatApiBody checks semantic response terms for happy and guardrail paths before writing task-8-chat-api-capture.txt.
+- PASS: 150ms waitForTimeout calls are bounded polling intervals inside explicit 10s loops, not fixed sleeps used as proof.
+
+Overfit/slop audit:
+- PASS: browser proof is not deletion-only or tautological; it drives the real UI, captures real /chat responses, checks DOM and API privacy, and records screenshots.
+- PASS: assertions target user-visible contract terms and public API response shape, not implementation-only details.
+- Residual note: browser-qa.mjs still uses broad catch blocks for Playwright import fallback, response JSON fallback, and best-effort failure screenshot handling. They do not create the prior false-positive gap and are not blocking Todo 8, but a later cleanup pass could preserve original error details.
+
+Result: PASS

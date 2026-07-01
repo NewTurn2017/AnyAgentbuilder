@@ -1,0 +1,11 @@
+$ curl -i -X POST /chat guardrail
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   903  100   841  100    62   754k  56932 --:--:-- --:--:-- --:--:--  881k
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 14:08:32 GMT
+server: uvicorn
+content-length: 841
+content-type: application/json
+
+{"assistant_message":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","active_agent":"triage_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"guardrail.blocked","detail":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","public_payload":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}],"status":"blocked","guardrail":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}

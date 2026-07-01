@@ -1,0 +1,49 @@
+{
+  "domain_key": "literal_probe",
+  "slug": "literal-probe-demo",
+  "brand_name": "리터럴 검증 데스크",
+  "user_prompt": "리터럴을 검증해줘",
+  "assistant_message": "문자열과 JSON 리터럴 타입을 보존했습니다.",
+  "active_agent": "literal_agent",
+  "widget_title": "리터럴 슬롯",
+  "widget_empty": "리터럴 없음",
+  "resource_kind": "리터럴 리소스",
+  "public_context": {
+    "string_truths": "true false null should remain string words",
+    "actual_true": true,
+    "actual_false": false,
+    "actual_null": null,
+    "nested_values": [
+      "true",
+      true,
+      "false",
+      false,
+      "null",
+      null
+    ]
+  },
+  "internal_context": {
+    "internal_string_truths": "true false null internal string",
+    "internal_true": true,
+    "internal_false": false,
+    "internal_null": null
+  },
+  "agents": [
+    "triage_agent",
+    "literal_agent"
+  ],
+  "handoffs": [
+    "triage_agent -> literal_agent"
+  ],
+  "guardrails": [
+    "privacy_guardrail"
+  ],
+  "resources": [
+    {
+      "label": "리터럴 A",
+      "status": "available",
+      "detail": "true false null 문자열 포함"
+    }
+  ],
+  "policy_summary": "true false null 문자열은 문자열로 유지합니다."
+}

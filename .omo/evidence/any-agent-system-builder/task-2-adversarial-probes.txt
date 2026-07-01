@@ -1,0 +1,48 @@
+Todo 2 adversarial probes refreshed after Todo 3 references existed.
+
+stale_state:
+Validator was rerun against the current directory after REFERENCE.md and EXAMPLES.md existed.
+SHA256 receipts:
+dac695e5f6649ea0900954e5cc05245fb566e7a05c396c5b016eeab4bb477381  agentic-system-builder/SKILL.md
+78fca19475bcbb374733f4944f40786cac217d4b4f7529ac7e9a6a63fc287fdc  agentic-system-builder/REFERENCE.md
+aca5c6b7e9e914a521357ddde0e0f29092b05296050d4fc51f2f175cffeb7344  agentic-system-builder/EXAMPLES.md
+mtime receipts:
+mtime=Jul  1 19:26:11 2026 size=4093 path=agentic-system-builder/SKILL.md
+mtime=Jul  1 19:28:19 2026 size=12438 path=agentic-system-builder/REFERENCE.md
+mtime=Jul  1 19:28:19 2026 size=13138 path=agentic-system-builder/EXAMPLES.md
+
+misleading_success_output:
+skill-check output:
+OK: skill structure valid: agentic-system-builder/SKILL.md
+line-count output:
+      61 agentic-system-builder/SKILL.md
+frontmatter preview:
+---
+name: agentic-system-builder
+description: It guides agents to derive operational multi-agent chat systems from a real service workflow, including shared context, specialist agents, handoffs, guardrails, tools, widgets, and proof plans. Use when building agentic chat systems, reservation or lending or booking workflows, multi-agent service systems, or domain-specific operational assistants.
+---
+
+malformed_input:
+negative output:
+ERROR: missing SKILL.md: .omo/plans/SKILL.md
+
+dirty_worktree:
+This worktree is not inside a git repository, so git dirty-state reporting is unavailable here.
+Todo 3 files were inspected and not edited by Todo 2. Preserved files:
+agentic-system-builder/REFERENCE.md
+agentic-system-builder/EXAMPLES.md
+
+hung_commands:
+Only short Node and shell CLI commands were run. No server, watcher, or long-lived command was started.
+
+prompt_injection:
+Not applicable. Todo 2 consumed local skill/reference files only and did not execute untrusted generated instructions.
+
+cancel/resume:
+Not applicable. This resume was a single bounded validation pass after Todo 3 produced reference files.
+
+flaky_tests:
+Not applicable. The acceptance checks are deterministic local validator and shell inspections.
+
+repeated_interruptions:
+Not applicable. No repeated interruption occurred during this Todo 2 completion pass.

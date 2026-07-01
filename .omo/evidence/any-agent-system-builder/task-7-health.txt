@@ -1,0 +1,14 @@
+$ curl -i http://127.0.0.1:62067/health
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 15:58:59 GMT
+server: uvicorn
+content-length: 83
+content-type: application/json
+
+{"status":"ok","runtime":"mock","domain_key":"library","active_stream_listeners":0}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    83  100    83    0     0  77137      0 --:--:-- --:--:-- --:--:-- 83000

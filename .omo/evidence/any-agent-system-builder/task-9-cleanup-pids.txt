@@ -1,0 +1,5 @@
+manifest=.omo/evidence/any-agent-system-builder/run-manifest.json
+backendPid=19915
+PASS backend PID is gone
+frontendPid=20563
+PASS frontend PID is gone

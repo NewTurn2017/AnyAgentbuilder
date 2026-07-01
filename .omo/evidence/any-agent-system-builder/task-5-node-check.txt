@@ -1,0 +1,2 @@
+COMMAND: node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+exit=0

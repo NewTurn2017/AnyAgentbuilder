@@ -1,0 +1,184 @@
+SCENARIO=Todo 5 prior blocker/content audit
+TEMP_DIR=/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI
+
+SECTION=pinned generated/template dependencies
+
+COMMAND=node -e 
+const fs = require("fs");
+const generatedPackage = JSON.parse(fs.readFileSync("generated/library-reservation-demo/frontend/package.json", "utf8"));
+for (const [name, version] of Object.entries({ ...(generatedPackage.dependencies || {}), ...(generatedPackage.devDependencies || {}) })) {
+  if (typeof version !== "string" || version === "latest" || /^[~^*<>=]/.test(version) || /x/i.test(version) || !/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) {
+    throw new Error(`generated frontend has unpinned dependency ${name}@${version}`);
+  }
+  console.log(`generated/library-reservation-demo/frontend/package.json: ${name}@${version}`);
+}
+const templatePackage = fs.readFileSync("agentic-system-builder/templates/frontend/package.json.tmpl", "utf8");
+for (const name of ["@vitejs/plugin-react", "vite", "react", "react-dom"]) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = templatePackage.match(new RegExp(`"${escaped}"\\s*:\\s*"([^"]+)"`));
+  if (!match) throw new Error(`template package missing ${name}`);
+  const version = match[1];
+  if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) throw new Error(`template package has unpinned dependency ${name}@${version}`);
+  console.log(`agentic-system-builder/templates/frontend/package.json.tmpl: ${name}@${version}`);
+}
+const reqFiles = [
+  "generated/library-reservation-demo/backend/requirements.txt",
+  "agentic-system-builder/templates/backend/requirements.txt"
+];
+for (const file of reqFiles) {
+  const lines = fs.readFileSync(file, "utf8").trim().split(/\n/).filter(Boolean);
+  for (const line of lines) {
+    if (!/^[A-Za-z0-9_.-]+==\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(line)) throw new Error(`${file} has unpinned requirement ${line}`);
+    console.log(`${file}: ${line}`);
+  }
+}
+
+generated/library-reservation-demo/frontend/package.json: @vitejs/plugin-react@4.3.4
+generated/library-reservation-demo/frontend/package.json: vite@5.4.11
+generated/library-reservation-demo/frontend/package.json: react@18.3.1
+generated/library-reservation-demo/frontend/package.json: react-dom@18.3.1
+agentic-system-builder/templates/frontend/package.json.tmpl: @vitejs/plugin-react@4.3.4
+agentic-system-builder/templates/frontend/package.json.tmpl: vite@5.4.11
+agentic-system-builder/templates/frontend/package.json.tmpl: react@18.3.1
+agentic-system-builder/templates/frontend/package.json.tmpl: react-dom@18.3.1
+generated/library-reservation-demo/backend/requirements.txt: fastapi==0.115.6
+generated/library-reservation-demo/backend/requirements.txt: uvicorn==0.34.0
+agentic-system-builder/templates/backend/requirements.txt: fastapi==0.115.6
+agentic-system-builder/templates/backend/requirements.txt: uvicorn==0.34.0
+EXIT_STATUS=0
+
+SECTION=json literal preservation source
+
+COMMAND=rg -n function jsonLiteral|JSON\.stringify\(value, null, 2\)|function pythonLiteral|typeof value === "string"\) return JSON\.stringify\(value\) agentic-system-builder/scripts/scaffold-agent-system.mjs
+168:function jsonLiteral(value) {
+169:  return JSON.stringify(value, null, 2);
+172:function pythonLiteral(value, depth = 0) {
+181:  if (typeof value === "string") return JSON.stringify(value);
+EXIT_STATUS=0
+
+SECTION=json literal preservation scaffold evidence
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --spec /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-spec.json --out /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app --force
+OK: scaffolded quotes agent system at /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+SCAFFOLD_EXIT_STATUS=0
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app
+OK: generated quotes app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app
+VALIDATE_EXIT_STATUS=0
+COMMAND=rg -n '오.하나|따옴표 예약|상담실' /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/backend/demo_data.py /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/frontend/src/App.jsx
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/backend/demo_data.py:4:BRAND_NAME = "따옴표 예약 \"데스크\""
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/backend/demo_data.py:6:  "customer_display_name": "오'하나 \"테스트\"",
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/backend/demo_data.py:8:  "resource_label": "상담실 \"A\"",
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/backend/demo_data.py:19:    "label": "상담실 \"A\"",
+/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-content-audit-tmp.vGOhJI/json-literals-app/frontend/src/App.jsx:74:          <h1>따옴표 예약 "데스크"</h1>
+RG_LITERAL_EXIT_STATUS=0
+
+SECTION=stale marker absence
+COMMAND=rg -n 'LIBRARY_RESERVATION_PATRON_MARKER|library reservation patron' agentic-system-builder generated/library-reservation-demo
+
+RG_MARKER_EXIT_STATUS=1
+RESULT=PASS no stale markers found
+
+SECTION=generated README/backend/frontend content
+
+COMMAND=rg -n mock|backend|frontend|AGENT_RUNTIME|npm run|uvicorn|qa generated/library-reservation-demo/README.md
+3:Generated mock app for the `library` agentic operations domain.
+5:## Run backend
+8:cd backend
+12:AGENT_RUNTIME=mock uvicorn main:app --reload --port 8000
+15:## Run frontend
+18:cd frontend
+20:VITE_API_BASE=http://127.0.0.1:8000 npm run dev
+30:Mock mode is the default local path. It does not import or call OpenAI. A real Agents SDK extension should be added behind `AGENT_RUNTIME=openai` with typed context, guarded tools, and session storage.
+EXIT_STATUS=0
+
+COMMAND=rg -n @app\.get\("/health"\)|@app\.get\("/state/bootstrap"\)|@app\.get\("/state"\)|@app\.get\("/state/stream"\)|@app\.post\("/chat"\) generated/library-reservation-demo/backend/main.py
+35:@app.get("/health")
+40:@app.get("/state/bootstrap")
+45:@app.get("/state")
+51:@app.get("/state/stream")
+73:@app.post("/chat")
+EXIT_STATUS=0
+
+COMMAND=rg -n data-testid="chat-input"|data-testid="send-message"|data-testid="agent-activity"|data-testid="public-context"|data-testid="domain-widget"|data-testid="guardrail-banner"|도서관 예약 도우미|공개 컨텍스트|스터디룸 generated/library-reservation-demo/frontend/src/App.jsx
+3:const initialMessage = "도서관 스터디룸 예약하고 싶어요";
+75:          <h1>도서관 예약 도우미</h1>
+79:            <p className="empty">첫 요청을 입력하면 담당 에이전트와 공개 컨텍스트가 갱신됩니다.</p>
+91:            data-testid="chat-input"
+97:          <button data-testid="send-message" onClick={sendMessage} disabled={loading}>
+101:        <div data-testid="guardrail-banner" className={guardrail ? "guardrail visible" : "guardrail"}>
+107:        <section data-testid="agent-activity" className="panel-section">
+117:        <section data-testid="public-context" className="panel-section">
+118:          <h2>공개 컨텍스트</h2>
+129:        <section data-testid="domain-widget" className="panel-section widget">
+130:          <h2>스터디룸 시간 선택</h2>
+EXIT_STATUS=0
+
+SECTION=library exact public/internal content
+
+COMMAND=node -e 
+const fs = require("fs");
+const context = fs.readFileSync("generated/library-reservation-demo/backend/context.py", "utf8");
+const demo = fs.readFileSync("generated/library-reservation-demo/backend/demo_data.py", "utf8");
+const app = fs.readFileSync("generated/library-reservation-demo/frontend/src/App.jsx", "utf8");
+const publicFields = ["patron_display_name", "reservation_id", "resource_label", "time_window", "reservation_status", "loan_titles", "policy_summary"];
+const internalFields = ["member_id", "internal_notes", "policy_overrides", "raw_hold_queue", "staff_token", "inventory_cost"];
+for (const field of publicFields) {
+  if (!context.includes(field)) throw new Error(`context missing public field ${field}`);
+  if (!demo.includes(field)) throw new Error(`demo seed missing public field ${field}`);
+  if (!app.includes(field)) throw new Error(`frontend missing public field label ${field}`);
+  console.log(`public field present: ${field}`);
+}
+for (const field of internalFields) {
+  if (!context.includes(field)) throw new Error(`context missing internal field ${field}`);
+  if (!demo.includes(field)) throw new Error(`demo seed missing internal field ${field}`);
+  if (app.includes(field)) throw new Error(`frontend leaks internal field ${field}`);
+  console.log(`internal field backend-only: ${field}`);
+}
+
+public field present: patron_display_name
+public field present: reservation_id
+public field present: resource_label
+public field present: time_window
+public field present: reservation_status
+public field present: loan_titles
+public field present: policy_summary
+internal field backend-only: member_id
+internal field backend-only: internal_notes
+internal field backend-only: policy_overrides
+internal field backend-only: raw_hold_queue
+internal field backend-only: staff_token
+internal field backend-only: inventory_cost
+EXIT_STATUS=0
+
+SECTION=mock mode direct OpenAI import/call absence in generated backend/templates
+COMMAND=rg -n '\b(from openai|import openai|OpenAI\(|openai-agents)\b' agentic-system-builder/templates/backend generated/library-reservation-demo/backend
+
+RG_OPENAI_EXIT_STATUS=1
+RESULT=PASS no direct OpenAI runtime import/call in generated backend/templates
+
+SECTION=script syntax and skill/example sanity
+
+COMMAND=node --check agentic-system-builder/scripts/scaffold-agent-system.mjs
+EXIT_STATUS=0
+
+COMMAND=node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+EXIT_STATUS=0
+
+COMMAND=npm run validate:skill
+
+> validate:skill
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+
+OK: skill structure valid: agentic-system-builder/SKILL.md
+EXIT_STATUS=0
+
+COMMAND=npm run validate:examples
+
+> validate:examples
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+
+OK: example domains valid: airline, library, pcbang, generic
+EXIT_STATUS=0
+
+FAILURES=0
+CLEANUP=PASS temp dir removed

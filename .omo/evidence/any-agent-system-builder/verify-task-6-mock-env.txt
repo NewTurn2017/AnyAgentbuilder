@@ -1,0 +1,38 @@
+$ OPENAI_API_KEY=fake AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will not import OpenAI or call provider APIs
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend import scan passed; openaiImportAttempted=false; openaiCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+running backend curl checks
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+EXIT_STATUS=0
+--- mock-env manifest summary ---
+{
+  "status": "passed",
+  "mode": "backend",
+  "dryRun": false,
+  "runtime": "mock",
+  "backendPort": 54481,
+  "frontendPort": 54482,
+  "backendPid": 47613,
+  "frontendPid": null,
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "generatedAppChecked": true,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  },
+  "error": null
+}
+--- backend OpenAI import scan ---

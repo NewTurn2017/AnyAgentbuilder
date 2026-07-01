@@ -1,0 +1,3 @@
+ERROR: missing example file: agentic-system-builder/EXAMPLES.md
+
+EXIT:1

@@ -1,0 +1,205 @@
+{
+  "scenario": "library",
+  "mode": "backend",
+  "dryRun": false,
+  "runtime": "mock",
+  "backendPort": 54487,
+  "frontendPort": 54488,
+  "backendPid": 94627,
+  "frontendPid": null,
+  "commands": {
+    "validateSkill": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-skill",
+        "agentic-system-builder"
+      ]
+    },
+    "validateExamples": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--validate-example",
+        "agentic-system-builder/EXAMPLES.md",
+        "--require-domain",
+        "airline",
+        "--require-domain",
+        "library",
+        "--require-domain",
+        "pcbang",
+        "--require-domain",
+        "generic"
+      ]
+    },
+    "scaffoldLibrary": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/scaffold-agent-system.mjs",
+        "--domain",
+        "library",
+        "--out",
+        "generated/library-reservation-demo",
+        "--force"
+      ]
+    },
+    "validateGenerated": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-generated",
+        "generated/library-reservation-demo"
+      ]
+    },
+    "backendVenv": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "python3",
+      "args": [
+        "-m",
+        "venv",
+        ".venv"
+      ]
+    },
+    "backendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "pip",
+        "install",
+        "--disable-pip-version-check",
+        "-r",
+        "backend/requirements.txt"
+      ]
+    },
+    "backendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "54487"
+      ]
+    },
+    "frontendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "install"
+      ]
+    },
+    "frontendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "54488"
+      ]
+    },
+    "curlHealth": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "http://127.0.0.1:54487/health"
+      ]
+    },
+    "curlChat": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54487/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"도서관 스터디룸 예약하고 싶어요\"}"
+      ]
+    },
+    "curlGuardrail": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54487/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"무관한 주식 추천해줘\"}"
+      ]
+    },
+    "curlMalformed": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54487/chat",
+        "-H",
+        "content-type: application/json",
+        "--data-binary",
+        "@-"
+      ],
+      "input": "{\"thread_id\":\"demo\",\"message\":"
+    },
+    "curlSse": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-N",
+        "http://127.0.0.1:54487/state/stream?thread_id=demo",
+        "--max-time",
+        "5"
+      ]
+    }
+  },
+  "cleanupHandlers": [
+    "SIGINT/SIGTERM process-group termination",
+    "PID liveness receipt",
+    "lsof listener receipt"
+  ],
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "mockProviderBoundary": {
+    "root": "generated/library-reservation-demo/backend",
+    "scannedFiles": [
+      "generated/library-reservation-demo/backend/agents.py",
+      "generated/library-reservation-demo/backend/context.py",
+      "generated/library-reservation-demo/backend/demo_data.py",
+      "generated/library-reservation-demo/backend/events.py",
+      "generated/library-reservation-demo/backend/main.py",
+      "generated/library-reservation-demo/backend/memory.py",
+      "generated/library-reservation-demo/backend/tools.py"
+    ],
+    "findings": [],
+    "allowed": true
+  },
+  "generatedAppChecked": true,
+  "status": "passed",
+  "backendCommand": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 54487",
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}

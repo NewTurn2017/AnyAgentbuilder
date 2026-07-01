@@ -1,0 +1,21 @@
+cleanup receipt for Todo 2 after Todo 3 references existed
+
+No dev servers, watchers, subprocess sessions, or background jobs were started by this Todo 2 completion pass.
+
+Residual Todo 2 process command:
+ps -axo pid=,command= | rg 'validate-domain-spec|qa-generated-demo|agentic-system-builder' | rg -v 'rg |/bin/zsh -c' || true
+
+Residual Todo 2 process result:
+<no output>
+
+Unrelated server snapshot command:
+ps -axo pid=,command= | rg 'node .*/vite' | rg -v 'rg |/bin/zsh -c' || true
+
+Unrelated server snapshot result:
+29860 node /Users/genie/test/project/node_modules/.bin/vite
+
+Interpretation:
+No Todo 2-owned process required cleanup. The Vite process is outside this workdir and was not started or modified by Todo 2.
+
+Port cleanup:
+Not applicable. Todo 2 ran no network listeners.

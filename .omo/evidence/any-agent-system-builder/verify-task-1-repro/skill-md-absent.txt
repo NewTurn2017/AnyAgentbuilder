@@ -1,0 +1,1 @@
+skill_absent_exit=0

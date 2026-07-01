@@ -1,0 +1,3 @@
+fixture=/tmp/anyagentbuilder-static-frontend.F80zev
+ERROR: generated frontend/src/App.jsx agent-activity region must render dynamic state/data, not static marker text
+exit=1

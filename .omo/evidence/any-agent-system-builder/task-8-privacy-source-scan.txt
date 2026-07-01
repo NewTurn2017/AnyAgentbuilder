@@ -1,0 +1,4 @@
+scenario=generated frontend source privacy scan
+files_scanned=3
+markers_checked=6
+result=PASS

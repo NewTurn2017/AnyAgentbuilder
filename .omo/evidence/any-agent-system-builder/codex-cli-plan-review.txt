@@ -1,0 +1,5 @@
+ITERATE - blocking fixes:
+- Make paths executable: the scope targets `/Users/genie/dev/tools/skills/AnyAgentbuilder`, but commands use relative `agentic-system-builder`, `package.json`, `generated/`, and `.omo/evidence`. Add an execution-root rule or convert paths to absolute paths.
+- Fix validation ordering: Todos 2 and 3 require `--check-skill`, `validate:examples`, and `--validate-example` before Todo 4 implements those validator capabilities. Move/merge validator implementation before those QA gates or update dependencies.
+- Fix QA harness ordering: Todos 6 and 7 invoke `qa-generated-demo.mjs` and manifest-based browser QA before Todo 8 creates them. Todo 8 also needs the frontend from Todo 7 but does not consistently depend on it. Reorder or split the harness so every todo can run its own QA when reached.
+- Make real-surface proof exact after reordering: require explicit mock-mode evidence with `OPENAI_API_KEY` unset / `AGENT_RUNTIME=mock`, explicit curl POST `/chat` happy and guardrail/malformed cases, and cleanup proof that both recorded PIDs and ports are gone.

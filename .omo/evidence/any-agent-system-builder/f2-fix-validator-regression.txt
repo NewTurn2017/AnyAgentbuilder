@@ -1,0 +1,93 @@
+SCENARIO=F2 validator structural regression probes
+CWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+TMP=/var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw
+
+## node-check
+COMMAND=node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## validate-skill
+COMMAND=npm run validate:skill
+
+> validate:skill
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+
+OK: skill structure valid: agentic-system-builder/SKILL.md
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## validate-examples
+COMMAND=npm run validate:examples
+
+> validate:examples
+> node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+
+OK: example domains valid: airline, library, pcbang, generic
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## validate-library-generated
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## scaffold-generic-temp
+COMMAND=node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain generic --out /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/generic-reservation-demo
+OK: scaffolded generic agent system at /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/generic-reservation-demo
+OK: backend endpoints include GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## validate-generic-generated
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/generic-reservation-demo
+OK: generated generic app skeleton valid: /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/generic-reservation-demo
+EXIT=0
+RESULT=EXPECTED_PASS
+
+## missing-generated-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/no-such-generated
+ERROR: missing generated app directory: /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/no-such-generated
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## typed-model-required-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/missing-models
+ERROR: missing generated app skeleton files: backend/models.py
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## broad-dict-any-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/untyped-any
+ERROR: generated backend typed model contract must not use Any or dict[str, Any] in public API/state models
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## previous-null-frontend-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/null-frontend
+ERROR: generated frontend/src/App.jsx must render the generated app UI, not return null
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## chat-response-consumption-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/inert-chat
+ERROR: generated frontend/src/App.jsx send action must consume /chat API responses, not fire inert fetch calls
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## scaffold-safety-validator-negative
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill /var/folders/6w/ryvjgm214g361w38k2x2dcch0000gn/T/tmp.mNF9bFVWTw/unsafe-skill
+ERROR: scaffold script missing deletion safety guard markers: OWNERSHIP_MARKER, hasOwnershipMarker
+EXIT=1
+RESULT=EXPECTED_FAIL
+
+## SIZE_OK rationale
+#!/usr/bin/env node
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { extname, join, resolve } from "node:path";
+
+// SIZE_OK: single-file, built-in-only validator kept portable for copied skill bundles;
+// structural helpers stay here so copied skills can run negative fixture/probe checks
+// without package installation, transpilation, or repo-local test harness coupling.
+

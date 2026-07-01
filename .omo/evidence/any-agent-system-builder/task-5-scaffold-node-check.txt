@@ -1,0 +1,2 @@
+COMMAND: node --check agentic-system-builder/scripts/scaffold-agent-system.mjs
+exit=0

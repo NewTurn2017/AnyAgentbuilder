@@ -1,0 +1,295 @@
+   101	function parseArgs(argv) {
+   102	  const parsed = {
+   103	    checkSkill: null,
+   104	    validateExample: null,
+   105	    requireDomains: [],
+   106	    checkGenerated: null,
+   107	  };
+   108	
+   109	  for (let index = 0; index < argv.length; index += 1) {
+   110	    const arg = argv[index];
+   111	    if (arg === "--check-skill") {
+   112	      parsed.checkSkill = readValue(argv, ++index, arg);
+   113	    } else if (arg === "--validate-example") {
+   114	      parsed.validateExample = readValue(argv, ++index, arg);
+   115	    } else if (arg === "--require-domain") {
+   116	      parsed.requireDomains.push(readValue(argv, ++index, arg));
+   117	    } else if (arg === "--check-generated") {
+   118	      parsed.checkGenerated = readValue(argv, ++index, arg);
+   119	    } else {
+   120	      fail(`unknown flag or argument: ${arg}`);
+   121	    }
+   122	  }
+   123	
+   124	  const modes = [parsed.checkSkill, parsed.validateExample, parsed.checkGenerated].filter(Boolean);
+   125	  if (modes.length !== 1) {
+   126	    fail("choose exactly one mode: --check-skill <dir>, --validate-example <file>, or --check-generated <dir>");
+   127	  }
+   128	  if (parsed.requireDomains.length > 0 && !parsed.validateExample) {
+   129	    fail("--require-domain can only be used with --validate-example <file>");
+   130	  }
+   131	  if (parsed.validateExample && parsed.requireDomains.length === 0) {
+   132	    fail("--validate-example requires at least one --require-domain <domain>");
+   133	  }
+   134	
+   135	  return parsed;
+   136	}
+   137	
+   138	function readValue(argv, index, flag) {
+   139	  const value = argv[index];
+   140	  if (!value || value.startsWith("--")) {
+   141	    fail(`${flag} requires a value`);
+   142	  }
+   143	  return value;
+   144	}
+   145	
+   146	function readRequiredFile(path, label) {
+   147	  if (!existsSync(path)) {
+   148	    fail(`missing ${label}: ${path}`);
+   149	  }
+   150	  if (!statSync(path).isFile()) {
+   151	    fail(`${label} is not a file: ${path}`);
+   152	  }
+   153	  return readFileSync(path, "utf8");
+   154	}
+   155	
+   156	function assertNoTimeSensitiveWording(text, label) {
+   157	  const forbidden = /\b(today|tomorrow|yesterday|latest|currently|recently|right now|this year|next year|as of|as-of|202[0-9]|203[0-9])\b/i;
+   158	  const match = text.match(forbidden);
+   159	  if (match) {
+   160	    fail(`${label} contains time-sensitive wording: ${match[0]}`);
+   202	function assertSkillLinks(skillText, dir) {
+   203	  const allowedLocal = new Set(["REFERENCE.md", "EXAMPLES.md"]);
+   204	  const links = markdownLinks(skillText);
+   205	  const bad = [];
+   206	
+   207	  for (const target of links) {
+   208	    if (isExternalLink(target)) {
+   209	      continue;
+   210	    }
+   211	    if (target.startsWith("#")) {
+   212	      continue;
+   213	    }
+   214	    if (target.includes("#")) {
+   215	      bad.push(`${target} (anchors create deep references)`);
+   216	      continue;
+   217	    }
+   218	    if (!allowedLocal.has(target)) {
+   219	      bad.push(target);
+   220	      continue;
+   221	    }
+   222	    const targetPath = join(dir, target);
+   223	    if (!existsSync(targetPath) || !statSync(targetPath).isFile()) {
+   224	      fail(`SKILL.md links to missing one-level reference: ${target}`);
+   225	    }
+   226	  }
+   227	
+   228	  if (bad.length > 0) {
+   229	    fail(`SKILL.md has unsupported local links; only REFERENCE.md and EXAMPLES.md are allowed: ${bad.join(", ")}`);
+   230	  }
+   231	}
+   232	
+   233	function assertNoNestedReferenceChains(refText, label) {
+   234	  const localMarkdownLinks = markdownLinks(refText).filter((target) => !isExternalLink(target) && !target.startsWith("#"));
+   235	  if (localMarkdownLinks.length > 0) {
+   236	    fail(`${label} contains local markdown links, which would create nested reference chains: ${localMarkdownLinks.join(", ")}`);
+   237	  }
+   238	}
+   239	
+   240	function assertRequiredSkillHeadings(text) {
+   241	  const headings = text
+   242	    .split(/\r?\n/)
+   243	    .filter((line) => /^#{2,6}\s+/.test(line))
+   244	    .map((line) => line.replace(/^#{2,6}\s+/, "").trim());
+   245	
+   246	  const missing = SKILL_HEADING_GROUPS.filter((group) => {
+   247	    return !headings.some((heading) => group.alternatives.some((regex) => regex.test(heading)));
+   248	  });
+   249	
+   250	  if (missing.length > 0) {
+   251	    fail(`SKILL.md missing required methodology headings or local equivalents: ${missing.map((group) => group.label).join(", ")}`);
+   252	  }
+   253	}
+   254	
+   255	function assertReferenceContextSeparation(referenceText, examplesText) {
+   256	  const combined = `${referenceText}\n${examplesText}`.toLowerCase();
+   257	  const requiredMarkers = [
+   258	    "publiccontext",
+   259	    "public_context",
+   260	    "internal_context",
+   261	    "public json",
+   262	    "internal fields",
+   263	  ];
+   264	  const missing = requiredMarkers.filter((marker) => !combined.includes(marker));
+   265	  if (missing.length > 0) {
+   266	    fail(`reference/examples missing public/internal context separation markers: ${missing.join(", ")}`);
+   267	  }
+   268	}
+   269	
+   270	function checkSkill(dir) {
+   271	  if (!existsSync(dir) || !statSync(dir).isDirectory()) {
+   272	    fail(`missing skill directory: ${dir}`);
+   273	  }
+   274	
+   275	  const skillPath = join(dir, "SKILL.md");
+   276	  const text = readRequiredFile(skillPath, "SKILL.md");
+   277	  const lines = text.split(/\r?\n/);
+   278	  if (lines.length > 100) {
+   279	    fail(`SKILL.md must be <=100 lines; found ${lines.length}`);
+   280	  }
+   281	
+   282	  const frontmatter = parseFrontmatter(text);
+   283	  if (!frontmatter.name) {
+   284	    fail("SKILL.md frontmatter missing name");
+   285	  }
+   286	  if (!frontmatter.description) {
+   287	    fail("SKILL.md frontmatter missing description");
+   288	  }
+   289	  if (frontmatter.description.length > 1024) {
+   290	    fail(`SKILL.md description must be <=1024 characters; found ${frontmatter.description.length}`);
+   291	  }
+   292	  if (!frontmatter.description.includes("Use when")) {
+   293	    fail('SKILL.md description must contain "Use when"');
+   294	  }
+   295	  assertNoTimeSensitiveWording(text, "SKILL.md");
+   296	  assertRequiredSkillHeadings(text);
+   297	  assertSkillLinks(text, dir);
+   298	
+   299	  for (const ref of ["REFERENCE.md", "EXAMPLES.md"]) {
+   300	    if (!text.includes(ref)) {
+   301	      fail(`SKILL.md must reference ${ref}`);
+   302	    }
+   303	    const refPath = join(dir, ref);
+   304	    if (!existsSync(refPath)) {
+   305	      fail(`SKILL.md references missing ${ref}: ${refPath}`);
+   306	    }
+   307	  }
+   308	
+   309	  const referenceText = readRequiredFile(join(dir, "REFERENCE.md"), "REFERENCE.md");
+   310	  const examplesText = readRequiredFile(join(dir, "EXAMPLES.md"), "EXAMPLES.md");
+   311	  assertNoTimeSensitiveWording(referenceText, "REFERENCE.md");
+   312	  assertNoTimeSensitiveWording(examplesText, "EXAMPLES.md");
+   313	  assertNoNestedReferenceChains(referenceText, "REFERENCE.md");
+   314	  assertNoNestedReferenceChains(examplesText, "EXAMPLES.md");
+   315	  assertReferenceContextSeparation(referenceText, examplesText);
+   316	
+   317	  ok(`skill structure valid: ${skillPath}`);
+   318	}
+   371	function assertDomainSchema(block, domain) {
+   372	  const keys = extractTopLevelKeys(block);
+   373	  const missingTerms = SCHEMA_TERMS.filter((term) => !keys.has(term));
+   374	  if (missingTerms.length > 0) {
+   375	    fail(`domain ${domain} missing required schema terms: ${missingTerms.join(", ")}`);
+   376	  }
+   377	
+   378	  const publicFields = extractYamlList(block, "public_context");
+   379	  const internalFields = extractYamlList(block, "internal_context");
+   380	  if (publicFields.length === 0 || internalFields.length === 0) {
+   381	    fail(`domain ${domain} must define non-empty public_context and internal_context lists`);
+   382	  }
+   383	
+   384	  const publicSet = new Set(publicFields);
+   385	  const overlap = internalFields.filter((field) => publicSet.has(field));
+   386	  if (overlap.length > 0) {
+   387	    fail(`domain ${domain} leaks internal fields into public_context: ${overlap.join(", ")}`);
+   388	  }
+   389	
+   390	  if (domain === "library") {
+   391	    const missingPublic = LIBRARY_PUBLIC_FIELDS.filter((field) => !publicSet.has(field));
+   392	    const internalSet = new Set(internalFields);
+   393	    const missingInternal = LIBRARY_INTERNAL_FIELDS.filter((field) => !internalSet.has(field));
+   394	    if (missingPublic.length > 0) {
+   395	      fail(`library example missing required public context fields: ${missingPublic.join(", ")}`);
+   396	    }
+   397	    if (missingInternal.length > 0) {
+   398	      fail(`library example missing required internal context fields: ${missingInternal.join(", ")}`);
+   399	    }
+   400	  }
+   401	}
+   402	
+   403	function checkExample(file, domains) {
+   404	  const text = readRequiredFile(file, "example file");
+   405	  assertNoTimeSensitiveWording(text, file);
+   406	  const blocks = parseDomainBlocks(text);
+   407	  const requiredDomains = new Set(domains.map(normalizeDomain));
+   408	  if (file.endsWith("EXAMPLES.md")) {
+   409	    for (const domain of REQUIRED_DOMAINS) {
+   410	      requiredDomains.add(domain);
+   411	    }
+   412	  }
+   413	
+   414	  for (const domain of requiredDomains) {
+   415	    if (!blocks.has(domain)) {
+   416	      fail(`missing required domain section/key: ${domain}`);
+   417	    }
+   418	    assertDomainSchema(blocks.get(domain), domain);
+   419	  }
+   420	
+   421	  ok(`example domains valid: ${Array.from(requiredDomains).join(", ")}`);
+   424	function checkGenerated(dir) {
+   425	  if (!existsSync(dir) || !statSync(dir).isDirectory()) {
+   426	    fail(`missing generated app directory: ${dir}`);
+   427	  }
+   428	
+   429	  const missing = [];
+   430	  for (const rel of GENERATED_REQUIRED) {
+   431	    const path = join(dir, rel);
+   432	    if (!existsSync(path)) {
+   433	      missing.push(rel);
+   434	    }
+   435	  }
+   436	  if (missing.length > 0) {
+   437	    fail(`missing generated app skeleton files: ${missing.join(", ")}`);
+   438	  }
+   439	
+   440	  const frontendEntry = GENERATED_FRONTEND_ENTRY_CANDIDATES.find((rel) => existsSync(join(dir, rel)));
+   441	  if (!frontendEntry) {
+   442	    fail(`missing generated frontend entry; expected one of: ${GENERATED_FRONTEND_ENTRY_CANDIDATES.join(", ")}`);
+   443	  }
+   444	
+   445	  const main = readRequiredFile(join(dir, "backend/main.py"), "generated backend main.py");
+   446	  const missingEndpoints = ENDPOINT_TERMS.filter((term) => !main.includes(term));
+   447	  if (missingEndpoints.length > 0) {
+   448	    fail(`generated backend missing endpoint terms: ${missingEndpoints.join(", ")}`);
+   449	  }
+   450	
+   451	  const frontendPackage = readRequiredFile(join(dir, "frontend/package.json"), "generated frontend package.json");
+   452	  try {
+   453	    const parsedPackage = JSON.parse(frontendPackage);
+   454	    if (!parsedPackage.scripts || !parsedPackage.scripts.dev) {
+   455	      fail("generated frontend/package.json must define scripts.dev");
+   456	    }
+   457	    const dependencyNames = new Set([
+   458	      ...Object.keys(parsedPackage.dependencies || {}),
+   459	      ...Object.keys(parsedPackage.devDependencies || {}),
+   460	    ]);
+   461	    if (![...dependencyNames].some((name) => ["@vitejs/plugin-react", "vite", "next", "react"].includes(name))) {
+   462	      fail("generated frontend/package.json must declare a React-compatible frontend dependency");
+   463	    }
+   464	  } catch (error) {
+   465	    fail(`generated frontend/package.json is invalid JSON: ${error.message}`);
+   466	  }
+   467	
+   468	  const readme = readRequiredFile(join(dir, "README.md"), "generated README.md");
+   469	  for (const term of ["mock", "backend", "frontend", "AGENT_RUNTIME"]) {
+   470	    if (!readme.toLowerCase().includes(term.toLowerCase())) {
+   471	      fail(`generated README.md missing run/extension term: ${term}`);
+   472	    }
+   473	  }
+   474	
+   475	  const backendText = readTextTree(join(dir, "backend"));
+   476	  const frontendText = readTextTree(join(dir, "frontend"));
+   477	  const missingBackendPublic = LIBRARY_PUBLIC_FIELDS.filter((field) => !backendText.includes(field));
+   478	  const missingBackendInternal = LIBRARY_INTERNAL_FIELDS.filter((field) => !backendText.includes(field));
+   479	  if (missingBackendPublic.length > 0) {
+   480	    fail(`generated backend missing public context field markers: ${missingBackendPublic.join(", ")}`);
+   481	  }
+   482	  if (missingBackendInternal.length > 0) {
+   483	    fail(`generated backend missing internal context field markers: ${missingBackendInternal.join(", ")}`);
+   484	  }
+   485	  const leakedFrontendInternal = LIBRARY_INTERNAL_FIELDS.filter((field) => frontendText.includes(field));
+   486	  if (leakedFrontendInternal.length > 0) {
+   487	    fail(`generated frontend leaks internal context field markers: ${leakedFrontendInternal.join(", ")}`);
+   488	  }
+   489	
+   490	  ok(`generated app skeleton valid: ${resolve(dir)}`);

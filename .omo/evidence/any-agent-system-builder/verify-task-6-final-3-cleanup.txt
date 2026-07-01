@@ -1,0 +1,67 @@
+Cleanup scan, final-3
+
+$ task-related process scan
+
+$ manifest pid/port inventory
+[
+  {
+    "path": ".omo/evidence/any-agent-system-builder/verify-task-6-final-2-mock-env-manifest.json",
+    "status": "passed",
+    "mode": "backend",
+    "backendPid": 94627,
+    "frontendPid": null,
+    "backendPort": 54487,
+    "frontendPort": 54488,
+    "cleanupOk": true
+  },
+  {
+    "path": ".omo/evidence/any-agent-system-builder/verify-task-6-final-3-runtime-artifacts/run-manifest.json",
+    "status": "dry-run",
+    "mode": "full",
+    "backendPid": null,
+    "frontendPid": null,
+    "backendPort": 56763,
+    "frontendPort": 56764,
+    "cleanupOk": true
+  },
+  {
+    "path": ".omo/evidence/any-agent-system-builder/verify-task-6-final-3-browser-preflight-artifacts/run-manifest.json",
+    "status": "failed-browser-dependency",
+    "mode": "browser",
+    "backendPid": null,
+    "frontendPid": null,
+    "backendPort": 57465,
+    "frontendPort": 57466,
+    "cleanupOk": true
+  }
+]
+
+$ kill -0 manifest pids
+.omo/evidence/any-agent-system-builder/verify-task-6-final-2-mock-env-manifest.json backend pid=94627 alive=false
+.omo/evidence/any-agent-system-builder/verify-task-6-final-2-mock-env-manifest.json frontend pid=null alive=false
+.omo/evidence/any-agent-system-builder/verify-task-6-final-3-runtime-artifacts/run-manifest.json backend pid=null alive=false
+.omo/evidence/any-agent-system-builder/verify-task-6-final-3-runtime-artifacts/run-manifest.json frontend pid=null alive=false
+.omo/evidence/any-agent-system-builder/verify-task-6-final-3-browser-preflight-artifacts/run-manifest.json backend pid=null alive=false
+.omo/evidence/any-agent-system-builder/verify-task-6-final-3-browser-preflight-artifacts/run-manifest.json frontend pid=null alive=false
+
+$ lsof manifest ports
+## backend port 54487
+## frontend port 54488
+## backend port 56763
+## frontend port 56764
+## backend port 57465
+## frontend port 57466
+
+$ broad listener scan for generated demo ports/process names
+
+$ latest harness cleanup receipts inspected
+frontend: not-started
+backend: not-started
+backend pid=null alive=false
+frontend pid=null alive=false
+$ lsof -nP -iTCP:57465 -sTCP:LISTEN
+backend port=57465 listener=no
+$ lsof -nP -iTCP:57466 -sTCP:LISTEN
+frontend port=57466 listener=no
+
+RESULT=pass if every listed alive=false and every lsof section above is empty except headings

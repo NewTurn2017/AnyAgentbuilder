@@ -1,0 +1,10 @@
+FOUND .omo/evidence/any-agent-system-builder/execution-root.txt
+FOUND .omo/evidence/any-agent-system-builder/red-validate-skill.txt
+FOUND .omo/evidence/any-agent-system-builder/red-qa-harness.txt
+FOUND .omo/evidence/any-agent-system-builder/task-1.txt
+FOUND .omo/evidence/any-agent-system-builder/task-1-validator-unknown-flag.txt
+FOUND .omo/evidence/any-agent-system-builder/task-1-qa-unknown-flag.txt
+FOUND .omo/evidence/any-agent-system-builder/task-1-validator-check-generated.txt
+FOUND .omo/evidence/any-agent-system-builder/run-manifest.json
+FOUND .omo/evidence/any-agent-system-builder/cleanup-pids.txt
+FOUND .omo/evidence/any-agent-system-builder/cleanup-ports.txt

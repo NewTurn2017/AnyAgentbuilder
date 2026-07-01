@@ -1,0 +1,3 @@
+ERROR: generated backend main.py has only placeholder content
+
+EXIT_STATUS=1

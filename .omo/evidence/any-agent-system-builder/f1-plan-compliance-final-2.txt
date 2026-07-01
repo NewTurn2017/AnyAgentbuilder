@@ -1,0 +1,128 @@
+recommendation: APPROVE
+
+blockers:
+- None.
+
+originalIntent:
+- Build a reusable `agentic-system-builder` skill for operational multi-agent chat systems, not an airline-only clone.
+- Deliver one-level skill references, domain examples, validator/scaffold/QA scripts, and a generated library reservation demo with mock backend, chat-first UI, guardrails, public/private context separation, and real-surface QA evidence.
+- Keep first proof local and mock-only. Do not implement production auth, payments, billing, deployment, provider dashboards, real external service APIs, or a required real OpenAI API path.
+
+desiredOutcome:
+- Todos 1-9 in `.omo/plans/any-agent-system-builder.md` are checked.
+- Every Todo 1-9 includes references, acceptance criteria, happy QA, and failure/negative QA.
+- Evidence exists for every Todo 1-9.
+- F2, F3, and F4 final verification artifacts approve after the F2 symlink/safety fixes.
+- The F2 symlink/safety fixes stay within planned scaffold/output-safety scope and do not broaden the artifact into production services or integrations.
+
+userOutcomeReview:
+- APPROVE. The current artifact satisfies the user's requested F1 plan-compliance outcome.
+- Todos 1-9 are checked in `.omo/plans/any-agent-system-builder.md`.
+- Direct plan parsing confirmed all Todos 1-9 have References, Acceptance criteria, QA scenarios, a happy path, and failure/negative coverage.
+- Evidence exists for each Todo 1-9 under `.omo/evidence/any-agent-system-builder/task-N*` and/or `.omo/evidence/any-agent-system-builder/verify-task-N*`.
+- Final verification approvals are present:
+  - F2: `.omo/evidence/any-agent-system-builder/f2-code-quality-final-3.txt` records `recommendation: APPROVE`, `blockers: none`, and final `APPROVE`.
+  - F3: `.omo/evidence/any-agent-system-builder/f3-real-qa.txt` and `f3-real-qa-gate-review.md` record `recommendation: APPROVE`.
+  - F4: `.omo/evidence/any-agent-system-builder/f4-scope-fidelity.txt` records `recommendation: APPROVE` and `finalDecision: APPROVE`.
+- Fresh static checks passed in this audit:
+  - `npm run validate:skill`
+  - `npm run validate:examples`
+  - `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo`
+  - `node --check agentic-system-builder/scripts/scaffold-agent-system.mjs`
+  - `node --check agentic-system-builder/scripts/validate-domain-spec.mjs`
+  - `node --check agentic-system-builder/scripts/qa-generated-demo.mjs`
+- Current manifest reports full mock QA passed with cleanup ok: backend PID 4672, frontend PID 5359, backend port 62067, frontend port 62068.
+- Fresh live cleanup check found no live process rows for PIDs 4672/5359/44152/44830 and no listeners on ports 62067/62068/53571/53572.
+
+todoCompliance:
+- Todo 1: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `red-validate-skill.txt`, `red-qa-harness.txt`, `task-1.txt`, `task-1-code-review.md`, and `verify-task-1-*`.
+- Todo 2: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-2-skill-check.txt`, `task-2-negative.txt`, and `verify-task-2-20260701T193627KST.md`.
+- Todo 3: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-3-examples.txt`, `task-3-negative.txt`, `task-3-code-review.md`, and `verify-task-3-final-20260701T194132KST-gate-review.md`.
+- Todo 4: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-4-validator.txt`, `task-4-negative.txt`, generated-app negative probes, and `verify-task-4-final-*`.
+- Todo 5: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-5-scaffold.txt`, `task-5-negative.txt`, `task-5-cleanup.txt`, validator regressions, non-library generated checks, and `verify-task-5-final-*`.
+- Todo 6: checked; references present; acceptance criteria present; happy QA and credential-contamination negative QA present. Evidence includes `task-6-harness-dry-run.txt`, `task-6-mock-env.txt`, HTTP artifacts, provider-boundary evidence, cleanup receipts, and `verify-task-6-final-*`.
+- Todo 7: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-7-health.txt`, `task-7-chat.txt`, `task-7-guardrail.txt`, `task-7-422.txt`, `task-7-sse.txt`, cleanup receipts, and `verify-task-7-final-gate-review.md`.
+- Todo 8: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-8-browser.txt`, `task-8-privacy.txt`, `task-8-artifact-check.txt`, screenshots, cleanup receipts, and `verify-task-8-final-gate-review.md`.
+- Todo 9: checked; references present; acceptance criteria present; happy/failure QA present. Evidence includes `task-9-final.txt`, `task-9-placeholders.txt`, `task-9-file-structure-current.txt`, `task-9-code-review.md`, and `verify-task-9-final-gate-review.md`.
+
+scopeBoundaryReview:
+- No unapproved production auth, billing, payment integration, deployment workflow, provider dashboard, or real external library/PC-bang/airline API implementation found in first-party files.
+- Scope scan hits for `OpenAI`, `OPENAI_API_KEY`, and `AGENT_RUNTIME` are documentation, mock-mode gating, validator/provider-security checks, or the 501 real-runtime placeholder. They do not require local provider access.
+- Payment-related hits are confined to the PC bang example's internal policy/privacy wording, not live payment integration.
+- `generated/library-reservation-demo/backend/main.py` defaults to `AGENT_RUNTIME=mock`; non-mock runtime returns HTTP 501 with extension guidance instead of calling a provider.
+- `agentic-system-builder/scripts/qa-lib/provider-security.mjs` scrubs provider environment keys and scans generated runtime files for OpenAI imports/calls before startup.
+- `agentic-system-builder/SKILL.md` keeps `thread_id` as a mock conversation key and warns not to treat it as authentication.
+
+f2SymlinkSafetyReview:
+- F2 final approval now exists at `.omo/evidence/any-agent-system-builder/f2-code-quality-final-3.txt`.
+- The symlink/safety fix is confined to `agentic-system-builder/scripts/scaffold-agent-system.mjs`, which is within planned Todo 5 scaffold-script scope.
+- Current source canonicalizes the nearest existing ancestor before safety decisions and checks both normalized and intended-real paths.
+- Current source runs safety checks before project file mkdir/write, ownership marker write, output preparation, recursive remove, output mkdir, and partial-output cleanup.
+- `f2-fix-scaffold-safety.txt` proves:
+  - symlinked workspace path into `agentic-system-builder` child rejected with no protected child created;
+  - symlinked workspace path into `.omo` child rejected with no protected child created;
+  - exact symlinks to workspace root, home, and filesystem root rejected before write/remove;
+  - unmarked generated child preserved under `--force`;
+  - marked generated child replaceable;
+  - normal library scaffold still succeeds.
+- This narrows filesystem behavior and does not add production auth/payments/deployment/real API behavior.
+
+directSlopAndProgrammingPass:
+- Loaded and applied `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/remove-ai-slops/SKILL.md`.
+- Loaded and applied `/Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/SKILL.md`.
+- Direct pass found no deletion-only tests, requested-removal-only tests, tautological proof, file-existence-only proof, or placeholder-only production surface being accepted as sufficient for F1.
+- The accepted F1 evidence is behavior-backed: validators pass, generated contract check passes, F3 drove real backend/browser QA, screenshots exist, cleanup receipts are current, and F2 symlink proof invokes the scaffold CLI and asserts rejection/no-write behavior.
+- Direct pass found F2-disclosed WATCH debt: oversized validator/scaffold scripts and some source-shape validator checks. F2 final explicitly records these as non-blocking code-quality debt, not blocker severity.
+- For F1 plan compliance, that WATCH debt does not create scope drift and does not invalidate the user-visible deliverable, because the final approval chain includes F2 approval and F3 real-surface QA approval.
+- The code-quality reports explicitly show the same skill-perspective coverage:
+  - `.omo/evidence/any-agent-system-builder/f2-code-quality-final-3.txt` has "Required Skill-Perspective Check" and "Overfit / Slop Review Pass" sections covering remove-ai-slops/programming, overfit/tautological tests, source-shape false confidence, oversized modules, typed boundary risks, and residual WATCH debt.
+  - `.omo/evidence/any-agent-system-builder/task-9-code-review.md` records the same skill-perspective check and no CRITICAL/HIGH findings.
+  - `.omo/evidence/any-agent-system-builder/f4-scope-fidelity.txt` records a direct remove-ai-slops/programming pass for scope fidelity.
+
+checkedArtifactPaths:
+- `.omo/plans/any-agent-system-builder.md`
+- `.omo/drafts/any-agent-system-builder.md`
+- `.omo/start-work/any-agent-system-builder-notepad.md`
+- `.omo/start-work/ledger.jsonl`
+- `.omo/evidence/any-agent-system-builder/f1-plan-compliance-final.txt`
+- `.omo/evidence/any-agent-system-builder/f2-code-quality-final-3.txt`
+- `.omo/evidence/any-agent-system-builder/f3-real-qa.txt`
+- `.omo/evidence/any-agent-system-builder/f3-real-qa-gate-review.md`
+- `.omo/evidence/any-agent-system-builder/f4-scope-fidelity.txt`
+- `.omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt`
+- `.omo/evidence/any-agent-system-builder/f2-fix-summary.txt`
+- `.omo/evidence/any-agent-system-builder/f2-fix-final-command.txt`
+- `.omo/evidence/any-agent-system-builder/f2-fix-cleanup.txt`
+- `.omo/evidence/any-agent-system-builder/run-manifest.json`
+- `.omo/evidence/any-agent-system-builder/browser-library-demo.png`
+- `.omo/evidence/any-agent-system-builder/browser-guardrail-demo.png`
+- `.omo/evidence/any-agent-system-builder/task-1*` and `verify-task-1*`
+- `.omo/evidence/any-agent-system-builder/task-2*` and `verify-task-2*`
+- `.omo/evidence/any-agent-system-builder/task-3*` and `verify-task-3*`
+- `.omo/evidence/any-agent-system-builder/task-4*` and `verify-task-4*`
+- `.omo/evidence/any-agent-system-builder/task-5*` and `verify-task-5*`
+- `.omo/evidence/any-agent-system-builder/task-6*` and `verify-task-6*`
+- `.omo/evidence/any-agent-system-builder/task-7*` and `verify-task-7*`
+- `.omo/evidence/any-agent-system-builder/task-8*` and `verify-task-8*`
+- `.omo/evidence/any-agent-system-builder/task-9*` and `verify-task-9*`
+- `package.json`
+- `agentic-system-builder/SKILL.md`
+- `agentic-system-builder/REFERENCE.md`
+- `agentic-system-builder/EXAMPLES.md`
+- `agentic-system-builder/scripts/scaffold-agent-system.mjs`
+- `agentic-system-builder/scripts/validate-domain-spec.mjs`
+- `agentic-system-builder/scripts/qa-generated-demo.mjs`
+- `agentic-system-builder/scripts/qa-lib/provider-security.mjs`
+- `agentic-system-builder/templates/**`
+- `generated/library-reservation-demo/README.md`
+- `generated/library-reservation-demo/backend/main.py`
+- `generated/library-reservation-demo/backend/models.py`
+- `generated/library-reservation-demo/frontend/src/App.jsx`
+
+exactEvidenceGaps:
+- No Git diff is available because `/Users/genie/dev/tools/skills/AnyAgentbuilder` is not a Git repository; `git status` failed with "not a git repository". This audit used the live filesystem, plan, ledger, and evidence artifacts instead.
+- The final verification wave checkboxes in `.omo/plans/any-agent-system-builder.md` are not edited by this audit because the user allowed writes only to this report path. F2/F3/F4 approval artifacts exist and approve; this file supplies the final F1 approval artifact requested by the user.
+- Residual F2 WATCH debt remains disclosed: validator/source-shape brittleness and oversized standalone scripts. This is not treated as an F1 plan-compliance blocker because F2 final approved it at code-quality scope and the F3/F4 artifacts approve runtime/scope fidelity.
+
+finalDecision:
+APPROVE

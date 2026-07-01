@@ -1,0 +1,7 @@
+artifact=.omo/evidence/any-agent-system-builder/task-9-audit.txt
+artifact_contents:
+found 0 vulnerabilities
+
+current_command=(cd generated/library-reservation-demo/frontend && npm audit --audit-level=moderate)
+found 0 vulnerabilities
+audit_exit_code=0

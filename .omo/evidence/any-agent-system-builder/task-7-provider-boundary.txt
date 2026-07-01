@@ -1,0 +1,14 @@
+{
+  "command": "scanMockProviderBoundary",
+  "allowed": true,
+  "findings": [],
+  "scannedFiles": [
+    "generated/library-reservation-demo/backend/agents.py",
+    "generated/library-reservation-demo/backend/context.py",
+    "generated/library-reservation-demo/backend/demo_data.py",
+    "generated/library-reservation-demo/backend/events.py",
+    "generated/library-reservation-demo/backend/main.py",
+    "generated/library-reservation-demo/backend/memory.py",
+    "generated/library-reservation-demo/backend/tools.py"
+  ]
+}

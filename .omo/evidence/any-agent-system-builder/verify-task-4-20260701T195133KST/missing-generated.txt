@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+ERROR: missing generated app directory: generated/library-reservation-demo
+
+exit=1

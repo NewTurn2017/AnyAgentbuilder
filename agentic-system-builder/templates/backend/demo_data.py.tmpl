@@ -1,0 +1,30 @@
+from context import build_internal_context, build_public_context
+from models import ConversationStateModel, JsonObject
+
+DOMAIN_KEY = {{PY:domain_key}}
+BRAND_NAME = {{PY:brand_name}}
+DEMO_PUBLIC_SEED = {{PY:public_context}}
+DEMO_INTERNAL_SEED = {{PY:internal_context}}
+DEMO_RESOURCES = {{PY:resources}}
+DEMO_AGENTS = {{PY:agents}}
+DEMO_HANDOFFS = {{PY:handoffs}}
+DEMO_GUARDRAILS = {{PY:guardrails}}
+
+RESOURCE_KIND = {{PY:resource_kind}}
+DEMO_RESOURCE_MODELS: list[JsonObject] = [dict(resource) for resource in DEMO_RESOURCES]
+
+
+DEMO_STATE = ConversationStateModel(
+    domain_key=DOMAIN_KEY,
+    brand_name=BRAND_NAME,
+    public_context=build_public_context(DEMO_PUBLIC_SEED),
+    internal_context=build_internal_context(DEMO_INTERNAL_SEED),
+    resources=DEMO_RESOURCE_MODELS,
+    agents=list(DEMO_AGENTS),
+    handoffs=list(DEMO_HANDOFFS),
+    guardrails=list(DEMO_GUARDRAILS),
+)
+
+
+def initial_state() -> ConversationStateModel:
+    return DEMO_STATE.model_copy(deep=True)

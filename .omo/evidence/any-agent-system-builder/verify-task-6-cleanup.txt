@@ -1,0 +1,652 @@
+Cleanup audit over backend-only manifest copy and latest/browser manifest
+===== .omo/evidence/any-agent-system-builder/verify-task-6-mock-env-manifest.json
+{
+  "scenario": "library",
+  "mode": "backend",
+  "dryRun": false,
+  "runtime": "mock",
+  "backendPort": 54481,
+  "frontendPort": 54482,
+  "backendPid": 47613,
+  "frontendPid": null,
+  "commands": {
+    "validateSkill": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-skill",
+        "agentic-system-builder"
+      ]
+    },
+    "validateExamples": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--validate-example",
+        "agentic-system-builder/EXAMPLES.md",
+        "--require-domain",
+        "airline",
+        "--require-domain",
+        "library",
+        "--require-domain",
+        "pcbang",
+        "--require-domain",
+        "generic"
+      ]
+    },
+    "scaffoldLibrary": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/scaffold-agent-system.mjs",
+        "--domain",
+        "library",
+        "--out",
+        "generated/library-reservation-demo",
+        "--force"
+      ]
+    },
+    "validateGenerated": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-generated",
+        "generated/library-reservation-demo"
+      ]
+    },
+    "backendVenv": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "python3",
+      "args": [
+        "-m",
+        "venv",
+        ".venv"
+      ]
+    },
+    "backendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "pip",
+        "install",
+        "--disable-pip-version-check",
+        "-r",
+        "backend/requirements.txt"
+      ]
+    },
+    "backendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "54481"
+      ]
+    },
+    "frontendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "install"
+      ]
+    },
+    "frontendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "54482"
+      ]
+    },
+    "curlHealth": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "http://127.0.0.1:54481/health"
+      ]
+    },
+    "curlChat": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54481/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"도서관 스터디룸 예약하고 싶어요\"}"
+      ]
+    },
+    "curlGuardrail": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54481/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"무관한 주식 추천해줘\"}"
+      ]
+    },
+    "curlMalformed": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:54481/chat",
+        "-H",
+        "content-type: application/json",
+        "--data-binary",
+        "@-"
+      ],
+      "input": "{\"thread_id\":\"demo\",\"message\":"
+    },
+    "curlSse": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-N",
+        "http://127.0.0.1:54481/state/stream?thread_id=demo",
+        "--max-time",
+        "5"
+      ]
+    }
+  },
+  "cleanupHandlers": [
+    "SIGINT/SIGTERM process-group termination",
+    "PID liveness receipt",
+    "lsof listener receipt"
+  ],
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "generatedAppChecked": true,
+  "status": "passed",
+  "backendCommand": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 54481",
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- parsed ---
+{
+  "file": ".omo/evidence/any-agent-system-builder/verify-task-6-mock-env-manifest.json",
+  "status": "passed",
+  "error": null,
+  "mode": "backend",
+  "backendPid": 47613,
+  "frontendPid": null,
+  "backendPort": 54481,
+  "frontendPort": 54482,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- kill -0 checks ---
+backend pid 47613 alive=no
+frontend pid null
+--- lsof checks ---
+backend port 54481
+frontend port 54482
+===== .omo/evidence/any-agent-system-builder/verify-task-6-browser-path-manifest.json
+{
+  "scenario": "library",
+  "mode": "browser",
+  "dryRun": false,
+  "runtime": "mock",
+  "backendPort": 55199,
+  "frontendPort": 55200,
+  "backendPid": 49526,
+  "frontendPid": 49750,
+  "commands": {
+    "validateSkill": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-skill",
+        "agentic-system-builder"
+      ]
+    },
+    "validateExamples": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--validate-example",
+        "agentic-system-builder/EXAMPLES.md",
+        "--require-domain",
+        "airline",
+        "--require-domain",
+        "library",
+        "--require-domain",
+        "pcbang",
+        "--require-domain",
+        "generic"
+      ]
+    },
+    "scaffoldLibrary": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/scaffold-agent-system.mjs",
+        "--domain",
+        "library",
+        "--out",
+        "generated/library-reservation-demo",
+        "--force"
+      ]
+    },
+    "validateGenerated": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-generated",
+        "generated/library-reservation-demo"
+      ]
+    },
+    "backendVenv": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "python3",
+      "args": [
+        "-m",
+        "venv",
+        ".venv"
+      ]
+    },
+    "backendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "pip",
+        "install",
+        "--disable-pip-version-check",
+        "-r",
+        "backend/requirements.txt"
+      ]
+    },
+    "backendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "55199"
+      ]
+    },
+    "frontendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "install"
+      ]
+    },
+    "frontendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "55200"
+      ]
+    },
+    "curlHealth": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "http://127.0.0.1:55199/health"
+      ]
+    },
+    "curlChat": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"도서관 스터디룸 예약하고 싶어요\"}"
+      ]
+    },
+    "curlGuardrail": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"무관한 주식 추천해줘\"}"
+      ]
+    },
+    "curlMalformed": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "--data-binary",
+        "@-"
+      ],
+      "input": "{\"thread_id\":\"demo\",\"message\":"
+    },
+    "curlSse": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-N",
+        "http://127.0.0.1:55199/state/stream?thread_id=demo",
+        "--max-time",
+        "5"
+      ]
+    }
+  },
+  "cleanupHandlers": [
+    "SIGINT/SIGTERM process-group termination",
+    "PID liveness receipt",
+    "lsof listener receipt"
+  ],
+  "providerCredentialsScrubbed": [],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "generatedAppChecked": true,
+  "status": "failed-browser-dependency",
+  "backendCommand": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 55199",
+  "frontendCommand": "npm run dev -- --port 55200",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- parsed ---
+{
+  "file": ".omo/evidence/any-agent-system-builder/verify-task-6-browser-path-manifest.json",
+  "status": "failed-browser-dependency",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "mode": "browser",
+  "backendPid": 49526,
+  "frontendPid": 49750,
+  "backendPort": 55199,
+  "frontendPort": 55200,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- kill -0 checks ---
+backend pid 49526 alive=no
+frontend pid 49750 alive=no
+--- lsof checks ---
+backend port 55199
+frontend port 55200
+===== .omo/evidence/any-agent-system-builder/run-manifest.json
+{
+  "scenario": "library",
+  "mode": "browser",
+  "dryRun": false,
+  "runtime": "mock",
+  "backendPort": 55199,
+  "frontendPort": 55200,
+  "backendPid": 49526,
+  "frontendPid": 49750,
+  "commands": {
+    "validateSkill": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-skill",
+        "agentic-system-builder"
+      ]
+    },
+    "validateExamples": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--validate-example",
+        "agentic-system-builder/EXAMPLES.md",
+        "--require-domain",
+        "airline",
+        "--require-domain",
+        "library",
+        "--require-domain",
+        "pcbang",
+        "--require-domain",
+        "generic"
+      ]
+    },
+    "scaffoldLibrary": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/scaffold-agent-system.mjs",
+        "--domain",
+        "library",
+        "--out",
+        "generated/library-reservation-demo",
+        "--force"
+      ]
+    },
+    "validateGenerated": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "/Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node",
+      "args": [
+        "agentic-system-builder/scripts/validate-domain-spec.mjs",
+        "--check-generated",
+        "generated/library-reservation-demo"
+      ]
+    },
+    "backendVenv": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "python3",
+      "args": [
+        "-m",
+        "venv",
+        ".venv"
+      ]
+    },
+    "backendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "pip",
+        "install",
+        "--disable-pip-version-check",
+        "-r",
+        "backend/requirements.txt"
+      ]
+    },
+    "backendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend",
+      "bin": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python",
+      "args": [
+        "-m",
+        "uvicorn",
+        "main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "55199"
+      ]
+    },
+    "frontendInstall": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "install"
+      ]
+    },
+    "frontendStart": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend",
+      "bin": "npm",
+      "args": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "55200"
+      ]
+    },
+    "curlHealth": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "http://127.0.0.1:55199/health"
+      ]
+    },
+    "curlChat": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"도서관 스터디룸 예약하고 싶어요\"}"
+      ]
+    },
+    "curlGuardrail": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "-d",
+        "{\"thread_id\":\"demo\",\"message\":\"무관한 주식 추천해줘\"}"
+      ]
+    },
+    "curlMalformed": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-X",
+        "POST",
+        "http://127.0.0.1:55199/chat",
+        "-H",
+        "content-type: application/json",
+        "--data-binary",
+        "@-"
+      ],
+      "input": "{\"thread_id\":\"demo\",\"message\":"
+    },
+    "curlSse": {
+      "cwd": "/Users/genie/dev/tools/skills/AnyAgentbuilder",
+      "bin": "curl",
+      "args": [
+        "-i",
+        "-N",
+        "http://127.0.0.1:55199/state/stream?thread_id=demo",
+        "--max-time",
+        "5"
+      ]
+    }
+  },
+  "cleanupHandlers": [
+    "SIGINT/SIGTERM process-group termination",
+    "PID liveness receipt",
+    "lsof listener receipt"
+  ],
+  "providerCredentialsScrubbed": [],
+  "openaiImportAttempted": false,
+  "openaiCalls": false,
+  "generatedAppChecked": true,
+  "status": "failed-browser-dependency",
+  "backendCommand": "/Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 55199",
+  "frontendCommand": "npm run dev -- --port 55200",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- parsed ---
+{
+  "file": ".omo/evidence/any-agent-system-builder/run-manifest.json",
+  "status": "failed-browser-dependency",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "mode": "browser",
+  "backendPid": 49526,
+  "frontendPid": 49750,
+  "backendPort": 55199,
+  "frontendPort": 55200,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+--- kill -0 checks ---
+backend pid 49526 alive=no
+frontend pid 49750 alive=no
+--- lsof checks ---
+backend port 55199
+frontend port 55200
+===== current task-6 cleanup receipts (from latest/browser run)
+frontend: pid 49750 alive=false
+backend: pid 49526 alive=false
+backend pid=49526 alive=false
+frontend pid=49750 alive=false
+$ lsof -nP -iTCP:55199 -sTCP:LISTEN
+backend port=55199 listener=no
+$ lsof -nP -iTCP:55200 -sTCP:LISTEN
+frontend port=55200 listener=no

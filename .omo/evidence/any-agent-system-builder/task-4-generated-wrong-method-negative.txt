@@ -1,0 +1,3 @@
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: POST /chat (method/path mismatch)
+
+EXIT_STATUS=1

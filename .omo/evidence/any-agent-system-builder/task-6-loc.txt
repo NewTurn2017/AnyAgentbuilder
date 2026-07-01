@@ -1,0 +1,30 @@
+$ wc -l agentic-system-builder/scripts/qa-generated-demo.mjs agentic-system-builder/scripts/qa-lib/*.mjs
+     149 agentic-system-builder/scripts/qa-generated-demo.mjs
+      55 agentic-system-builder/scripts/qa-lib/args.mjs
+      35 agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+     122 agentic-system-builder/scripts/qa-lib/commands.mjs
+       7 agentic-system-builder/scripts/qa-lib/errors.mjs
+      19 agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+      73 agentic-system-builder/scripts/qa-lib/http-checks.mjs
+      35 agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+       8 agentic-system-builder/scripts/qa-lib/manifest.mjs
+      17 agentic-system-builder/scripts/qa-lib/paths.mjs
+      12 agentic-system-builder/scripts/qa-lib/ports.mjs
+     188 agentic-system-builder/scripts/qa-lib/processes.mjs
+     188 agentic-system-builder/scripts/qa-lib/provider-security.mjs
+     908 total
+
+$ awk pure LOC by file
+agentic-system-builder/scripts/qa-generated-demo.mjs pure_loc=134 physical_lines=149
+agentic-system-builder/scripts/qa-lib/args.mjs pure_loc=49 physical_lines=55
+agentic-system-builder/scripts/qa-lib/browser-qa.mjs pure_loc=32 physical_lines=35
+agentic-system-builder/scripts/qa-lib/commands.mjs pure_loc=120 physical_lines=122
+agentic-system-builder/scripts/qa-lib/errors.mjs pure_loc=7 physical_lines=7
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs pure_loc=16 physical_lines=19
+agentic-system-builder/scripts/qa-lib/http-checks.mjs pure_loc=65 physical_lines=73
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs pure_loc=32 physical_lines=35
+agentic-system-builder/scripts/qa-lib/manifest.mjs pure_loc=7 physical_lines=8
+agentic-system-builder/scripts/qa-lib/paths.mjs pure_loc=15 physical_lines=17
+agentic-system-builder/scripts/qa-lib/ports.mjs pure_loc=11 physical_lines=12
+agentic-system-builder/scripts/qa-lib/processes.mjs pure_loc=175 physical_lines=188
+agentic-system-builder/scripts/qa-lib/provider-security.mjs pure_loc=175 physical_lines=188

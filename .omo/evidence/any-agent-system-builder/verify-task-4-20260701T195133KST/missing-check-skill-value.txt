@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill
+ERROR: --check-skill requires a value
+
+exit=1

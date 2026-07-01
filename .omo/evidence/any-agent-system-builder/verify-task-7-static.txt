@@ -1,0 +1,36 @@
+Todo 7 static/syntax verification
+
+$ python3 source compile without pycache writes
+compile-ok generated/library-reservation-demo/backend/agents.py
+compile-ok generated/library-reservation-demo/backend/context.py
+compile-ok generated/library-reservation-demo/backend/demo_data.py
+compile-ok generated/library-reservation-demo/backend/events.py
+compile-ok generated/library-reservation-demo/backend/main.py
+compile-ok generated/library-reservation-demo/backend/memory.py
+compile-ok generated/library-reservation-demo/backend/tools.py
+
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+
+$ node --check qa harness and helpers
+node-check-ok
+
+$ backend pure LOC
+generated/library-reservation-demo/backend/agents.py pure_loc=76
+generated/library-reservation-demo/backend/context.py pure_loc=35
+generated/library-reservation-demo/backend/demo_data.py pure_loc=84
+generated/library-reservation-demo/backend/events.py pure_loc=29
+generated/library-reservation-demo/backend/main.py pure_loc=87
+generated/library-reservation-demo/backend/memory.py pure_loc=14
+generated/library-reservation-demo/backend/tools.py pure_loc=11
+agentic-system-builder/templates/backend/agents.py.tmpl pure_loc=63
+agentic-system-builder/templates/backend/context.py.tmpl pure_loc=20
+agentic-system-builder/templates/backend/demo_data.py.tmpl pure_loc=35
+agentic-system-builder/templates/backend/events.py.tmpl pure_loc=29
+agentic-system-builder/templates/backend/main.py.tmpl pure_loc=87
+agentic-system-builder/templates/backend/memory.py.tmpl pure_loc=14
+agentic-system-builder/templates/backend/tools.py.tmpl pure_loc=11
+
+$ unresolved placeholder scan in Todo 7 backend/templates
+
+result=PASS

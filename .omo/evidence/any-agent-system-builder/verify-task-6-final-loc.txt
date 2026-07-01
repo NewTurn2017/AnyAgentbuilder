@@ -1,0 +1,68 @@
+## Pure LOC by harness file
+ 129 pure /  143 physical  agentic-system-builder/scripts/qa-generated-demo.mjs
+  49 pure /   55 physical  agentic-system-builder/scripts/qa-lib/args.mjs
+  27 pure /   28 physical  agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+ 120 pure /  122 physical  agentic-system-builder/scripts/qa-lib/commands.mjs
+   7 pure /    7 physical  agentic-system-builder/scripts/qa-lib/errors.mjs
+  16 pure /   19 physical  agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+  65 pure /   73 physical  agentic-system-builder/scripts/qa-lib/http-checks.mjs
+  32 pure /   35 physical  agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+   7 pure /    8 physical  agentic-system-builder/scripts/qa-lib/manifest.mjs
+  15 pure /   17 physical  agentic-system-builder/scripts/qa-lib/paths.mjs
+  11 pure /   12 physical  agentic-system-builder/scripts/qa-lib/ports.mjs
+ 175 pure /  188 physical  agentic-system-builder/scripts/qa-lib/processes.mjs
+ 130 pure /  141 physical  agentic-system-builder/scripts/qa-lib/provider-security.mjs
+
+## Exported helper surface
+agentic-system-builder/scripts/qa-lib/processes.mjs:9:export async function appendProcessLog(path, message) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:13:export function spawnChild(command, options = {}) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:28:export async function runCommand(command, options = {}) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:76:export async function writeCommandArtifact(path, result) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:90:export async function startManagedProcess(command, manifest, manifestKey, logPath, provider) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:108:export function processStillAlive(pid) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:118:export async function stopProcess(child, label) {
+agentic-system-builder/scripts/qa-lib/processes.mjs:155:export async function cleanupProcesses(state, evidenceDir, manifest) {
+agentic-system-builder/scripts/qa-lib/paths.mjs:4:export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+agentic-system-builder/scripts/qa-lib/paths.mjs:5:export const GENERATED_ROOT = join(ROOT, "generated/library-reservation-demo");
+agentic-system-builder/scripts/qa-lib/paths.mjs:6:export const BACKEND_ROOT = join(GENERATED_ROOT, "backend");
+agentic-system-builder/scripts/qa-lib/paths.mjs:7:export const FRONTEND_ROOT = join(GENERATED_ROOT, "frontend");
+agentic-system-builder/scripts/qa-lib/paths.mjs:8:export const EVIDENCE_DEFAULT = ".omo/evidence/any-agent-system-builder";
+agentic-system-builder/scripts/qa-lib/paths.mjs:10:export const INTERNAL_FIELD_MARKERS = [
+agentic-system-builder/scripts/qa-lib/ports.mjs:3:export async function freePort() {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:10:export function makeProviderEnv() {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:22:export function requireMockRuntime(provider) {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:107:export function scanMockProviderBoundary(root = BACKEND_ROOT) {
+agentic-system-builder/scripts/qa-lib/provider-security.mjs:133:export function assertMockProviderSafe(root = BACKEND_ROOT) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:7:export async function runSetup(commands, manifest, provider) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:23:export async function ensureBackendDependencies(commands, provider) {
+agentic-system-builder/scripts/qa-lib/lifecycle.mjs:32:export async function ensureFrontendDependencies(commands, provider) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:6:export async function waitForHttp(url, label, timeoutMs = 30000) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:24:export function assertHttpStatus(result, expected, label) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:31:export function assertNoInternalMarkers(text, label) {
+agentic-system-builder/scripts/qa-lib/http-checks.mjs:38:export async function runCurlChecks(commands, evidenceDir, provider) {
+agentic-system-builder/scripts/qa-lib/browser-qa.mjs:5:export async function runBrowserQa(frontendPort, evidenceDir) {
+agentic-system-builder/scripts/qa-lib/errors.mjs:1:export class HarnessError extends Error {
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs:4:export function ensureEvidenceDir(path) {
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs:8:export async function pathExists(path) {
+agentic-system-builder/scripts/qa-lib/fs-utils.mjs:17:export async function ensureDir(path) {
+agentic-system-builder/scripts/qa-lib/args.mjs:12:export function parseArgs(argv) {
+agentic-system-builder/scripts/qa-lib/args.mjs:51:export function modeFromArgs(args) {
+agentic-system-builder/scripts/qa-lib/commands.mjs:4:export function commandLabel(command) {
+agentic-system-builder/scripts/qa-lib/commands.mjs:8:export function buildPlannedCommands(backendPort, frontendPort) {
+agentic-system-builder/scripts/qa-lib/manifest.mjs:4:export async function writeManifest(evidenceDir, manifest) {
+
+## Focused responsibility assessment
+qa-generated-demo.mjs: entrypoint orchestration only; imports parser, command planning, setup, provider env, process, HTTP, browser, cleanup modules.
+args.mjs: CLI shape/malformed argument handling.
+commands.mjs: deterministic command definitions for validators, scaffold, dependency installs, servers, curl probes.
+provider-security.mjs: mock env scrubbing and runtime provider import/call scan.
+processes.mjs: child process execution, managed server start/stop, cleanup receipts.
+http-checks.mjs: readiness and curl artifact contract assertions.
+browser-qa.mjs: optional Playwright surface check, isolated from backend-only path.
+paths/ports/manifest/fs-utils/errors: small shared constants/primitives.
+
+## Slop/overfit pass
+No source file exceeds 250 pure LOC. Entrypoint is 129 pure LOC.
+No deletion-only or tautological tests added in this pass; verification commands exercise CLI errors, provider-boundary negative scanning, real curl artifacts, and process cleanup.
+The split introduces small focused modules, not catch-all helpers; file names map to concrete harness responsibilities.
+Residual non-blocker: freePort() still uses probe-then-bind without retry; exact backend-only run passed and cleanup receipts are clean.

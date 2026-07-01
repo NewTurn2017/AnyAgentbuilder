@@ -1,0 +1,37 @@
+COMMAND: npm audit --omit dev
+found 0 vulnerabilities
+
+COMMAND: npm run build
+
+> library-reservation-demo@0.1.0 build
+> vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 31 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB │ gzip:  0.30 kB
+dist/assets/index-DbuskNNr.css    2.64 kB │ gzip:  0.99 kB
+dist/assets/index-BVz7tkHV.js   146.46 kB │ gzip: 47.76 kB
+✓ built in 251ms
+
+COMMAND: node package proof
+{
+  "vite": "5.4.21",
+  "react": "18.3.1",
+  "reactDom": "18.3.1",
+  "rootDevDeps": {
+    "@vitejs/plugin-react": "4.3.4",
+    "playwright": "1.54.1",
+    "vite": "5.4.21"
+  },
+  "viteLock": {
+    "version": "5.4.21",
+    "dev": true
+  },
+  "esbuildLock": {
+    "version": "0.21.5",
+    "dev": true
+  }
+}

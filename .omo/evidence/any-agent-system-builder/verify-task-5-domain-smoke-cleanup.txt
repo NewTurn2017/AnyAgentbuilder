@@ -1,0 +1,1 @@
+ok generated/verify-task-5-pcbang-smoke absent after domain smoke

@@ -1,0 +1,6 @@
+SCENARIO=library generated contract check after DEMO_PUBLIC_SEED exact-field fix
+PWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+OK: generated library app skeleton valid: /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo
+EXIT_STATUS=0
+NOTE=scaffold command not run because lane is read-only outside .omo/evidence; existing generated/library-reservation-demo was validated in place.

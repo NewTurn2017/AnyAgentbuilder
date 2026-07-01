@@ -1,0 +1,24 @@
+date=2026-07-01T12:35:45Z
+
+SCENARIO: no task temp dirs remain
+COMMAND: find /tmp -maxdepth 1 -type d -name 'aab-task5-final2-*' -print | sort
+temp_cleanup=PASS no /tmp/aab-task5-final2-* dirs
+
+SCENARIO: no repo-local transient generated task dirs
+COMMAND: find generated -maxdepth 1 -type d matching task/smoke/bad/verify probes
+repo_transient_cleanup=PASS no repo-local transient generated dirs
+
+SCENARIO: no generated backend/frontend servers running
+COMMAND: pgrep -af 'uvicorn|vite' | rg 'generated/library-reservation-demo|uvicorn main:app|vite --host 127.0.0.1'
+server_process_scan=PASS no matching generated app server processes
+
+SCENARIO: old run-manifest ports if present
+COMMAND: node parse run-manifest.json and lsof recorded ports
+backendPort=60271
+frontendPort=60272
+COMMAND: lsof -nP -i :60271
+port_check=PASS no listener on 60271
+COMMAND: lsof -nP -i :60272
+port_check=PASS no listener on 60272
+
+failures=0

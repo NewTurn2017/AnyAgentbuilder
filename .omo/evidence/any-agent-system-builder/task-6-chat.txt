@@ -1,0 +1,14 @@
+$ curl -i -X POST http://127.0.0.1:54487/chat -H content-type: application/json -d {"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}
+exit=0
+--- stdout ---
+HTTP/1.1 200 OK
+date: Wed, 01 Jul 2026 13:47:08 GMT
+server: uvicorn
+content-length: 987
+content-type: application/json
+
+{"assistant_message":"예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.","active_agent":"room_reservation_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"handoff.started","detail":"triage_agent -> room_reservation_agent","public_payload":{"active_agent":"room_reservation_agent"}},{"type":"tool.called","detail":"availability_tool","public_payload":{"count":3}},{"type":"state.delta","detail":"public context refreshed","public_payload":{"policy_summary":"회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}],"status":"ok","guardrail":null}
+--- stderr ---
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1065  100   987  100    78   862k  69829 --:--:-- --:--:-- --:--:-- 1040k

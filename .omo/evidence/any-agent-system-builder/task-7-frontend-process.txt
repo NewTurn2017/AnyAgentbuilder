@@ -1,0 +1,11 @@
+$ npm run dev -- --port 62068
+
+> library-reservation-demo@0.1.0 dev
+> vite --host 127.0.0.1 --port 62068
+
+
+  VITE v8.1.2  ready in 310 ms
+
+  ➜  Local:   http://127.0.0.1:62068/
+
+[process exit] code=143 signal=null

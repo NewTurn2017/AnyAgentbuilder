@@ -1,0 +1,1 @@
+ERROR: missing skill directory: /tmp/does-not-exist

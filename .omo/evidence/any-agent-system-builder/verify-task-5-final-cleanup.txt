@@ -1,0 +1,24 @@
+# verify-task-5-final-cleanup
+cwd=/Users/genie/dev/tools/skills/AnyAgentbuilder
+date=2026-07-01T12:14:39Z
+
+## temp dirs under evidence
+tmp_final_dir_count=0
+
+## generated final smoke dirs
+generated_temp_dir_count=0
+
+## generated-demo process scan
+no_generated_demo_processes_found
+
+## common local listener scan
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    29860 genie   16u  IPv6 0x6fb7a865c0801f33      0t0  TCP [::1]:5173 (LISTEN)
+
+## 5173 listener cwd if present
+listener_5173_pids=29860 
+pid=29860  command=node /Users/genie/test/project/node_modules/.bin/vite
+pid=29860  cwd=
+
+cleanup_temp_dirs=PASS
+servers_started_by_gate=NO (no backend/frontend dev server commands were invoked; only scaffold/static/Python import probes ran)

@@ -1,0 +1,25 @@
+Todo 7 provider boundary verification
+
+current generated backend scan:
+allowed=true
+findings=[]
+scannedFiles=generated/library-reservation-demo/backend/agents.py, generated/library-reservation-demo/backend/context.py, generated/library-reservation-demo/backend/demo_data.py, generated/library-reservation-demo/backend/events.py, generated/library-reservation-demo/backend/main.py, generated/library-reservation-demo/backend/memory.py, generated/library-reservation-demo/backend/tools.py
+
+manifest provider boundary:
+status=passed
+runtime=mock
+mode=backend
+openaiImportAttempted=false
+openaiCalls=false
+mockProviderBoundary.allowed=true
+mockProviderBoundary.findings=[]
+
+literal provider/import scan note:
+11: from agents import run_mock_agent_turn
+The only generated runtime line matching /from agents import/ imports local generated/library-reservation-demo/backend/agents.py symbol run_mock_agent_turn, not OpenAI Agents SDK symbols. No openai import/call is present.
+
+negative overfit fixture under evidence:
+negative.allowed=false
+negative.findings=[{"file":".omo/evidence/any-agent-system-builder/verify-task-7-provider-negative/backend/main.py","line":1,"kind":"python-agents-sdk-import","match":"from agents import Agent, Runner, SQLiteSession, RunContextWrapper, input_guardrail, GuardrailFunctionOutput"},{"file":".omo/evidence/any-agent-system-builder/verify-task-7-provider-negative/backend/main.py","line":2,"kind":"python-openai-import","match":"from openai import OpenAI"},{"file":".omo/evidence/any-agent-system-builder/verify-task-7-provider-negative/backend/main.py","line":3,"kind":"python-openai-call","match":"client = OpenAI()"},{"file":".omo/evidence/any-agent-system-builder/verify-task-7-provider-negative/backend/openai-client.mjs","line":1,"kind":"js-openai-import","match":"import OpenAI from \"openai\";"},{"file":".omo/evidence/any-agent-system-builder/verify-task-7-provider-negative/backend/openai-client.mjs","line":2,"kind":"js-openai-call","match":"const client = new OpenAI();"}]
+
+result=PASS

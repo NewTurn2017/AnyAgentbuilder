@@ -1,0 +1,3 @@
+removed=.omo/evidence/any-agent-system-builder/task-4-wrong-method-fixture
+exists_after_cleanup=no
+date=2026-07-01 20:30:38 KST

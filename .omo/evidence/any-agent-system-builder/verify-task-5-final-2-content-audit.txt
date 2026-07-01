@@ -1,0 +1,94 @@
+date=2026-07-01T12:34:38Z
+
+SCENARIO: generated library file inventory
+COMMAND: find generated/library-reservation-demo -maxdepth 3 -type f | sort
+generated/library-reservation-demo/README.md
+generated/library-reservation-demo/backend/agents.py
+generated/library-reservation-demo/backend/context.py
+generated/library-reservation-demo/backend/demo_data.py
+generated/library-reservation-demo/backend/events.py
+generated/library-reservation-demo/backend/main.py
+generated/library-reservation-demo/backend/memory.py
+generated/library-reservation-demo/backend/requirements.txt
+generated/library-reservation-demo/backend/tools.py
+generated/library-reservation-demo/frontend/index.html
+generated/library-reservation-demo/frontend/package.json
+generated/library-reservation-demo/frontend/src/App.jsx
+generated/library-reservation-demo/frontend/src/main.jsx
+generated/library-reservation-demo/frontend/src/styles.css
+generated/library-reservation-demo/frontend/vite.config.js
+
+SCENARIO: exact endpoint method/path declarations
+COMMAND: rg -n '^@app\.(get|post)\("/(health|state/bootstrap|state|state/stream|chat)"' generated/library-reservation-demo/backend/main.py
+35:@app.get("/health")
+40:@app.get("/state/bootstrap")
+45:@app.get("/state")
+51:@app.get("/state/stream")
+73:@app.post("/chat")
+@app.get("/health")
+endpoint_check=PASS @app.get("/health")
+@app.get("/state/bootstrap")
+endpoint_check=PASS @app.get("/state/bootstrap")
+@app.get("/state")
+endpoint_check=PASS @app.get("/state")
+@app.get("/state/stream")
+endpoint_check=PASS @app.get("/state/stream")
+@app.post("/chat")
+endpoint_check=PASS @app.post("/chat")
+
+SCENARIO: public/internal field metadata
+COMMAND: node parse context.py and compare exact library fields
+PUBLIC_FIELD_NAMES=["patron_display_name","reservation_id","resource_label","time_window","reservation_status","loan_titles","policy_summary"]
+INTERNAL_FIELD_NAMES=["member_id","internal_notes","policy_overrides","raw_hold_queue","staff_token","inventory_cost"]
+node_exit=0
+field_metadata=PASS exact library public/internal lists
+
+SCENARIO: public fields appear in frontend labels
+COMMAND: rg public field names in generated frontend App.jsx
+5:  "patron_display_name": "이용자",
+frontend_public_field=PASS patron_display_name
+6:  "reservation_id": "예약 번호",
+frontend_public_field=PASS reservation_id
+7:  "resource_label": "리소스",
+frontend_public_field=PASS resource_label
+8:  "time_window": "시간",
+frontend_public_field=PASS time_window
+9:  "reservation_status": "상태",
+frontend_public_field=PASS reservation_status
+10:  "loan_titles": "대출 도서",
+frontend_public_field=PASS loan_titles
+11:  "policy_summary": "정책 요약"
+frontend_public_field=PASS policy_summary
+
+SCENARIO: internal fields absent from public/UI surfaces
+COMMAND: rg -n 'member_id|internal_notes|policy_overrides|raw_hold_queue|staff_token|inventory_cost' public serving sources
+internal_public_surface=PASS no internal field markers in public/UI surface files
+
+SCENARIO: no OpenAI imports/calls in mock source path
+COMMAND: rg -n 'from\s+openai|import\s+openai|OpenAI\s*\(|Runner\s*\.|Agent\s*\(' generated/library-reservation-demo/backend generated/library-reservation-demo/frontend
+openai_mock_boundary=PASS no OpenAI imports/calls in backend/frontend mock path
+COMMAND: rg -n 'openai|OpenAI|Agents SDK|AGENT_RUNTIME=openai' generated/library-reservation-demo
+generated/library-reservation-demo/README.md:30:Mock mode is the default local path. It does not import or call OpenAI. A real Agents SDK extension should be added behind `AGENT_RUNTIME=openai` with typed context, guarded tools, and session storage.
+generated/library-reservation-demo/backend/main.py:78:        raise HTTPException(status_code=501, detail="Set AGENT_RUNTIME=mock or add the documented openai runtime extension.")
+
+SCENARIO: README run commands and mock notes
+COMMAND: grep required README terms
+python3 -m venv .venv
+readme_check=PASS python3 -m venv
+pip install -r requirements.txt
+readme_check=PASS pip install -r requirements.txt
+AGENT_RUNTIME=mock uvicorn main:app --reload --port 8000
+readme_check=PASS AGENT_RUNTIME=mock uvicorn
+npm install
+readme_check=PASS npm install
+VITE_API_BASE=http://127.0.0.1:8000 npm run dev
+readme_check=PASS VITE_API_BASE=http://127.0.0.1:8000 npm run dev
+curl -i http://127.0.0.1:8000/health
+curl -i -X POST http://127.0.0.1:8000/chat -H 'content-type: application/json' -d '{"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}'
+readme_check=PASS curl -i
+Mock mode is the default local path. It does not import or call OpenAI. A real Agents SDK extension should be added behind `AGENT_RUNTIME=openai` with typed context, guarded tools, and session storage.
+readme_check=PASS does not import or call OpenAI
+Mock mode is the default local path. It does not import or call OpenAI. A real Agents SDK extension should be added behind `AGENT_RUNTIME=openai` with typed context, guarded tools, and session storage.
+readme_check=PASS AGENT_RUNTIME=openai
+
+failures=0

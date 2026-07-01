@@ -1,0 +1,3 @@
+ERROR: missing generated app files: generated backend directory: generated/library-reservation-demo/backend; generated backend main.py: generated/library-reservation-demo/backend/main.py; generated backend requirements.txt: generated/library-reservation-demo/backend/requirements.txt
+
+EXIT_CODE=1

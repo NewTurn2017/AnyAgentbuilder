@@ -1,0 +1,50 @@
+Browser preflight verification, final-3
+
+$ playwright dependency probe
+playwright-missing ERR_MODULE_NOT_FOUND
+
+$ pre: frontend dependency artifacts
+
+$ pre: task-related process snapshot
+
+$ OPENAI_API_KEY=fake AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder/verify-task-6-final-3-browser-preflight-artifacts
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-6-final-3-browser-preflight-artifacts/run-manifest.json
+cleanup: ok
+ERROR: browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA
+exit=1
+
+$ manifest summary
+{
+  "status": "failed-browser-dependency",
+  "error": "browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA",
+  "mode": "browser",
+  "dryRun": false,
+  "backendPid": null,
+  "frontendPid": null,
+  "generatedAppChecked": false,
+  "providerCredentialsScrubbed": [
+    "OPENAI_API_KEY"
+  ],
+  "cleanupOk": true,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+
+$ cleanup receipts from preflight manifest ports
+frontend: not-started
+backend: not-started
+backend pid=null alive=false
+frontend pid=null alive=false
+$ lsof -nP -iTCP:57465 -sTCP:LISTEN
+backend port=57465 listener=no
+$ lsof -nP -iTCP:57466 -sTCP:LISTEN
+frontend port=57466 listener=no
+
+$ post: frontend dependency artifacts
+
+$ post: task-related process snapshot

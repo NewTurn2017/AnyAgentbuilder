@@ -1,0 +1,43 @@
+temp output paths
+ok absent: generated/verify-task-5-bad
+ok absent: generated/verify-task-5-bad-json
+ok absent: generated/verify-task-5-missing-spec
+ok absent: generated/verify-task-5-pcbang-smoke
+ok absent: generated/bad
+ok absent: generated/bad-json
+ok absent: generated/bad-spec
+ok absent: generated/task-5-pcbang-smoke
+
+pycache scan
+
+generated demo process scan
+
+common port listener context
+COMMAND   PID  USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    29860 genie   16u  IPv6 0x6fb7a865c0801f33      0t0  TCP [::1]:5173 (LISTEN)
+
+5173 process details if present
+  PID  PPID COMMAND
+29860 29830 node /Users/genie/test/project/node_modules/.bin/vite
+COMMAND   PID  USER   FD     TYPE             DEVICE  SIZE/OFF                NODE NAME
+node    29860 genie  cwd      DIR               1,15       384           156255424 /Users/genie/test/project
+node    29860 genie  txt      REG               1,15 112989184            47079149 /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node
+node    29860 genie  txt      REG               1,15   2374000 1152921500312573277 /usr/lib/dyld
+node    29860 genie  txt      REG               1,15     73064           153022196 /Library/Preferences/Logging/.plist-cache.bJqOodTP
+node    29860 genie  txt      REG               1,15  17221888           156256953 /Users/genie/test/project/node_modules/@rolldown/binding-darwin-arm64/rolldown-binding.darwin-arm64.node
+node    29860 genie    0r     CHR                3,2       0t0                 336 /dev/null
+node    29860 genie    1w     REG               1,15       318           156263380 /private/tmp/vite-dev.log
+node    29860 genie    2w     REG               1,15       318           156263380 /private/tmp/vite-dev.log
+node    29860 genie    3u  KQUEUE                                                  count=0, state=0x8
+node    29860 genie    4     PIPE 0xb8c957ac832f89a5     16384                     ->0xac927ceac44c327
+node    29860 genie    5     PIPE  0xac927ceac44c327     16384                     ->0xb8c957ac832f89a5
+node    29860 genie    6r     DIR               1,15       704                   2 /
+node    29860 genie    7u  KQUEUE                                                  count=0, state=0xa
+node    29860 genie    8r     DIR               1,15       704                   2 /
+node    29860 genie    9u  KQUEUE                                                  count=0, state=0xa
+node    29860 genie   10r     DIR               1,15       704                   2 /
+node    29860 genie   11     PIPE 0xca0f3370a03953df     16384                     ->0xb10bd881f921deeb
+node    29860 genie   12     PIPE 0xb10bd881f921deeb     16384                     ->0xca0f3370a03953df
+node    29860 genie   13r     CHR                3,2       0t0                 336 /dev/null
+
+cleanup_conclusion=no generated demo server process found; any 5173 listener shown above is outside this repo if command/cwd points outside AnyAgentbuilder

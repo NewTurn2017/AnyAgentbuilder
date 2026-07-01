@@ -1,0 +1,4 @@
+$ lsof -nP -iTCP:56763 -sTCP:LISTEN
+backend port=56763 listener=no
+$ lsof -nP -iTCP:56764 -sTCP:LISTEN
+frontend port=56764 listener=no

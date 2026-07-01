@@ -1,0 +1,30 @@
+PWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+DATE=2026-07-01 20:24:31 KST
+VALIDATOR_SHA256=f20caad9f00bd15516cfc8a7ec1299bd4b7783200175e46628e6af8535f660ac
+
+TMP_ROOT=.omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1
+
+## missing check-skill path
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/does-not-exist
+ERROR: missing skill directory: .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/does-not-exist
+EXIT_STATUS=1
+
+## missing generated app path
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/no-generated-app
+ERROR: missing generated app directory: .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/no-generated-app
+EXIT_STATUS=1
+
+## comment and string literal route markers
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/comment-literal-routes
+ERROR: generated backend main.py has only placeholder content
+EXIT_STATUS=1
+
+## literal-only route constants without decorators
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/literal-route-markers
+ERROR: generated backend missing FastAPI route declarations: /health, /state/bootstrap, /state, /state/stream, /chat
+EXIT_STATUS=1
+
+## literal-only backend module token stuffing
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated .omo/evidence/any-agent-system-builder/verify-task-4-final-2-fixtures.FGWJr1/backend-tokenstuff
+ERROR: generated backend/context.py must contain executable data/logic beyond literal marker strings
+EXIT_STATUS=1

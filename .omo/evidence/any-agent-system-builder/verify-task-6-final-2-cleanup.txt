@@ -1,0 +1,31 @@
+Cleanup verification against verify-task-6-final-2-mock-env-manifest.json
+{
+  "status": "passed",
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  },
+  "backendPid": 94627,
+  "frontendPid": null,
+  "backendPort": 54487,
+  "frontendPort": 54488
+}
+
+$ kill -0 manifest pids
+backend pid=94627 alive=false
+frontend pid=null alive=false
+
+$ lsof manifest ports
+## backend port 54487
+## frontend port 54488
+
+$ harness cleanup receipts
+frontend: not-started
+backend: pid 94627 alive=false
+backend pid=94627 alive=false
+frontend pid=null alive=false
+$ lsof -nP -iTCP:54487 -sTCP:LISTEN
+backend port=54487 listener=no
+$ lsof -nP -iTCP:54488 -sTCP:LISTEN
+frontend port=54488 listener=no

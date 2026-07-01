@@ -1,0 +1,39 @@
+SOURCE_AUDIT Todo 4 final gate after endpoint method validation fix
+Wed Jul  1 20:36:07 KST 2026
+
+[malformed_input_missing_path]
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated
+ERROR: --check-generated requires a value
+EXIT_STATUS=1
+
+[missing_generated_path]
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/anyagentbuilder-final3-does-not-exist
+ERROR: missing generated app directory: /tmp/anyagentbuilder-final3-does-not-exist
+EXIT_STATUS=1
+
+[syntax]
+COMMAND: node --check agentic-system-builder/scripts/validate-domain-spec.mjs
+EXIT_STATUS=0
+
+[source_freshness]
+COMMAND: shasum -a 256 agentic-system-builder/scripts/validate-domain-spec.mjs
+9a9bba004493e78d2f479e8063f22119968d92de5947c100622f559753db3a51  agentic-system-builder/scripts/validate-domain-spec.mjs
+COMMAND: stat -f source metadata
+SOURCE_PATH=agentic-system-builder/scripts/validate-domain-spec.mjs
+SOURCE_MTIME=2026-07-01 20:30:11 KST
+SOURCE_SIZE=30391 bytes
+COMMAND: wc -l and pure LOC
+     862 agentic-system-builder/scripts/validate-domain-spec.mjs
+PURE_LOC=780
+
+[method_pair_source_lines]
+COMMAND: rg -n "ENDPOINT_CONTRACTS|assertFastApiRoutes|method/path mismatch|ENDPOINT_TERMS" agentic-system-builder/scripts/validate-domain-spec.mjs
+50:const ENDPOINT_CONTRACTS = [
+304:function assertFastApiRoutes(text, endpoints, label) {
+341:      const suffix = hasWrongMethodDecorator || hasWrongMethodAddApiRoute ? " (method/path mismatch)" : "";
+351:    fail(`${label} missing FastAPI route declarations or method/path mismatch: ${missing.join(", ")}`);
+749:  assertFastApiRoutes(mainWithoutComments, ENDPOINT_CONTRACTS, "generated backend");
+
+[stale_state_check]
+STALE_STATE_RESULT=PASS no old path-only ENDPOINT_TERMS symbol found
+METHOD_PAIR_RESULT=PASS required GET/POST endpoint contract literals present

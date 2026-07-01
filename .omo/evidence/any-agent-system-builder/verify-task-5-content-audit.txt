@@ -1,0 +1,65 @@
+required file audit
+OK: README.md
+OK: backend/main.py
+OK: backend/agents.py
+OK: backend/tools.py
+OK: backend/context.py
+OK: backend/demo_data.py
+OK: backend/memory.py
+OK: backend/events.py
+OK: backend/requirements.txt
+OK: frontend/index.html
+OK: frontend/package.json
+OK: frontend/vite.config.js
+OK: frontend/src/App.jsx
+OK: frontend/src/main.jsx
+OK: frontend/src/styles.css
+
+README command audit
+OK: python3 -m venv .venv
+OK: . .venv/bin/activate
+OK: pip install -r requirements.txt
+OK: AGENT_RUNTIME=mock uvicorn main:app --reload --port 8000
+OK: npm install
+OK: VITE_API_BASE=http://127.0.0.1:8000 npm run dev
+OK: curl -i http://127.0.0.1:8000/health
+OK: curl -i -X POST http://127.0.0.1:8000/chat
+
+public/internal field audit
+OK: PUBLIC_FIELD_NAMES exact ["patron_display_name","reservation_id","resource_label","time_window","reservation_status","loan_titles","policy_summary"]
+OK: INTERNAL_FIELD_NAMES exact ["member_id","internal_notes","policy_overrides","raw_hold_queue","staff_token","inventory_cost"]
+OK: public field reachable: patron_display_name
+OK: public field reachable: reservation_id
+OK: public field reachable: resource_label
+OK: public field reachable: time_window
+OK: public field reachable: reservation_status
+OK: public field reachable: loan_titles
+OK: public field reachable: policy_summary
+OK: frontend omits internal field: member_id
+OK: public endpoint/UI/readme surfaces omit internal field: member_id
+OK: frontend omits internal field: internal_notes
+OK: public endpoint/UI/readme surfaces omit internal field: internal_notes
+OK: frontend omits internal field: policy_overrides
+OK: public endpoint/UI/readme surfaces omit internal field: policy_overrides
+OK: frontend omits internal field: raw_hold_queue
+OK: public endpoint/UI/readme surfaces omit internal field: raw_hold_queue
+OK: frontend omits internal field: staff_token
+OK: public endpoint/UI/readme surfaces omit internal field: staff_token
+OK: frontend omits internal field: inventory_cost
+OK: public endpoint/UI/readme surfaces omit internal field: inventory_cost
+
+slop/domain residue audit
+FAIL: no unused library marker constant
+FAIL: no validator-only literal marker string
+
+pinned dependency audit
+FAIL: frontend dependency pinned: @vitejs/plugin-react@latest
+FAIL: frontend dependency pinned: vite@latest
+FAIL: frontend dependency pinned: react@latest
+FAIL: frontend dependency pinned: react-dom@latest
+OK: backend fastapi pinned with ==
+OK: backend uvicorn pinned with ==
+
+failures=6
+
+status=1

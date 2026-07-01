@@ -1,0 +1,47 @@
+SCENARIO=F2 backend typed public API/state models
+CWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+
+## python compile
+COMMAND=python3 -m compileall -q generated/library-reservation-demo/backend
+EXIT=0
+
+## backend-only QA
+COMMAND=env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --backend-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: no provider credentials present
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend runtime scan passed; providerImportAttempted=false; providerCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+running backend curl checks
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+EXIT=0
+
+## backend import in harness venv
+COMMAND=(cd generated/library-reservation-demo/backend && ../.venv/bin/python -c "import main; print(main.health().model_dump())")
+{'status': 'ok', 'runtime': 'mock', 'domain_key': 'library', 'active_stream_listeners': 0}
+EXIT=0
+
+## typed model source audit
+COMMAND=rg -n "dict\[str, Any\]|typing import Any|\bAny\b|-> dict\b|: dict\b" agentic-system-builder/templates/backend generated/library-reservation-demo/backend -g "*.py"
+generated/library-reservation-demo/backend/context.py:24:def only_fields(seed: Mapping[str, JsonValue], fields: list[str]) -> dict[str, JsonValue]:
+generated/library-reservation-demo/backend/events.py:12:        self.state: dict[str, list[asyncio.Queue[EventModel]]] = {}
+generated/library-reservation-demo/backend/memory.py:9:        self.memory: dict[str, ConversationStateModel] = {}
+RG_EXIT=0
+NOTE=remaining dict hits are typed concrete/JsonValue dictionaries, not broad dict[str, Any] public API boundaries.
+
+## response model declarations
+generated/library-reservation-demo/backend/main.py:29:@app.get("/health", response_model=HealthResponse)
+generated/library-reservation-demo/backend/main.py:39:@app.get("/state/bootstrap", response_model=StateResponse)
+generated/library-reservation-demo/backend/main.py:44:@app.get("/state", response_model=StateResponse)
+generated/library-reservation-demo/backend/main.py:72:@app.post("/chat", response_model=ChatResponse)
+generated/library-reservation-demo/backend/models.py:11:class PublicContextModel(BaseModel):
+generated/library-reservation-demo/backend/models.py:34:class EventModel(BaseModel):
+generated/library-reservation-demo/backend/models.py:45:class GuardrailModel(BaseModel):
+generated/library-reservation-demo/backend/models.py:75:class StateResponse(BaseModel):
+generated/library-reservation-demo/backend/models.py:87:class ChatRequest(BaseModel):
+generated/library-reservation-demo/backend/models.py:92:class ChatResponse(BaseModel):

@@ -1,0 +1,12 @@
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+running validator: skill structure
+running validator: examples
+scaffolding generated library demo from current templates
+running validator: generated app contract
+mock provider boundary: generated backend runtime scan passed; providerImportAttempted=false; providerCalls=false
+installing backend dependency environment locally: generated/library-reservation-demo/.venv
+installing backend dependencies locally from backend/requirements.txt
+running backend curl checks
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok

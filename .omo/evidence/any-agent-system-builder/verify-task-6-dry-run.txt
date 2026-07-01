@@ -1,0 +1,50 @@
+$ env -u OPENAI_API_KEY AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder --dry-run
+mock mode active: no provider credentials present
+mock mode active: harness will not import OpenAI or call provider APIs
+DRY RUN: generated-demo QA harness lifecycle plan
+scenario=library
+mode=full
+backendPort=54348
+frontendPort=54349
+planned commands:
+- validateSkill: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+- validateExamples: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+- scaffoldLibrary: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out generated/library-reservation-demo --force
+- validateGenerated: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) /Users/genie/.local/share/fnm/node-versions/v22.22.2/installation/bin/node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+- backendVenv: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo) python3 -m venv .venv
+- backendInstall: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo) /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m pip install --disable-pip-version-check -r backend/requirements.txt
+- backendStart: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/backend) /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 54348
+- frontendInstall: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend) npm install
+- frontendStart: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder/generated/library-reservation-demo/frontend) npm run dev -- --port 54349
+- curlHealth: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i http://127.0.0.1:54348/health
+- curlChat: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:54348/chat -H content-type: application/json -d {"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}
+- curlGuardrail: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:54348/chat -H content-type: application/json -d {"thread_id":"demo","message":"무관한 주식 추천해줘"}
+- curlMalformed: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -X POST http://127.0.0.1:54348/chat -H content-type: application/json --data-binary @-
+- curlSse: (cwd /Users/genie/dev/tools/skills/AnyAgentbuilder) curl -i -N http://127.0.0.1:54348/state/stream?thread_id=demo --max-time 5
+cleanup handlers:
+- SIGINT/SIGTERM process-group termination
+- PID liveness receipt
+- lsof listener receipt
+DRY RUN: no servers started, no dependency installs performed
+EXIT_STATUS=0
+--- dry-run manifest summary ---
+{
+  "status": "dry-run",
+  "dryRun": true,
+  "mode": "full",
+  "runtime": "mock",
+  "backendPort": 54348,
+  "frontendPort": 54349,
+  "backendPid": null,
+  "frontendPid": null,
+  "cleanupHandlers": [
+    "SIGINT/SIGTERM process-group termination",
+    "PID liveness receipt",
+    "lsof listener receipt"
+  ],
+  "openaiImportAttempted": false,
+  "openaiCalls": false
+}
+--- lsof planned ports after dry-run ---
+PORT=54348
+PORT=54349

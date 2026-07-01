@@ -1,0 +1,66 @@
+## Current run-manifest summary
+{
+  "status": "passed",
+  "mode": "backend",
+  "backendPid": 71152,
+  "frontendPid": null,
+  "backendPort": 63635,
+  "frontendPort": 63636,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+
+## Copied mock-env manifest summary
+{
+  "status": "passed",
+  "mode": "backend",
+  "backendPid": 71152,
+  "frontendPid": null,
+  "backendPort": 63635,
+  "frontendPort": 63636,
+  "cleanup": {
+    "pidReceipt": "task-6-cleanup-pids.txt",
+    "portReceipt": "task-6-cleanup-ports.txt",
+    "ok": true
+  }
+}
+
+## ps recorded PIDs
+  PID  PPID STAT COMMAND
+
+## lsof recorded ports
+$ lsof -nP -iTCP:63635 -sTCP:LISTEN
+backend port=63635 listener=no
+$ lsof -nP -iTCP:63636 -sTCP:LISTEN
+frontend port=63636 listener=no
+
+## exact generated-demo process command scan
+no generated-demo command/path/port processes found
+
+## open files under generated demo tree
+
+## generic dev process CWD check (context only)
+29830     1 npm run dev   
+node    29830 genie  cwd    DIR   1,15      384 156255424 /Users/genie/test/project
+29860 29830 node /Users/genie/test/project/node_modules/.bin/vite
+node    29860 genie  cwd    DIR   1,15      384 156255424 /Users/genie/test/project
+77850     1 npm run dev   
+node    77850 genie  cwd    DIR   1,15     1664 154849553 /Users/genie/dev/active/erpsystem
+
+## harness cleanup receipts
+frontend: not-started
+backend: pid 71152 alive=false
+backend pid=71152 alive=false
+frontend pid=null alive=false
+$ lsof -nP -iTCP:63635 -sTCP:LISTEN
+backend port=63635 listener=no
+$ lsof -nP -iTCP:63636 -sTCP:LISTEN
+frontend port=63636 listener=no
+
+## generated frontend install residue
+absent: generated/library-reservation-demo/frontend/node_modules
+absent: generated/library-reservation-demo/frontend/package-lock.json
+absent: generated/library-reservation-demo/frontend/npm-shrinkwrap.json

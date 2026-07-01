@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "active_work_id": null,
+  "works": {
+    "any-agent-system-builder": {
+      "work_id": "any-agent-system-builder",
+      "active_plan": ".omo/plans/any-agent-system-builder.md",
+      "plan_name": "any-agent-system-builder",
+      "session_ids": [
+        "codex:any-agent-system-builder-ulw-20260701"
+      ],
+      "status": "done",
+      "worktree_path": null
+    }
+  }
+}

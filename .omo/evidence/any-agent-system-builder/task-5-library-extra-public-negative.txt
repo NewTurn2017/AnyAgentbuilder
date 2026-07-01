@@ -1,0 +1,6 @@
+SCENARIO=library generated app with extra PUBLIC_FIELD_NAMES vip_code
+TEMP_DIR=/tmp/aab-task5-extra-public.bWkxBi
+INVOCATION=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-extra-public.bWkxBi/library
+ERROR: generated library backend has unexpected extra public context fields: vip_code
+EXIT_STATUS=1
+RESULT=PASS validator rejected extra PUBLIC_FIELD_NAMES

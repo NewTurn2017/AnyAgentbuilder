@@ -1,0 +1,4 @@
+$ node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder --require-domain library
+ERROR: --require-domain can only be used with --validate-example <file>
+
+exit=1

@@ -1,0 +1,39 @@
+HTTP artifact real-response audit
+===== task-6-health.txt
+bytes=574
+4:HTTP/1.1 200 OK
+8:content-type: application/json
+10:{"status":"ok","runtime":"mock","domain_key":"library"}
+===== task-6-chat.txt
+bytes=1629
+1:$ curl -i -X POST http://127.0.0.1:54481/chat -H content-type: application/json -d {"thread_id":"demo","message":"도서관 스터디룸 예약하고 싶어요"}
+4:HTTP/1.1 200 OK
+8:content-type: application/json
+10:{"assistant_message":"예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다.","active_agent":"room_reservation_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"handoff.started","detail":"triage_agent -> room_reservation_agent","public_payload":{"active_agent":"room_reservation_agent"}},{"type":"tool.called","detail":"availability_tool","public_payload":{"count":3}},{"type":"state.delta","detail":"public context refreshed","public_payload":{"policy_summary":"회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}],"status":"ok","guardrail":null}
+===== task-6-guardrail.txt
+bytes=1467
+1:$ curl -i -X POST http://127.0.0.1:54481/chat -H content-type: application/json -d {"thread_id":"demo","message":"무관한 주식 추천해줘"}
+4:HTTP/1.1 200 OK
+8:content-type: application/json
+10:{"assistant_message":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","active_agent":"triage_agent","public_context":{"patron_display_name":"김서연","reservation_id":"LIB-RSV-1042","resource_label":"2층 스터디룸 A","time_window":"14:00-16:00","reservation_status":"held","loan_titles":["도시와 사람","자료 구조 입문"],"policy_summary":"스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."},"events":[{"type":"guardrail.blocked","detail":"이 데스크는 도서관 공간 예약 업무만 처리합니다.","public_payload":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}],"status":"blocked","guardrail":{"name":"relevance_guardrail","reason":"이 데스크는 도서관 공간 예약 업무만 처리합니다."}}
+===== task-6-422.txt
+bytes=721
+1:$ curl -i -X POST http://127.0.0.1:54481/chat -H content-type: application/json --data-binary @-
+4:HTTP/1.1 422 Unprocessable Content
+8:content-type: application/json
+10:{"detail":[{"type":"json_invalid","loc":["body",30],"msg":"JSON decode error","input":{},"ctx":{"error":"Expecting value"}}]}
+===== task-6-sse.txt
+bytes=3490
+4:HTTP/1.1 200 OK
+7:content-type: text/event-stream; charset=utf-8
+10:event: state.snapshot
+11:data: {"domain_key": "library", "brand_name": "도서관 예약 도우미", "public_context": {"patron_display_name": "김서연", "reservation_id": "LIB-RSV-1042", "resource_label": "2층 스터디룸 A", "time_window": "14:00-16:00", "reservation_status": "held", "loan_titles": ["도시와 사람", "자료 구조 입문"], "policy_summary": "스터디룸은 1회 2시간, 하루 1회까지 예약할 수 있습니다."}, "resources": [{"label": "2층 스터디룸 A", "status": "available", "detail": "4명, 화이트보드"}, {"label": "3층 미디어룸", "status": "available", "detail": "6명, 모니터"}, {"label": "1층 열람실 부스", "status": "waitlisted", "detail": "대기 1명"}], "agents": ["triage_agent", "room_reservation_agent", "lending_agent", "policy_agent", "escalation_agent"], "handoffs": ["triage_agent -> room_reservation_agent", "room_reservation_agent -> policy_agent"], "guardrails": ["relevance_guardrail", "privacy_guardrail", "policy_guardrail"], "messages": [{"role": "user", "content": "도서관 스터디룸 예약하고 싶어요"}, {"role": "assistant", "content": "예약 가능한 공간을 확인했어요. 2층 스터디룸 A를 오늘 오후 시간대로 임시 확보했습니다."}, {"role": "user", "content": "무관한 주식 추천해줘"}, {"role": "assistant", "content": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}], "events": [{"type": "handoff.started", "detail": "triage_agent -> room_reservation_agent", "public_payload": {"active_agent": "room_reservation_agent"}}, {"type": "tool.called", "detail": "availability_tool", "public_payload": {"count": 3}}, {"type": "state.delta", "detail": "public context refreshed", "public_payload": {"policy_summary": "회원 표시명과 예약 상태만 공개하고 내부 회원 번호와 대기열은 노출하지 않습니다."}}, {"type": "guardrail.blocked", "detail": "이 데스크는 도서관 공간 예약 업무만 처리합니다.", "public_payload": {"name": "relevance_guardrail", "reason": "이 데스크는 도서관 공간 예약 업무만 처리합니다."}}]}
+13:event: state.delta
+14:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+16:event: state.delta
+17:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+19:event: state.delta
+20:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+22:event: state.delta
+23:data: {"type": "heartbeat", "detail": "stream alive", "public_payload": {}}
+--- negative marker scan in HTTP artifacts ---

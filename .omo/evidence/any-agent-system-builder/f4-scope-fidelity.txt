@@ -1,0 +1,90 @@
+recommendation: APPROVE
+
+originalIntent:
+- Build a general reusable agent system builder skill for operational chat systems.
+- The airline guide at /Users/genie/Downloads/openai-cs-agents-demo-guide.md is a reference pattern source, not the target product.
+- The expected reusable scope includes chat UI, backend orchestration, shared context, handoffs, guardrails, widgets, and mock-proofed examples for domains such as airline service, library reservation/lending, PC bang seat booking, and generic reservations.
+- Scope boundaries: no real production APIs, auth, payments, provider dashboards, or deployment; local proof must work in mock mode; real OpenAI Agents SDK wiring may be documented only as an opt-in future extension.
+
+desiredOutcome:
+- A skill package at agentic-system-builder/ with concise SKILL.md, one-level references, reusable methodology, domain examples, deterministic validation/scaffold/QA scripts, and a generated library reservation demo.
+- The generated demo must include a backend, chat-first UI, Korean user-facing example surface, public/internal context separation, mock mode without OPENAI_API_KEY, and documented future SDK extension.
+
+userOutcomeReview:
+- APPROVE. The final artifact matches the requested scope and is not airline-only.
+- agentic-system-builder/SKILL.md is 61 lines, routes to REFERENCE.md and EXAMPLES.md only, and instructs agents to derive operational service systems with Actor, Resource, Reservation, Availability, Policy, Action, Tool, Agent, Handoff, Guardrail, PublicContext, Widget, and Event.
+- agentic-system-builder/REFERENCE.md generalizes the airline guide into reusable methodology for reservation desks, lending workflows, seat allocation, appointments, and similar service flows. It explicitly says not to copy the airline demo source or roster wholesale.
+- agentic-system-builder/EXAMPLES.md includes four domain packs: airline, library, pcbang, and generic.
+- agentic-system-builder/templates/domains.json includes built-in scaffold domains for airline, library, pcbang, and generic, so the scaffold is not hardcoded to airline.
+- generated/library-reservation-demo/backend/main.py exposes GET /health, GET /state/bootstrap, GET /state, GET /state/stream, and POST /chat.
+- generated/library-reservation-demo/frontend/src/App.jsx is a Korean chat-first UI with chat input/send controls, agent activity, public context, domain widget, and guardrail banner.
+- Mock-provider boundary scan passed: scanMockProviderBoundary("generated/library-reservation-demo/backend") returned allowed=true, findings=[] across 7 runtime files.
+- generated/library-reservation-demo/README.md documents mock mode as default, says it does not import or call OpenAI, and describes real Agents SDK wiring only behind AGENT_RUNTIME=openai.
+- Static validators passed without starting servers:
+  node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder
+  node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic
+  node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo
+- Existing runtime evidence from verify-task-9-final-command.txt records the full mock QA command exited 0 and ran validation, generated-app contract checks, provider-boundary scan, backend curl checks, browser QA, screenshots, and cleanup.
+
+scopeBoundaryConfirmation:
+- No production auth/payment/deployment implementation found in final generated library demo or skill docs. Payment appears only as a PC bang internal privacy example, not a live payment integration.
+- No real external library, PC bang, airline, OpenAI, or provider API call is required for local proof.
+- Mock mode is enforced by the QA harness and provider env scrubber. Provider scan rejects OpenAI imports/calls and accepted the current generated backend.
+- thread_id is documented as a mock conversation key, not authentication, in SKILL.md and REFERENCE.md.
+- Real Agents SDK concepts are documented in REFERENCE.md and README as opt-in future wiring behind AGENT_RUNTIME=openai, not claimed as locally live-verified.
+
+airlineGuideComparison:
+- The airline guide describes FastAPI + React, shared context, handoffs, guardrails, SSE observability, public_context filtering, and an airline-specific roster/tools.
+- The final REFERENCE.md cites the guide as inspiration and extracts the portable pattern: shared context, triage/specialist agents, handoff graph, guardrail matrix, UI surface mapping, backend contract, QA recipe, and public/internal state separation.
+- The final artifact does not wholesale-copy airline code. Airline-specific tool names appear only in the airline example domain pack, while production/generated code is the library reservation demo and generic templates.
+
+removeAiSlopsAndProgrammingPass:
+- Loaded and applied omo:remove-ai-slops and omo:programming before decision.
+- Direct F4 pass found no deletion-only tests, requested-removal-only tests, tautological proof, implementation-mirroring proof, file-existence-only proof, or airline-code copy being accepted as sufficient.
+- Static validators assert behavior-relevant contracts: one-level skill refs, four required domains, generated FastAPI method/path contracts, frontend dynamic chat/state regions, exact library public fields, internal-field non-leakage, pinned frontend dependencies, mock/provider boundary, and no placeholder-only generated app.
+- The oversized validator is 993 pure LOC but has an explicit first-five-line SIZE_OK portability waiver: "single-file, built-in-only validator kept portable for copied skill bundles." Other measured source files are below the 250 pure LOC defect threshold; scaffold-agent-system.mjs is 230 pure LOC.
+- Existing task-9-code-review.md explicitly records a skill-perspective check using omo:remove-ai-slops and omo:programming, reports no CRITICAL/HIGH findings, and discloses non-blocking WATCH debt for the portable validator and broad Any usage in the generated Python mock starter. The direct F4 pass did not find that debt to undermine scope fidelity.
+
+checkedArtifactPaths:
+- /Users/genie/Downloads/openai-cs-agents-demo-guide.md
+- /Users/genie/.codex/skills/.system/skill-creator/SKILL.md
+- /Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/remove-ai-slops/SKILL.md
+- /Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/SKILL.md
+- /Users/genie/.codex/plugins/cache/sisyphuslabs/omo/4.15.0/skills/programming/references/typescript/README.md
+- .omo/plans/any-agent-system-builder.md
+- .omo/start-work/any-agent-system-builder-notepad.md
+- .omo/evidence/any-agent-system-builder/task-9-code-review.md
+- .omo/evidence/any-agent-system-builder/verify-task-9-final-gate-review.md
+- .omo/evidence/any-agent-system-builder/verify-task-9-final-command.txt
+- .omo/evidence/any-agent-system-builder/verify-task-9-regression.txt
+- .omo/evidence/any-agent-system-builder/verify-task-9-cleanup.txt
+- .omo/evidence/any-agent-system-builder/run-manifest.json
+- .omo/evidence/any-agent-system-builder/browser-library-demo.png
+- .omo/evidence/any-agent-system-builder/browser-guardrail-demo.png
+- package.json
+- agentic-system-builder/SKILL.md
+- agentic-system-builder/REFERENCE.md
+- agentic-system-builder/EXAMPLES.md
+- agentic-system-builder/templates/domains.json
+- agentic-system-builder/scripts/scaffold-agent-system.mjs
+- agentic-system-builder/scripts/validate-domain-spec.mjs
+- agentic-system-builder/scripts/qa-generated-demo.mjs
+- agentic-system-builder/scripts/qa-lib/provider-security.mjs
+- generated/library-reservation-demo/README.md
+- generated/library-reservation-demo/backend/main.py
+- generated/library-reservation-demo/backend/agents.py
+- generated/library-reservation-demo/backend/context.py
+- generated/library-reservation-demo/backend/demo_data.py
+- generated/library-reservation-demo/backend/events.py
+- generated/library-reservation-demo/backend/memory.py
+- generated/library-reservation-demo/backend/tools.py
+- generated/library-reservation-demo/frontend/src/App.jsx
+- generated/library-reservation-demo/frontend/src/styles.css
+
+exactEvidenceGaps:
+- No Git diff is available because /Users/genie/dev/tools/skills/AnyAgentbuilder is not a Git repository. This F4 review used live artifact files and recorded evidence instead.
+- verify-task-9-cleanup.txt references older PIDs/ports than the current run-manifest.json. I did not treat that stale cleanup file as current proof. I performed a live non-server check against current manifest values: backend PID 44152 and frontend PID 44830 were not alive; backend port 53571 and frontend port 53572 had no listeners.
+- I did not start servers for this review, per instruction. Runtime proof is from existing verify-task-9 evidence; my fresh checks were static validators, provider-boundary scan, file inspection, ps, and lsof.
+
+finalDecision:
+APPROVE

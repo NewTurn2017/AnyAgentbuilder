@@ -1,0 +1,150 @@
+F2 Final Code Quality Review 2 - any-agent-system-builder
+==========================================================
+
+codeQualityStatus: BLOCK
+recommendation: REQUEST_CHANGES
+reportPath: .omo/evidence/any-agent-system-builder/f2-code-quality-final-2.txt
+
+Scope Reviewed
+--------------
+- Current filesystem state under /Users/genie/dev/tools/skills/AnyAgentbuilder.
+- Current source:
+  - agentic-system-builder/scripts/scaffold-agent-system.mjs
+  - agentic-system-builder/scripts/validate-domain-spec.mjs
+  - agentic-system-builder/templates/backend/*.tmpl
+  - generated/library-reservation-demo/backend/*
+- Evidence inspected:
+  - .omo/evidence/any-agent-system-builder/f2-fix-scaffold-safety.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-summary.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-backend-types.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-validator-regression.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-final-command.txt
+  - .omo/evidence/any-agent-system-builder/f2-fix-cleanup.txt
+  - .omo/evidence/any-agent-system-builder/f2-code-quality-final.txt
+- Notepad consulted:
+  - .omo/start-work/any-agent-system-builder-notepad.md
+
+Repository Baseline
+-------------------
+- /Users/genie/dev/tools/skills/AnyAgentbuilder is not a Git repository, matching the project notepad. A full git diff/merge-base review was not possible.
+- Review is based on current source, current behavior probes in temporary copies, and the referenced evidence artifacts.
+- No source files were modified by this review. Temporary probes wrote only under system temp directories; the only workspace write is this report artifact.
+
+Skill Perspective Check
+-----------------------
+- Ran the required skill-perspective check.
+- Loaded and applied omo:remove-ai-slops. Relevant criteria applied: deletion safety, cleanup false confidence, ownership-gated destructive actions, overfit/implementation-mirroring tests, and unnecessary production complexity.
+- Loaded and applied omo:programming, plus its Python README and code-smells reference for generated backend and validator review. Relevant criteria applied: no broad Any/dict public boundaries, parse-don't-validate boundaries, strict typed public responses, no brittle implementation-mirroring tests, no needless validation/parsing complexity, and oversized-file risk.
+- Result: the original unmarked generated-directory deletion blocker is fixed. The current diff still violates the safety perspective because protected-path rejection can be bypassed for non-existing protected children when the output path is spelled through a symlink. The validator still carries non-blocking programming/slop debt from source-shape assertions and an oversized single file.
+
+Fresh Verification
+------------------
+- PASS: node --check agentic-system-builder/scripts/scaffold-agent-system.mjs.
+- PASS: node --check agentic-system-builder/scripts/validate-domain-spec.mjs.
+- PASS: npm run validate:skill.
+- PASS: npm run validate:examples.
+- PASS: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo.
+- PASS: temp full final command from current source:
+  env -u OPENAI_API_KEY AGENT_RUNTIME=mock sh -c 'npm run validate:skill && npm run validate:examples && npm run qa:generated-demo'
+  exited 0 in a temporary copy and reported cleanup: ok.
+- PASS: temp safety probe confirmed an unmarked existing generated child is rejected under --force and keep.txt survives.
+- PASS: temp safety probe confirmed a marked existing generated child is replaceable under --force; old.txt is removed and README.md plus .any-agent-builder-generated.json are generated.
+- PASS: canonical temp protected nested paths under agentic-system-builder/ and .omo/ are rejected.
+- FAIL: symlink temp protected nested path under agentic-system-builder/ was accepted and scaffolded.
+- PASS: f2-fix-cleanup.txt PIDs 83549 and 84600 are not alive; ports 59497 and 59498 have no LISTEN sockets in fresh ps/lsof checks.
+- PASS: source scan found no dict[str, Any] or typing.Any in generated backend/templates public API/state implementation. Remaining dict hits are typed JsonValue maps or concrete queue/state maps.
+
+Findings
+--------
+
+CRITICAL
+
+- None.
+
+HIGH
+
+1. Protected-path rejection is bypassable for non-existing protected children when the output path uses a symlink.
+
+Evidence:
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:257 normalizes outputDir with resolve(outputDir), not a canonical realpath for non-existing paths.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:270 checks whether the normalized path is inside agentic-system-builder or .omo.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:297 only calls existingRealPath(outputDir) after the first path-safety assertion and only when the path already exists.
+- Fresh temp probe created a symlink to the temp workspace, then ran:
+  node agentic-system-builder/scripts/scaffold-agent-system.mjs --domain library --out <work-link>/agentic-system-builder/subdir --force
+  It exited 0 and wrote README.md into the protected source subtree through the symlink.
+- The canonical spelling of the same nested protected paths rejects correctly. The bypass depends on path spelling, not user intent.
+
+Impact:
+- The current code still allows scaffolding into protected workspace internals when the target child does not already exist and the output path reaches the workspace through a symlink.
+- Existing protected targets are safer because realpath(outputDir) is checked when they exist, but new protected children are not covered.
+- This violates the requested "dangerous paths remain rejected" criterion and the script's own line 272 intent to refuse output inside protected workspace.
+
+Required fix:
+- Canonicalize the nearest existing ancestor before deciding whether a non-existing output path is inside ROOT, agentic-system-builder, .omo, or generated.
+- Apply the same canonical path basis to ROOT/protected dirs and requested output paths before any mkdir/write/rm.
+- Add a regression probe for symlinked workspace/output path spelling, including a non-existing protected child under agentic-system-builder/ and .omo/.
+
+MEDIUM
+
+1. validate-domain-spec.mjs still relies heavily on source-shape and regex implementation checks.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:734 adds typed backend model checks and response_model checks.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:1044 validates generated apps mostly by reading source files and matching strings/regexes.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:1133 rejects broad dict[str, Any]/typing.Any in generated backend implementation.
+- .omo/evidence/any-agent-system-builder/f2-fix-validator-regression.txt shows useful negative probes for missing typed models, broad dict[str, Any], null frontend, inert chat fetch, and scaffold guard marker removal.
+
+Impact:
+- The specific F2 validator regressions are materially improved and acceptable for this review.
+- Future generated behavior can still satisfy source-shape checks without fully proving runtime behavior, so this should remain explicit debt.
+
+2. validate-domain-spec.mjs remains oversized.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:5 carries a SIZE_OK rationale.
+- Fresh pure LOC measurement: 1104.
+
+Impact:
+- The rationale explains the portability tradeoff, but the file still combines CLI parsing, markdown/domain parsing, generated backend validation, frontend validation, dependency checks, and source scans. Future validator changes should avoid growing this file further without splitting responsibilities.
+
+LOW
+
+1. Generated runtime/cache artifacts remain in generated/library-reservation-demo.
+
+Evidence:
+- generated/library-reservation-demo/backend/__pycache__/*.pyc exists.
+- generated/library-reservation-demo/.venv exists from QA runs.
+
+Impact:
+- Not a functional blocker for F2, but it is packaging/source-tree residue.
+
+2. Generated backend still diverges from the strict Python programming reference outside the F2 blocker.
+
+Evidence:
+- generated/library-reservation-demo/backend/main.py:1 imports asyncio.
+- generated/library-reservation-demo/backend/events.py:1 imports asyncio.
+- generated/library-reservation-demo/backend/models.py:11 and following Pydantic models use ConfigDict(extra="forbid") but not frozen=True.
+
+Impact:
+- Not blocking for the requested F2 safety fix, but a residual strict-stack risk if this generated backend is meant to model the programming reference rather than a lightweight demo.
+
+Positive Checks
+---------------
+- The previous HIGH blocker in .omo/evidence/any-agent-system-builder/f2-code-quality-final.txt is fixed in current source: there is no safeGeneratedChild bypass, and any existing output directory now requires a valid .any-agent-builder-generated.json marker before recursive rm.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:301 rejects --force overwrite of existing unowned output.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:313 checks the ownership marker again before failed-run cleanup removal.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:330 keeps prepared=false until prepareOutputDir completes, so an unowned overwrite failure does not enter cleanupPreparedOutput.
+- Marked generated dirs remain replaceable, as proven by f2-fix-scaffold-safety.txt and fresh temp probe.
+- Normal scaffold works, as proven by f2-fix-scaffold-safety.txt and fresh temp final command.
+- Dangerous exact paths from worker evidence remain rejected: /, HOME, repo root, generated root, agentic-system-builder, and .omo.
+- Backend public FastAPI endpoints now declare typed response_model values and return typed Pydantic response objects.
+- Public/internal state separation is represented by PublicContextModel, InternalContextModel, ConversationStateModel, StateResponse, and ChatResponse rather than broad dict[str, Any].
+- Final command and cleanup evidence are current enough to trust: prior f2-fix-final-command.txt exited 0, and the same command exited 0 in a fresh temporary copy from current source.
+
+Blockers
+--------
+- Fix symlink-safe dangerous-path rejection for non-existing protected children under agentic-system-builder/ and .omo/. Add a regression probe that invokes scaffold through a symlinked workspace/output path and proves no protected subtree is written.
+
+Final Status
+------------
+REJECT: REQUEST_CHANGES

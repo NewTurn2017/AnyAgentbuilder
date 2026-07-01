@@ -1,0 +1,15 @@
+{
+  "scenario": "library",
+  "mode": "browser",
+  "runtime": "mock",
+  "backendPort": 63502,
+  "frontendPort": 63503,
+  "backendPid": null,
+  "frontendPid": null,
+  "status": "blocked-missing-generated-app",
+  "openaiCalls": false,
+  "missing": [
+    "generated frontend directory: generated/library-reservation-demo/frontend",
+    "generated frontend package.json: generated/library-reservation-demo/frontend/package.json"
+  ]
+}

@@ -1,0 +1,32 @@
+tmp_root=/tmp/aab-task5-final2-validator.YIxMpN
+date=2026-07-01T12:32:25Z
+
+SCENARIO: placeholder
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-validator.YIxMpN/placeholder
+ERROR: generated backend main.py has only placeholder content
+exit=1
+RESULT=EXPECTED_FAIL
+
+SCENARIO: tokenstuff
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-validator.YIxMpN/tokenstuff
+ERROR: generated backend/tools.py must contain executable data/logic beyond literal marker strings
+exit=1
+RESULT=EXPECTED_FAIL
+
+SCENARIO: route-tokenstuff
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-validator.YIxMpN/route-tokenstuff
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: POST /chat
+exit=1
+RESULT=EXPECTED_FAIL
+
+SCENARIO: wrong-method
+COMMAND: node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /tmp/aab-task5-final2-validator.YIxMpN/wrong-method
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: POST /chat (method/path mismatch)
+exit=1
+RESULT=EXPECTED_FAIL
+
+expected_failures=4
+unexpected_passes=0
+COMMAND: rm -rf /tmp/aab-task5-final2-validator.YIxMpN
+cleanup_exists=no
+failures=0

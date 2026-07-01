@@ -1,0 +1,1 @@
+PASS node syntax check for browser-qa.mjs

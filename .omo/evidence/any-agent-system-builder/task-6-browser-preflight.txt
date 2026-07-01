@@ -1,0 +1,18 @@
+$ find generated/library-reservation-demo/frontend -maxdepth 1 \( -name node_modules -o -name package-lock.json \) -print # before
+before: none
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder
+mock mode active: scrubbed provider environment keys: OPENAI_API_KEY
+mock mode active: harness will scan generated runtime paths for provider imports/calls before startup
+manifest: /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/run-manifest.json
+cleanup: ok
+ERROR: browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA
+exit=1
+$ find generated/library-reservation-demo/frontend -maxdepth 1 \( -name node_modules -o -name package-lock.json \) -print # after
+after: none
+$ node -e "const m=require(\"./.omo/evidence/any-agent-system-builder/run-manifest.json\"); console.log(m.status); console.log(m.error); console.log(Boolean(m.backendPid), Boolean(m.frontendPid));"
+manifest.status=failed-browser-dependency
+manifest.error=browser QA requires local optional dependency playwright; install it in this project before --browser-only/full runtime QA
+manifest.backendPid=null
+manifest.frontendPid=null
+generatedAppChecked=false
+PASS: missing Playwright failed before frontend install/startup and left frontend artifacts absent

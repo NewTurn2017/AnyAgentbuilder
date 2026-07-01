@@ -1,0 +1,3 @@
+ERROR: missing generated app files: generated frontend directory: generated/library-reservation-demo/frontend; generated frontend package.json: generated/library-reservation-demo/frontend/package.json
+
+EXIT:1

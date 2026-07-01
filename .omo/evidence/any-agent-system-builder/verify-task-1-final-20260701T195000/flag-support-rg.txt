@@ -1,0 +1,18 @@
+package.json:4:    "validate:skill": "node agentic-system-builder/scripts/validate-domain-spec.mjs --check-skill agentic-system-builder",
+package.json:5:    "validate:examples": "node agentic-system-builder/scripts/validate-domain-spec.mjs --validate-example agentic-system-builder/EXAMPLES.md --require-domain airline --require-domain library --require-domain pcbang --require-domain generic",
+package.json:7:    "qa:generated-demo": "node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario library --evidence .omo/evidence/any-agent-system-builder"
+agentic-system-builder/scripts/validate-domain-spec.mjs:63:    if (arg === "--check-skill") {
+agentic-system-builder/scripts/validate-domain-spec.mjs:65:    } else if (arg === "--validate-example") {
+agentic-system-builder/scripts/validate-domain-spec.mjs:67:    } else if (arg === "--require-domain") {
+agentic-system-builder/scripts/validate-domain-spec.mjs:69:    } else if (arg === "--check-generated") {
+agentic-system-builder/scripts/validate-domain-spec.mjs:78:    fail("choose exactly one mode: --check-skill <dir>, --validate-example <file>, or --check-generated <dir>");
+agentic-system-builder/scripts/validate-domain-spec.mjs:81:    fail("--require-domain can only be used with --validate-example <file>");
+agentic-system-builder/scripts/validate-domain-spec.mjs:84:    fail("--validate-example requires at least one --require-domain <domain>");
+agentic-system-builder/scripts/qa-generated-demo.mjs:33:    if (arg === "--backend-only") {
+agentic-system-builder/scripts/qa-generated-demo.mjs:35:    } else if (arg === "--browser-only") {
+agentic-system-builder/scripts/qa-generated-demo.mjs:37:    } else if (arg === "--scenario") {
+agentic-system-builder/scripts/qa-generated-demo.mjs:39:    } else if (arg === "--evidence") {
+agentic-system-builder/scripts/qa-generated-demo.mjs:47:    fail("choose at most one of --backend-only or --browser-only");
+agentic-system-builder/scripts/qa-generated-demo.mjs:50:    fail(`invalid --scenario value: ${parsed.scenario}`);
+
+EXIT:0

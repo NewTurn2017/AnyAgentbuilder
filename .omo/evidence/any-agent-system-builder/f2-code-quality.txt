@@ -1,0 +1,131 @@
+F2 Code Quality Review - any-agent-system-builder
+=================================================
+
+codeQualityStatus: BLOCK
+recommendation: REQUEST_CHANGES
+reportPath: .omo/evidence/any-agent-system-builder/f2-code-quality.txt
+
+Scope Reviewed
+--------------
+- agentic-system-builder/**/*.md
+- agentic-system-builder/scripts/*.mjs
+- agentic-system-builder/scripts/qa-lib/*.mjs
+- agentic-system-builder/templates/**
+- generated/library-reservation-demo backend/frontend source, excluding vendored/runtime trees (`.venv`, `node_modules`) but noting generated cache artifacts
+- package.json scripts
+- Evidence under .omo/evidence/any-agent-system-builder, including task-9-final.txt, run-manifest.json, cleanup receipts, privacy/API captures, and validator/provider-boundary probes
+
+Repository Baseline
+-------------------
+- /Users/genie/dev/tools/skills/AnyAgentbuilder is not a Git repository, so no diff or merge-base review was possible.
+- Review is against the current filesystem state and referenced evidence artifacts.
+
+Skill Perspective Check
+-----------------------
+- remove-ai-slops SKILL.md was loaded and applied. Violations found: unsafe broad deletion, oversized/brittle validator complexity, generated cache artifacts, and weakly typed implementation boundaries.
+- programming SKILL.md was loaded and applied. Violations found: untyped escape hatches in generated Python public surfaces, oversized validator despite SIZE_OK opt-out, and brittle implementation-mirroring validator checks.
+
+Verification Run By Reviewer
+----------------------------
+- PASS: `npm run validate:skill`
+- PASS: `npm run validate:examples`
+- PASS: `node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated generated/library-reservation-demo`
+- PASS: `find agentic-system-builder/scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check`
+- PASS: no listeners on latest recorded ports 53571 and 53572 (`lsof` exit 1 with no output)
+- Not rerun: full `qa:generated-demo`, because it scaffolds/installs/starts processes and would write outside this read-only review's allowed report artifact. Existing evidence was inspected instead.
+
+Findings
+--------
+
+CRITICAL
+
+1. Scaffold cleanup can recursively delete arbitrary user-selected paths.
+
+Evidence:
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:228 resolves `--out` directly.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:232 checks whether that arbitrary path exists.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:234 runs `rm(outputDir, { recursive: true, force: true })` when `--force` is passed.
+- agentic-system-builder/scripts/scaffold-agent-system.mjs:242 and agentic-system-builder/scripts/scaffold-agent-system.mjs:243 repeat recursive forced deletion during failure cleanup.
+
+Impact:
+- A caller can pass `--out .`, `--out ..`, an absolute project path, or another valuable directory with `--force`, and the script will delete it before scaffolding.
+- This violates the requested rejection criteria for unsafe shell/process cleanup and unsafe broad scope.
+- The plan only needs cleanup of generated/bad-style outputs. The script must constrain deletion to an approved generated workspace, or require explicit safe-path checks before any recursive removal.
+
+HIGH
+
+1. Generated backend and templates rely on `dict[str, Any]` across public API and state boundaries.
+
+Evidence:
+- generated/library-reservation-demo/backend/main.py:36, generated/library-reservation-demo/backend/main.py:46, generated/library-reservation-demo/backend/main.py:51, generated/library-reservation-demo/backend/main.py:79, and generated/library-reservation-demo/backend/main.py:94 expose public endpoint returns and public-state shaping as generic dictionaries.
+- generated/library-reservation-demo/backend/context.py:23 through generated/library-reservation-demo/backend/context.py:46 model public/internal contexts as generic dictionaries with string-key filtering.
+- generated/library-reservation-demo/backend/memory.py:9 through generated/library-reservation-demo/backend/memory.py:18 stores raw mutable dictionaries for conversation state.
+
+Impact:
+- The privacy boundary is enforced by string lists and dynamic dict access instead of typed parsed objects. This conflicts with the programming perspective's "parse, don't validate" and "no untyped escape hatches" guidance.
+- The current QA proves the generated library happy path, but future generated domains can silently drift because the type system does not protect public/internal separation.
+
+2. The generated-app validator contains brittle implementation-mirroring checks that can produce false confidence.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:427 through agentic-system-builder/scripts/validate-domain-spec.mjs:430 checks that `/chat` is fetched and that `.json()` exists somewhere in the file, but it does not prove the `/chat` response is the value being parsed or consumed.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:833 through agentic-system-builder/scripts/validate-domain-spec.mjs:877 implements ad hoc fenced-block/YAML list parsing with regular expressions and simple line splitting.
+- agentic-system-builder/scripts/validate-domain-spec.mjs:933 through agentic-system-builder/scripts/validate-domain-spec.mjs:1063 validates generated backend/frontend behavior largely by source-string markers rather than executable contracts.
+
+Impact:
+- This violates the requested brittle parsing rejection criterion and the programming perspective's rejection of implementation-mirroring tests.
+- The real QA evidence reduces current-risk for the library demo, but the validator is part of the package contract and can accept misleading source shapes.
+
+MEDIUM
+
+1. `validate-domain-spec.mjs` is oversized and carries too many responsibilities in one file.
+
+Evidence:
+- agentic-system-builder/scripts/validate-domain-spec.mjs:5 contains a SIZE_OK opt-out.
+- Reviewer LOC measurement: 993 pure LOC for that file.
+- Responsibilities include CLI parsing, skill frontmatter parsing, markdown link parsing, example block parsing, generated backend route scanning, generated frontend JSX scanning, dependency pin checks, and public/internal field checks.
+
+Impact:
+- The SIZE_OK comment explains portability, but the module is still a maintenance hotspot. It increases the chance that future validator changes weaken evidence or create false positives/negatives.
+
+2. Timeout cleanup for non-managed commands only kills the direct child process.
+
+Evidence:
+- agentic-system-builder/scripts/qa-lib/processes.mjs:28 starts regular commands without `detached`.
+- agentic-system-builder/scripts/qa-lib/processes.mjs:38 and agentic-system-builder/scripts/qa-lib/processes.mjs:39 kill only the direct child on timeout.
+
+Impact:
+- Managed backend/frontend servers use process-group cleanup, but install/build commands can spawn children. A timeout in `npm`, `npx`, or `pip` could leave child processes behind.
+
+LOW
+
+1. Generated cache artifacts are present in the filesystem.
+
+Evidence:
+- generated/library-reservation-demo/backend/__pycache__/*.pyc exists.
+- generated/library-reservation-demo/.gitignore ignores `__pycache__/`, so this is probably not intended source, but this workspace is not a Git checkout and the artifacts are present in the deliverable tree as reviewed.
+
+2. Top-level cleanup receipts are stale relative to the latest manifest.
+
+Evidence:
+- .omo/evidence/any-agent-system-builder/run-manifest.json records latest backend/frontend ports 53571/53572 and PIDs 44152/44830.
+- .omo/evidence/any-agent-system-builder/cleanup-ports.txt records ports 60271/60272.
+- The task-7/task-8 cleanup receipts do align with the latest PIDs, and reviewer `lsof` checks found no listeners on 53571/53572.
+
+Positive Checks
+---------------
+- No unresolved placeholder/TODO/FIXME/lorem markers found in the reviewed code/templates/generated app, excluding validator guard strings.
+- Dependencies in generated frontend package.json are pinned exactly; backend requirements are pinned exactly.
+- Mock provider boundary evidence is strong for the generated backend: run-manifest.json reports no OpenAI imports/calls, and task-6-provider-boundary-extended.txt contains adversarial import/call probes.
+- Existing task-8 browser/API capture shows public JSON excludes required internal field names for the library demo.
+- Package scripts are narrow and do not directly start servers except through the QA script.
+
+Blockers
+--------
+- Fix scaffold deletion scope before approval: recursive forced deletion must be constrained to safe generated output paths or otherwise protected from deleting arbitrary caller-supplied directories.
+- Replace or narrow the untyped generated backend boundary so public/internal context separation is represented by typed parsed objects, not only raw `dict[str, Any]` plus string filters.
+- Harden validator checks that currently mirror implementation strings or fragile parsing, especially `/chat` response consumption and example parsing.
+
+Final Status
+------------
+REJECT: REQUEST_CHANGES

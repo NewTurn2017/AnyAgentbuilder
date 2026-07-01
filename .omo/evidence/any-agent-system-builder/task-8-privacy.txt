@@ -1,0 +1,9 @@
+scenario=browser DOM and /chat API privacy scan
+frontend_url=http://127.0.0.1:62068
+happy_dom_characters=573
+guardrail_dom_characters=675
+chat_api_responses=2
+happy_chat_api_responses=1
+guardrail_chat_api_responses=1
+hidden_fields_absent=member_id,internal_notes,policy_overrides,raw_hold_queue,staff_token,inventory_cost
+result=PASS

@@ -1,0 +1,17 @@
+Malformed CLI probes, rerun after dead-export cleanup
+
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --not-a-real-flag --evidence .omo/evidence/any-agent-system-builder
+ERROR: unknown flag or argument: --not-a-real-flag
+exit=1
+
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario bad! --evidence .omo/evidence/any-agent-system-builder
+ERROR: invalid --scenario value: bad!
+exit=1
+
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --scenario airline --evidence .omo/evidence/any-agent-system-builder
+ERROR: unsupported --scenario value: airline; only library is wired for generated-demo QA
+exit=1
+
+$ AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --browser-only --evidence .omo/evidence/any-agent-system-builder
+ERROR: choose at most one of --backend-only or --browser-only
+exit=1

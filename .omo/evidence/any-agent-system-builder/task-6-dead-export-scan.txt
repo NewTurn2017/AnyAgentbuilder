@@ -1,0 +1,3 @@
+$ rg -n '\b(ensureDir|appendProcessLog)\b' agentic-system-builder/scripts/qa-lib agentic-system-builder/scripts/qa-generated-demo.mjs
+exit=1
+observable=no matches

@@ -1,0 +1,49 @@
+Todo 6 dead-export blocker fix summary
+
+Changed source files:
+- agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+- agentic-system-builder/scripts/qa-lib/processes.mjs
+
+Implementation:
+- Removed the unused exported ensureDir helper from fs-utils.mjs and removed its now-unused node:fs/promises mkdir import.
+- Removed the exported appendProcessLog helper from processes.mjs and wrote the managed-process command header with appendFile directly at the existing startManagedProcess call site.
+- No import sites needed cleanup because neither removed helper was imported by the entrypoint or qa-lib modules.
+
+Verification and artifacts:
+- Dead-export scan: rg -n '\b(ensureDir|appendProcessLog)\b' agentic-system-builder/scripts/qa-lib agentic-system-builder/scripts/qa-generated-demo.mjs -> .omo/evidence/any-agent-system-builder/task-6-dead-export-scan.txt; rg exit=1, observable=no matches.
+- Syntax: node --check agentic-system-builder/scripts/qa-generated-demo.mjs and every agentic-system-builder/scripts/qa-lib/*.mjs -> .omo/evidence/any-agent-system-builder/task-6-node-check.txt; exit 0 for all listed files.
+
+Cleanup:
+- No servers were started.
+- No dry-run was needed for this deletion-only export cleanup.
+- Workspace root is not a Git checkout, so changed-file reporting is path-based rather than git-diff-based.
+
+Risks / boundaries:
+- Harness runtime behavior was not re-smoked because the scoped change removed dead exports and preserved the existing appendFile write in startManagedProcess.
+
+Todo 6 final review blocker fix summary
+
+Changed source files:
+- agentic-system-builder/scripts/qa-generated-demo.mjs
+- agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+- agentic-system-builder/scripts/qa-lib/provider-security.mjs
+
+Implementation:
+- Extended mock-mode provider boundary scanning to block all pinned Agents SDK concepts from REFERENCE.md: Agent, Runner, SQLiteSession, function_tool, handoff, RunContextWrapper, input_guardrail, and GuardrailFunctionOutput.
+- Preserved the local generated agents.py allowance for non-SDK local imports while blocking pinned SDK symbols in from-agents imports, aliases, parenthesized imports, import agents forms, and OpenAI imports/calls.
+- Added browser QA dependency preflight and call it before setup, dependency installs, backend/frontend startup, or browser QA for browser/full modes.
+
+Verification and artifacts:
+- Provider boundary negatives: AGENT_RUNTIME=mock node --input-type=module <provider-boundary-temp-fixture> -> .omo/evidence/any-agent-system-builder/task-6-provider-boundary-extended.txt; exit 0. The extended SQLiteSession/RunContextWrapper/input_guardrail/GuardrailFunctionOutput import and the previous Agent/Runner/function_tool/handoff import both failed with failed-provider-boundary; the same artifact also proves aliased/parenthesized SDK imports plus aliased agents module and OpenAI import/call detection.
+- Browser-only missing Playwright preflight: AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --browser-only --evidence .omo/evidence/any-agent-system-builder -> .omo/evidence/any-agent-system-builder/task-6-browser-preflight.txt; expected exit 1 with failed-browser-dependency, backendPid=null, frontendPid=null, generatedAppChecked=false, and no generated frontend node_modules/package-lock artifacts before or after.
+- Dry run: AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --dry-run --evidence .omo/evidence/any-agent-system-builder -> .omo/evidence/any-agent-system-builder/task-6-harness-dry-run.txt; exit 0.
+- Mock backend-only: OPENAI_API_KEY=fake AGENT_RUNTIME=mock node agentic-system-builder/scripts/qa-generated-demo.mjs --backend-only --evidence .omo/evidence/any-agent-system-builder -> .omo/evidence/any-agent-system-builder/task-6-mock-env.txt; exit 0.
+- Manifest observable: .omo/evidence/any-agent-system-builder/run-manifest.json status=passed, mode=backend, cleanup.ok=true, mockProviderBoundary.allowed=true, findings=0, scannedFiles=7, openaiImportAttempted=false, openaiCalls=false.
+- HTTP artifacts: .omo/evidence/any-agent-system-builder/task-6-health.txt, task-6-chat.txt, task-6-guardrail.txt, task-6-422.txt, and task-6-sse.txt.
+- Syntax: node --check entrypoint and all qa-lib modules -> .omo/evidence/any-agent-system-builder/task-6-node-check.txt; exit 0.
+- LOC and organization: .omo/evidence/any-agent-system-builder/task-6-loc.txt records entrypoint pure_loc=134 and largest helper pure_loc=175.
+- Cleanup receipts: .omo/evidence/any-agent-system-builder/task-6-cleanup-pids.txt records backend pid alive=false and frontend pid null; .omo/evidence/any-agent-system-builder/task-6-cleanup-ports.txt records backend/frontend listener=no; .omo/evidence/any-agent-system-builder/task-6-frontend-cleanup.txt records no frontend node_modules/package-lock artifacts.
+
+Risks / boundaries:
+- Browser UI QA was not started, per task instruction.
+- Workspace root is not a Git checkout, so changed-file reporting is path-based rather than git-diff-based.

@@ -1,0 +1,14 @@
+$ node --check agentic-system-builder/scripts/qa-generated-demo.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/args.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/commands.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/errors.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/http-checks.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/manifest.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/paths.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/ports.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/processes.mjs
+$ node --check agentic-system-builder/scripts/qa-lib/provider-security.mjs
+observable=all node --check invocations exited 0

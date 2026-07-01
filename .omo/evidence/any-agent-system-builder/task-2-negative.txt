@@ -1,0 +1,1 @@
+ERROR: missing SKILL.md: .omo/plans/SKILL.md

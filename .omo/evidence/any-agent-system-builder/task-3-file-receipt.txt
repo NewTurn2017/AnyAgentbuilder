@@ -1,0 +1,5 @@
+agentic-system-builder/REFERENCE.md size=12438 mtime=2026-07-01T10:28:19.384Z
+agentic-system-builder/EXAMPLES.md size=13138 mtime=2026-07-01T10:28:19.384Z
+agentic-system-builder/SKILL.md size=4093 mtime=2026-07-01T10:26:11.480Z
+owned_changes=REFERENCE.md, EXAMPLES.md, task-3 evidence files
+skill_md_status=present from parallel Todo 2; read and validated but not edited by Todo 3

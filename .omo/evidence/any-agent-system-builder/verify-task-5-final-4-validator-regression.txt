@@ -1,0 +1,34 @@
+SCENARIO=Todo 4 false-pass fixture regression reprobe
+TEMP_DIR=/Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-validator-regression-tmp.PSjUDZ
+
+CASE=placeholder
+MUTATION=replace backend/main.py with placeholder-only content
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-validator-regression-tmp.PSjUDZ/placeholder
+ERROR: generated backend main.py has only placeholder content
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+CASE=tokenstuff
+MUTATION=replace backend/tools.py with literal marker tokens only
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-validator-regression-tmp.PSjUDZ/tokenstuff
+ERROR: generated backend/tools.py must contain executable data/logic beyond literal marker strings
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+CASE=route-tokenstuff
+MUTATION=route strings exist as loose tokens, not FastAPI decorators
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-validator-regression-tmp.PSjUDZ/route-tokenstuff
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: GET /health, GET /state/bootstrap, GET /state, GET /state/stream, POST /chat
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+CASE=wrong-method
+MUTATION=change POST /chat decorator to GET /chat
+COMMAND=node agentic-system-builder/scripts/validate-domain-spec.mjs --check-generated /Users/genie/dev/tools/skills/AnyAgentbuilder/.omo/evidence/any-agent-system-builder/verify-task-5-final-4-validator-regression-tmp.PSjUDZ/wrong-method
+ERROR: generated backend missing FastAPI route declarations or method/path mismatch: POST /chat (method/path mismatch)
+EXIT_STATUS=1
+RESULT=EXPECTED_FAIL
+
+expected_failures=4
+unexpected_passes=0
+CLEANUP=PASS temp dir removed

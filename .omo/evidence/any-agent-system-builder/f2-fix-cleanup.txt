@@ -1,0 +1,28 @@
+SCENARIO=F2 cleanup pids, ports, and temp symlink artifacts
+CWD=/Users/genie/dev/tools/skills/AnyAgentbuilder
+DATE=2026-07-01T16:00:25Z
+MANIFEST=.omo/evidence/any-agent-system-builder/run-manifest.json
+BACKEND_PID=4672
+FRONTEND_PID=5359
+BACKEND_PORT=62067
+FRONTEND_PORT=62068
+
+## pid-liveness
+PID=4672
+ALIVE=false
+RESULT=EXPECTED_DEAD
+PID=5359
+ALIVE=false
+RESULT=EXPECTED_DEAD
+
+## port-listeners
+PORT=62067
+LSOF_EXIT=1
+RESULT=EXPECTED_NO_LISTENER
+PORT=62068
+LSOF_EXIT=1
+RESULT=EXPECTED_NO_LISTENER
+
+## temp-artifacts
+COMMAND=find /tmp -maxdepth 1 prefixes f2-scaffold-safety.* and f2-scaffold-exact.*; protected/generated probe names
+RESULT=NO_OUTPUT_MEANS_NO_TEMP_ARTIFACTS

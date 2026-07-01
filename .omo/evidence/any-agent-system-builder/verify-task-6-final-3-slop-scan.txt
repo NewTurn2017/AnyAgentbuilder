@@ -1,0 +1,65 @@
+Dead helper and suspicious unused export scan, final-3
+
+$ pure LOC for Todo 6 harness/helper files
+ 175 agentic-system-builder/scripts/qa-lib/provider-security.mjs
+ 172 agentic-system-builder/scripts/qa-lib/processes.mjs
+ 134 agentic-system-builder/scripts/qa-generated-demo.mjs
+ 120 agentic-system-builder/scripts/qa-lib/commands.mjs
+  65 agentic-system-builder/scripts/qa-lib/http-checks.mjs
+  49 agentic-system-builder/scripts/qa-lib/args.mjs
+  32 agentic-system-builder/scripts/qa-lib/lifecycle.mjs
+  32 agentic-system-builder/scripts/qa-lib/browser-qa.mjs
+  15 agentic-system-builder/scripts/qa-lib/paths.mjs
+  13 agentic-system-builder/scripts/qa-lib/fs-utils.mjs
+  11 agentic-system-builder/scripts/qa-lib/ports.mjs
+   7 agentic-system-builder/scripts/qa-lib/manifest.mjs
+   7 agentic-system-builder/scripts/qa-lib/errors.mjs
+
+$ named dead helper scan: ensureDir / appendProcessLog
+RESULT=pass; no ensureDir or appendProcessLog references in harness/helper/generated runtime scope
+
+$ exported symbol external-reference inventory
+externally-used	agentic-system-builder/scripts/qa-lib/args.mjs	parseArgs	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/args.mjs	modeFromArgs	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/browser-qa.mjs	requireBrowserQaDependency	externalRefs=2	sameFileRefs=1
+externally-used	agentic-system-builder/scripts/qa-lib/browser-qa.mjs	runBrowserQa	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/commands.mjs	commandLabel	externalRefs=9	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/commands.mjs	buildPlannedCommands	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/errors.mjs	HarnessError	externalRefs=23	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/fs-utils.mjs	ensureEvidenceDir	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/fs-utils.mjs	pathExists	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/http-checks.mjs	waitForHttp	externalRefs=3	sameFileRefs=0
+internal-only-export	agentic-system-builder/scripts/qa-lib/http-checks.mjs	assertHttpStatus	externalRefs=0	sameFileRefs=4
+externally-used	agentic-system-builder/scripts/qa-lib/http-checks.mjs	assertNoInternalMarkers	externalRefs=2	sameFileRefs=2
+externally-used	agentic-system-builder/scripts/qa-lib/http-checks.mjs	runCurlChecks	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/lifecycle.mjs	runSetup	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/lifecycle.mjs	ensureBackendDependencies	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/lifecycle.mjs	ensureFrontendDependencies	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/manifest.mjs	writeManifest	externalRefs=10	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	ROOT	externalRefs=16	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	GENERATED_ROOT	externalRefs=6	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	BACKEND_ROOT	externalRefs=7	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	FRONTEND_ROOT	externalRefs=3	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	EVIDENCE_DEFAULT	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/paths.mjs	INTERNAL_FIELD_MARKERS	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/ports.mjs	freePort	externalRefs=3	sameFileRefs=0
+internal-only-export	agentic-system-builder/scripts/qa-lib/processes.mjs	spawnChild	externalRefs=0	sameFileRefs=1
+externally-used	agentic-system-builder/scripts/qa-lib/processes.mjs	runCommand	externalRefs=14	sameFileRefs=1
+externally-used	agentic-system-builder/scripts/qa-lib/processes.mjs	writeCommandArtifact	externalRefs=6	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/processes.mjs	startManagedProcess	externalRefs=3	sameFileRefs=0
+internal-only-export	agentic-system-builder/scripts/qa-lib/processes.mjs	processStillAlive	externalRefs=0	sameFileRefs=5
+internal-only-export	agentic-system-builder/scripts/qa-lib/processes.mjs	stopProcess	externalRefs=0	sameFileRefs=2
+externally-used	agentic-system-builder/scripts/qa-lib/processes.mjs	cleanupProcesses	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/provider-security.mjs	makeProviderEnv	externalRefs=2	sameFileRefs=0
+externally-used	agentic-system-builder/scripts/qa-lib/provider-security.mjs	requireMockRuntime	externalRefs=2	sameFileRefs=0
+internal-only-export	agentic-system-builder/scripts/qa-lib/provider-security.mjs	scanMockProviderBoundary	externalRefs=0	sameFileRefs=1
+externally-used	agentic-system-builder/scripts/qa-lib/provider-security.mjs	assertMockProviderSafe	externalRefs=2	sameFileRefs=0
+SUMMARY deadExports=0
+
+$ node syntax checks
+RESULT=node syntax checks passed
+
+Direct remove-ai-slops/programming assessment:
+- PASS: named dead exports ensureDir and appendProcessLog are absent.
+- PASS: no zero-reference exported helper remains in qa-generated-demo.mjs or qa-lib/*.mjs.
+- NOTE: internal-only exports are reported as suspicious public-surface cleanup candidates, not dead helpers; they have same-file callers and do not invalidate the named dead-export cleanup.

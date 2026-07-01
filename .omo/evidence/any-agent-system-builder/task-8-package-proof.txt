@@ -1,0 +1,9 @@
+scenario=generated frontend package dependency proof
+package_dependencies=react,react-dom
+package_devDependencies=@vitejs/plugin-react,playwright,vite
+vite_package_pin=5.4.21
+vite_lock_version=5.4.21
+vite_lock_dev=true
+plugin_react_lock_dev=true
+esbuild_lock_dev=true
+result=PASS

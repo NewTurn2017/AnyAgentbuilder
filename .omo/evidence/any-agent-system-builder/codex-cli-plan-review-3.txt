@@ -1,0 +1,1 @@
+ITERATE - Blocking fix: make the malformed JSON `/chat` proof an explicit `curl -i -X POST .../chat` invocation, not just “run malformed JSON.” Add it where `/chat` curl proofs are listed in `.omo/plans/any-agent-system-builder.md` lines 97 and 186, with an invalid JSON body and required HTTP 422 evidence.
